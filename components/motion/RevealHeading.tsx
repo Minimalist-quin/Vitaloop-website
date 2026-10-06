@@ -13,8 +13,7 @@ export interface RevealHeadingProps {
 
 /**
  * The "headlines reveal word by word as they enter" signature motion
- * moment from docs/BUILD_PLAN.md. Reusable across the styleguide now and
- * the homepage sections in Phase 2.
+ * moment from docs/BUILD_PLAN.md. Reusable across homepage sections.
  *
  * The heading tag (`as`) wraps a plain <span> that actually carries the
  * ref and gets split — SplitText needs a real DOM node, and attaching

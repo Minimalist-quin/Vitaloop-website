@@ -1,47 +1,52 @@
 /*
   Design tokens — Vitaloop.
 
-  PLACEHOLDER: the accent color and typeface are neutral stand-ins. Swap
-  --color-accent-* and the font imports in app/layout.tsx once real brand
-  colors and a licensed typeface are available; nothing else should need
-  to change since every component reads these variables, not raw values.
+  Palette and type direction follow ouraring.com (warm cream neutrals,
+  warm charcoal ink instead of cold black, a blue accent, a light-weight
+  serif display face for big headlines) per user direction. Values pulled
+  from the live site's computed styles, not eyeballed from a screenshot.
 
-  Theme: :root carries the light values. prefers-color-scheme flips them
-  for users with no explicit preference; [data-theme="dark"] / "light"
-  lets the styleguide's manual toggle (and later a real theme switch)
+  PLACEHOLDER: the exact accent blue and the display typeface are
+  stand-ins pending real brand assets. Swap --color-accent-* and the font
+  import in app/layout.tsx later; nothing else should need to change
+  since every component reads these variables, not raw values.
+
+  Theme: :root carries the light (cream) values. prefers-color-scheme
+  flips them to the warm-dark variant for users with no explicit
+  preference; [data-theme="dark"] / "light" lets a manual theme switch
   override that media query in either direction.
 */
 
 :root {
-  /* Neutral ramp (light) */
-  --color-neutral-0: #ffffff;
-  --color-neutral-50: #f7f8f8;
-  --color-neutral-100: #eceeed;
-  --color-neutral-200: #d8dbda;
-  --color-neutral-300: #b7bcba;
-  --color-neutral-400: #8d9492;
-  --color-neutral-500: #6b7270;
-  --color-neutral-600: #4f5553;
-  --color-neutral-700: #383c3b;
-  --color-neutral-800: #242726;
-  --color-neutral-900: #141615;
-  --color-neutral-950: #0a0b0b;
+  /* Neutral ramp (light) — warm, cream-leaning, not cold gray */
+  --color-neutral-0: #fffdfa;
+  --color-neutral-50: #f7f1e8;
+  --color-neutral-100: #efe6db;
+  --color-neutral-200: #e3d9cb;
+  --color-neutral-300: #cdc0ad;
+  --color-neutral-400: #a89d8a;
+  --color-neutral-500: #7d7465;
+  --color-neutral-600: #5c564b;
+  --color-neutral-700: #4a4741;
+  --color-neutral-800: #332f29;
+  --color-neutral-900: #211e1a;
+  --color-neutral-950: #15130f;
 
-  /* Accent — PLACEHOLDER (neutral teal stand-in for the brand color) */
-  --color-accent-400: #4fc3a1;
-  --color-accent-500: #2fa786;
-  --color-accent-600: #22846a;
+  /* Accent — PLACEHOLDER (Oura's blue, pending a real brand color) */
+  --color-accent-400: #5b94e8;
+  --color-accent-500: #2a72de;
+  --color-accent-600: #1f5bb8;
   --color-accent-contrast: #ffffff;
 
-  --color-danger-500: #d6483f;
+  --color-danger-500: #c4483d;
 
   /* Semantic surface/text roles — components use these, never the ramp directly */
-  --color-bg: var(--color-neutral-0);
-  --color-bg-raised: var(--color-neutral-50);
+  --color-bg: var(--color-neutral-50);
+  --color-bg-raised: var(--color-neutral-0);
   --color-bg-inverted: var(--color-neutral-950);
-  --color-text: var(--color-neutral-900);
-  --color-text-muted: var(--color-neutral-600);
-  --color-text-inverted: var(--color-neutral-0);
+  --color-text: var(--color-neutral-700);
+  --color-text-muted: var(--color-neutral-500);
+  --color-text-inverted: var(--color-neutral-50);
   --color-border: var(--color-neutral-200);
   --color-border-strong: var(--color-neutral-300);
   --color-focus-ring: var(--color-accent-500);
@@ -58,6 +63,8 @@
   --line-height-snug: 1.3;
   --line-height-body: 1.6;
   --tracking-tight: -0.02em;
+  /* Serif display headlines read better loose, not tight like a grotesk */
+  --tracking-display: -0.01em;
 
   /* Spacing scale (4px base) */
   --space-1: 0.25rem;
@@ -99,22 +106,22 @@
   :root:not([data-theme="light"]) {
     --color-bg: var(--color-neutral-950);
     --color-bg-raised: var(--color-neutral-900);
-    --color-bg-inverted: var(--color-neutral-0);
+    --color-bg-inverted: var(--color-neutral-50);
     --color-text: var(--color-neutral-50);
     --color-text-muted: var(--color-neutral-400);
     --color-text-inverted: var(--color-neutral-950);
-    --color-border: var(--color-neutral-700);
-    --color-border-strong: var(--color-neutral-600);
+    --color-border: var(--color-neutral-800);
+    --color-border-strong: var(--color-neutral-700);
   }
 }
 
 :root[data-theme="dark"] {
   --color-bg: var(--color-neutral-950);
   --color-bg-raised: var(--color-neutral-900);
-  --color-bg-inverted: var(--color-neutral-0);
+  --color-bg-inverted: var(--color-neutral-50);
   --color-text: var(--color-neutral-50);
   --color-text-muted: var(--color-neutral-400);
   --color-text-inverted: var(--color-neutral-950);
-  --color-border: var(--color-neutral-700);
-  --color-border-strong: var(--color-neutral-600);
+  --color-border: var(--color-neutral-800);
+  --color-border-strong: var(--color-neutral-700);
 }

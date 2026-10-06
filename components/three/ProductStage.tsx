@@ -12,7 +12,7 @@ function WearablePlaceholder() {
   return (
     <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
       <capsuleGeometry args={[0.5, 1.2, 8, 32]} />
-      <meshStandardMaterial color="#2fa786" metalness={0.4} roughness={0.25} />
+      <meshStandardMaterial color="#2a72de" metalness={0.4} roughness={0.25} />
     </mesh>
   );
 }
@@ -31,11 +31,11 @@ function RobotaPlaceholder() {
         position={[0, -0.15, 0]}
         castShadow
       >
-        <meshStandardMaterial color="#eceeed" metalness={0.1} roughness={0.5} />
+        <meshStandardMaterial color="#efe6db" metalness={0.1} roughness={0.5} />
       </RoundedBox>
       <mesh position={[0, 0.85, 0]} castShadow>
         <sphereGeometry args={[0.45, 32, 32]} />
-        <meshStandardMaterial color="#2fa786" metalness={0.3} roughness={0.3} />
+        <meshStandardMaterial color="#2a72de" metalness={0.3} roughness={0.3} />
       </mesh>
     </group>
   );
@@ -75,10 +75,10 @@ export function ProductStage({
       gl={{ antialias: true }}
       onCreated={onCreated}
     >
-      <color attach="background" args={["#0a0b0b"]} />
+      <color attach="background" args={["#211e1a"]} />
       <ambientLight intensity={0.5} />
       <directionalLight position={[3, 4, 5]} intensity={1.4} castShadow />
-      <pointLight position={[-4, -2, -3]} intensity={0.6} color="#4fc3a1" />
+      <pointLight position={[-4, -2, -3]} intensity={0.6} color="#5b94e8" />
       {device === "wearable" ? <WearablePlaceholder /> : <RobotaPlaceholder />}
       <ContactShadows position={[0, -0.9, 0]} opacity={0.5} blur={2.5} far={2} />
       <OrbitControls

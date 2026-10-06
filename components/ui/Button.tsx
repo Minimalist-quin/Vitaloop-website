@@ -2,7 +2,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "secondaryInverted";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "secondaryInverted" | "dark";
 type ButtonSize = "default" | "sm";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -27,6 +27,11 @@ const variants: Record<ButtonVariant, string> = {
   // semantic ones, so it never goes invisible against its own background.
   secondaryInverted:
     "border border-[var(--color-neutral-700)] text-[var(--color-neutral-0)] hover:bg-[var(--color-neutral-900)]",
+  // Solid dark pill on a light/cream surface — ouraring.com's secondary
+  // CTA style ("Why Oura", "How It Works"). Literal neutral tokens, same
+  // reasoning as secondaryInverted: this reads as "dark" regardless of
+  // the page's own light/dark theme.
+  dark: "bg-[var(--color-neutral-900)] text-[var(--color-neutral-50)] hover:bg-[var(--color-neutral-800)]",
 };
 
 const sizes: Record<ButtonSize, string> = {
