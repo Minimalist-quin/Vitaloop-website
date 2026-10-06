@@ -10,15 +10,7 @@ import Image from "next/image";
  * here must be replaced before anything ships.
  */
 
-const NAV_LINKS = [
-  { label: "Services", hasPlus: true, badge: false },
-  { label: "International", hasPlus: true, badge: false },
-  { label: "About", hasPlus: true, badge: false },
-  { label: "Work", hasPlus: false, badge: true },
-  { label: "Careers", hasPlus: false, badge: false },
-  { label: "Blog", hasPlus: false, badge: false },
-  { label: "Webinar", hasPlus: false, badge: false },
-];
+const NAV_LINKS = ["Technology", "Service", "Careers"];
 
 export function Hero() {
   return (
@@ -36,38 +28,31 @@ export function Hero() {
         </div>
         <div aria-hidden className="absolute inset-0 -z-10 bg-black/35" />
 
-        <header className="flex items-center justify-between px-10 py-8">
-          <span className="text-2xl font-medium tracking-[-0.01em] whitespace-nowrap">
-            Rise at Seven<span className="ml-0.5 inline-block rotate-[-35deg]">↘</span>
-          </span>
-
-          <nav aria-label="Primary" className="hidden items-center gap-9 lg:flex">
-            {NAV_LINKS.map((link) => (
-              <span key={link.label} className="relative">
-                {link.badge && (
-                  <span
-                    aria-hidden
-                    className="absolute -top-5 left-1/2 flex h-5 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-[#9fe8c4] text-[10px] text-[#1c3b2c]"
-                  >
-                    ↗
-                  </span>
-                )}
-                <a
-                  href="#"
-                  className="text-[15px] whitespace-nowrap text-white/90 hover:text-white"
-                >
-                  {link.label}
-                  {link.hasPlus && " +"}
-                </a>
-              </span>
+        <header className="relative mx-auto flex w-full max-w-[1180px] items-center justify-between px-6 py-7">
+          <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+            {NAV_LINKS.map((label) => (
+              <a
+                key={label}
+                href="#"
+                className="text-[15px] whitespace-nowrap text-white/90 hover:text-white"
+              >
+                {label}
+              </a>
             ))}
           </nav>
 
+          <span className="absolute left-1/2 -translate-x-1/2 text-[28px] leading-none font-bold tracking-[-0.05em] [font-family:var(--font-wordmark)]">
+            vitaloop
+          </span>
+
           <a
             href="#"
-            className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-[15px] whitespace-nowrap text-[#1b1b1b]"
+            className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-[#6a5ff5] px-7 py-3 text-[15px] whitespace-nowrap text-white"
           >
-            Get In Touch <span aria-hidden>↗</span>
+            Menu{" "}
+            <span aria-hidden className="text-[13px] opacity-90">
+              +
+            </span>
           </a>
         </header>
 
