@@ -34,9 +34,10 @@ const RIGHT_FEATURES = [
 ];
 
 const PHONE_FORECAST = [
-  { day: "Today", temp: "10°", sky: "Clear" },
-  { day: "Tomorrow", temp: "12°", sky: "Cloudy" },
-  { day: "Wed", temp: "15°", sky: "Clear" },
+  { day: "Today", temp: "10°", sky: "Clear", faded: false },
+  { day: "Tomorrow", temp: "12°", sky: "Cloudy", faded: false },
+  { day: "Wed", temp: "15°", sky: "Clear", faded: false },
+  { day: "Thu", temp: "9°", sky: "Clear", faded: true },
 ];
 
 function CloudGlyph(props: SVGProps<SVGSVGElement>) {
@@ -64,6 +65,24 @@ function DownloadIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+function GearIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} {...props}>
+      <circle cx={12} cy={12} r={3.2} />
+      <path d="M12 2.5v2.2M12 19.3v2.2M4.2 7.5l1.9 1.1M17.9 15.4l1.9 1.1M4.2 16.5l1.9-1.1M17.9 8.6l1.9-1.1" />
+    </svg>
+  );
+}
+
+function BellIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M12 2.6a5.6 5.6 0 0 0-5.6 5.6v3.4L5 14.9a.8.8 0 0 0 .7 1.2h12.6a.8.8 0 0 0 .7-1.2l-1.4-3.3V8.2A5.6 5.6 0 0 0 12 2.6z" />
+      <path d="M10 17.6a2 2 0 0 0 4 0z" />
+    </svg>
+  );
+}
+
 function AppleIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
@@ -81,14 +100,23 @@ function PlayIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function Marker({ className = "" }: { className?: string }) {
+function Marker() {
   return (
     <span
       aria-hidden
-      className={`mt-2 h-2.5 w-2.5 shrink-0 rounded-full border border-[#c9cdd2] bg-white ${className}`}
+      className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full border border-[#c9cdd2] bg-[#f1f1f1]"
     />
   );
 }
+
+/**
+ * The three labels on each side sit on the dashed circle, so the middle
+ * one lands at the circle's widest point and the outer two pull back
+ * toward the centre. Offsetting the middle row outward reproduces that
+ * curve without positioning each marker trigonometrically.
+ */
+const CURVE_OFFSET = ["", "lg:-translate-x-10", ""];
+const CURVE_OFFSET_RIGHT = ["", "lg:translate-x-10", ""];
 
 export function AppSection() {
   return (
@@ -115,89 +143,118 @@ export function AppSection() {
         </span>
       </h2>
 
-      <div className="relative mx-auto mt-14 grid max-w-6xl grid-cols-1 items-center gap-10 px-6 lg:grid-cols-[1fr_auto_1fr] lg:gap-6 lg:px-10">
+      <div className="relative mx-auto mt-16 grid max-w-6xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-[1fr_auto_1fr] lg:gap-x-28 lg:px-10">
         <div
           aria-hidden
-          className="pointer-events-none absolute top-1/2 left-1/2 hidden h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-[#c9cdd2] lg:block"
+          className="pointer-events-none absolute top-1/2 left-1/2 hidden h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-[#c9cdd2] lg:block"
         />
 
-        <ul className="flex flex-col gap-14 text-[17px] text-[#b4b9be] lg:items-end lg:text-right">
-          {LEFT_LABELS.map((label) => (
-            <li key={label} className="flex max-w-[15rem] items-start gap-3 lg:flex-row-reverse">
+        <ul className="flex flex-col gap-20 text-[18px] text-[#b4b9be] lg:items-end lg:text-right">
+          {LEFT_LABELS.map((label, i) => (
+            <li
+              key={label}
+              className={`flex max-w-[17rem] items-start gap-3 lg:flex-row-reverse ${CURVE_OFFSET[i]}`}
+            >
               <Marker />
               <span className="leading-snug">{label}</span>
             </li>
           ))}
         </ul>
 
-        <div className="relative mx-auto w-[260px]">
-          <div className="absolute -inset-x-7 -top-10 bottom-6 rounded-t-[160px] rounded-b-[48px] bg-gradient-to-b from-[#cfe4ef] to-[#eaf3f7]" />
+        <div className="relative z-10 mx-auto w-[272px]">
+          <div className="absolute -inset-x-8 -top-12 bottom-10 rounded-t-[150px] rounded-b-[70px] bg-gradient-to-b from-[#bcd7e0] to-[#dceaee]" />
 
-          <div className="relative mx-auto mt-4 overflow-hidden rounded-[2.2rem] border-[6px] border-white bg-gradient-to-b from-[#a9cfe2] to-[#dcecf3] p-5 text-white shadow-xl">
-            <div className="mx-auto mb-4 h-1.5 w-14 rounded-full bg-white/70" />
+          <div className="relative mx-auto mt-2 overflow-hidden rounded-[2.4rem] border-[7px] border-white bg-gradient-to-b from-[#9ebccb] via-[#b9d2da] to-[#dfe9ea] pt-2 text-white shadow-xl">
+            <div className="mx-auto h-[22px] w-20 rounded-full bg-white/85" />
 
-            <p className="text-[13px]">21:30</p>
-            <p className="text-[22px] leading-tight font-medium">New York</p>
-            <p className="mt-1 border-b border-white/40 pb-2 text-[11px] text-white/80">
-              Today <span className="font-semibold text-white">28.12.23</span>
-            </p>
-
-            <div className="mt-3 flex items-start justify-between">
-              <p className="text-[44px] leading-none font-semibold">10°</p>
-              <div className="flex flex-col items-end gap-1 text-[9px]">
-                <span className="rounded-full bg-white/35 px-2 py-0.5">Wind</span>
-                <span className="text-white/90">5 km/h</span>
-                <span className="rounded-full bg-white/35 px-2 py-0.5">Humidity</span>
-                <span className="text-white/90">78 %</span>
+            <div className="px-4 pt-3">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-[13px]">21:30</p>
+                  <p className="text-[25px] leading-tight font-medium">New York</p>
+                </div>
+                <div className="flex -space-x-2">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/40">
+                    <GearIcon className="h-4 w-4" />
+                  </span>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/55">
+                    <BellIcon className="h-3.5 w-3.5" />
+                  </span>
+                </div>
               </div>
+
+              <p className="mt-1.5 border-b border-white/35 pb-2.5 text-[12px] text-white/85">
+                Today <span className="font-semibold text-white">28.12.23</span>
+              </p>
+
+              <div className="mt-3 flex items-start justify-between">
+                <p className="flex items-baseline gap-2 text-[46px] leading-none font-semibold">
+                  10°
+                  <span className="text-[15px] font-normal">Clear</span>
+                </p>
+                <div className="flex flex-col items-end gap-0.5 text-[9px]">
+                  <span className="rounded-full bg-white/40 px-2 py-0.5">Wind</span>
+                  <span className="pr-1 text-white/90">5 km/h</span>
+                  <span className="mt-1 rounded-full bg-white/40 px-2 py-0.5">Humidity</span>
+                  <span className="pr-1 text-white/90">78 %</span>
+                </div>
+              </div>
+
+              <p className="mt-5 text-[34px] leading-[1.12] font-medium">
+                It’s
+                <br />
+                Getting
+                <br />
+                <span className="inline-flex items-baseline gap-2">
+                  Cold
+                  <span className="flex h-5 w-5 translate-y-[2px] items-center justify-center rounded-full bg-[#1f9cf0]">
+                    <DownloadIcon className="h-3 w-3 text-white" />
+                  </span>
+                </span>
+              </p>
+
+              <ul className="mt-6 grid grid-cols-4 gap-1.5 border-t border-white/35 pt-3 text-[9px]">
+                {PHONE_FORECAST.map(({ day, temp, sky, faded }) => (
+                  <li key={day} className={faded ? "opacity-40" : undefined}>
+                    <p className="text-white/80">{day}</p>
+                    <p className="text-[16px] font-semibold">{temp}</p>
+                    <p className="text-white/80">{sky}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <p className="mt-1 text-[13px]">Clear</p>
 
-            <p className="mt-4 text-[30px] leading-[1.1] font-medium">
-              It’s
-              <br />
-              Getting
-              <br />
-              Cold
-            </p>
-
-            <ul className="mt-5 grid grid-cols-3 gap-2 border-t border-white/40 pt-3 text-[10px]">
-              {PHONE_FORECAST.map(({ day, temp, sky }) => (
-                <li key={day}>
-                  <p className="text-white/80">{day}</p>
-                  <p className="text-[17px] font-semibold">{temp}</p>
-                  <p className="text-white/80">{sky}</p>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-4 flex items-center gap-2">
-              <span className="flex-1 rounded-full bg-white px-3 py-1.5 text-center text-[10px] font-semibold text-[#15130f]">
+            <div className="mt-4 flex items-center gap-2 rounded-t-[1.5rem] bg-white/25 px-3 py-3 backdrop-blur-sm">
+              <span className="rounded-full bg-white px-3 py-1.5 text-[10px] font-semibold text-[#15130f]">
                 add location
               </span>
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-[#15130f]">
-                <DownloadIcon className="h-3.5 w-3.5" />
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#15130f]">
+                <DownloadIcon className="h-3.5 w-3.5 text-white" />
               </span>
+              <span className="ml-auto h-10 w-16 rounded-xl bg-gradient-to-b from-[#6f8a9c] to-[#9fb4c0]" />
             </div>
           </div>
 
           {/* Clouds sit above the phone, overlapping its edges as in the reference. */}
           <CloudGlyph
             aria-hidden
-            className="absolute -right-14 top-[38%] z-10 h-11 w-20 text-white drop-shadow-md"
+            className="absolute top-[30%] -right-16 z-20 h-12 w-24 text-white drop-shadow-md"
           />
           <CloudGlyph
             aria-hidden
-            className="absolute -left-12 top-[58%] z-10 h-9 w-16 text-white drop-shadow-md"
+            className="absolute top-[52%] -left-14 z-20 h-10 w-20 text-white drop-shadow-md"
           />
         </div>
 
-        <ul className="flex flex-col gap-12">
-          {RIGHT_FEATURES.map(({ lead, bold, trail, description }) => (
-            <li key={bold} className="flex max-w-[17rem] items-start gap-3">
+        <ul className="flex flex-col gap-20">
+          {RIGHT_FEATURES.map(({ lead, bold, trail, description }, i) => (
+            <li
+              key={bold}
+              className={`flex max-w-[19rem] items-start gap-3 ${CURVE_OFFSET_RIGHT[i]}`}
+            >
               <Marker />
               <div>
-                <p className="text-[19px] leading-snug">
+                <p className="text-[20px] leading-snug">
                   {lead}
                   <strong className="font-semibold">{bold}</strong>
                   {trail}
@@ -209,7 +266,7 @@ export function AppSection() {
         </ul>
       </div>
 
-      <div className="mx-auto mt-14 flex max-w-6xl px-6 lg:px-10">
+      <div className="mx-auto mt-16 flex max-w-6xl px-6 lg:px-10">
         <div className="flex items-center gap-3 rounded-[1.75rem] bg-white p-3 pr-6">
           <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#e3e3e3]">
             <AppleIcon className="h-5 w-5 text-[#15130f]" />
