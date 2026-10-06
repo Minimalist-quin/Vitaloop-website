@@ -1,5 +1,4 @@
 import Image from "next/image";
-import type { SVGProps } from "react";
 import { VitaloopWordmark } from "./VitaloopWordmark";
 
 /**
@@ -16,23 +15,6 @@ import { VitaloopWordmark } from "./VitaloopWordmark";
  */
 
 const NAV_LINKS = ["Technology", "Service", "Careers"];
-
-function IconDna(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      {...props}
-    >
-      <path d="M8 3c0 6 8 6 8 9s-8 3-8 9" />
-      <path d="M16 3c0 6-8 6-8 9s8 3 8 9" />
-      <path d="M9 7h6M9 17h6M10.5 5h3M10.5 19h3" />
-    </svg>
-  );
-}
 
 function ArrowBadge({ dark = false }: { dark?: boolean }) {
   return (
@@ -94,7 +76,7 @@ export function Hero() {
             <a
               key={label}
               href="#"
-              className="text-[17px] whitespace-nowrap text-white/90 hover:text-white"
+              className="text-[15px] whitespace-nowrap text-white/90 hover:text-white"
             >
               {label}
             </a>
@@ -103,7 +85,7 @@ export function Hero() {
 
         <a
           href="#"
-          className="ml-auto inline-flex items-center gap-3 rounded-full bg-[#111] py-1.5 pr-1.5 pl-6 text-[14px] whitespace-nowrap text-white"
+          className="ml-auto inline-flex items-center gap-3 rounded-full bg-[#111] py-1.5 pr-1.5 pl-6 text-[14px] font-semibold whitespace-nowrap text-white"
         >
           Join Waitlist
           <ArrowBadge />
@@ -112,11 +94,6 @@ export function Hero() {
 
       <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-end px-6 pt-10 pb-14">
         <div className="max-w-2xl">
-          <span className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-2 text-[13px] whitespace-nowrap backdrop-blur-sm">
-            <IconDna className="h-[18px] w-[18px] shrink-0" />
-            Personalized Health Insights
-          </span>
-
           <h1 className="text-[clamp(2.5rem,5.6vw,4.9rem)] leading-[1.1] font-normal tracking-[-0.02em]">
             See Beyond.
             <br />
@@ -129,7 +106,7 @@ export function Hero() {
 
           <a
             href="#"
-            className="mt-7 inline-flex items-center gap-3 rounded-full bg-white py-1.5 pr-1.5 pl-6 text-[14px] whitespace-nowrap text-[#111]"
+            className="mt-7 inline-flex items-center gap-3 rounded-full bg-white py-1.5 pr-1.5 pl-6 text-[14px] font-semibold whitespace-nowrap text-[#111]"
           >
             Discover More
             <ArrowBadge dark />
