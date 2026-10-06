@@ -19,23 +19,23 @@ Vitaloop is a B2B2C preventive-health platform: a wrist wearable that detects ca
 
 Next.js with Tailwind, GSAP and React Three Fiber is the strongest stack for a premium, animation-led product site: it is what most award-level product pages use, and it keeps SEO, CMS and performance intact.
 
-| Layer | Choice | Why |
-| --- | --- | --- |
-| Framework | Next.js (App Router, latest stable), TypeScript | Server rendering for SEO, static pages for speed, best ecosystem for React 3D and animation |
-| Styling | Tailwind CSS v4 with design tokens as CSS variables | Precise control over spacing and type; tokens keep the premium look consistent |
-| Components | Radix UI primitives, custom-styled (no stock UI kit look) | Accessible behaviour without a generic template feel |
-| Scroll storytelling | GSAP with ScrollTrigger and SplitText (free since 2025) | Industry standard for pinned, scrubbed, timeline-based scroll animation |
-| Smooth scroll | Lenis | Smooth, inertial scrolling that syncs with ScrollTrigger |
-| UI motion | Motion (formerly Framer Motion) | Micro-interactions, hover states, page and layout transitions |
-| 3D product scenes | React Three Fiber + drei, GLB models, Draco/KTX2 compression | Real-time wearable and Robota that rotate and react to scroll |
-| Illustrated motion | Rive (optional) | Lightweight interactive animations for How it works and UI states |
-| Typography | A premium variable typeface (licensed, e.g. a grotesk display face) with a clean text face | Type carries most of the premium feel |
-| CMS | Sanity | Editable copy, FAQ and partner pages; drafts and review workflow |
-| Forms | Next.js route handlers, Zod validation, Turnstile spam protection | Demo and waitlist forms without a third-party form tool |
-| CRM and email | HubSpot (or your CRM) via API | Demo leads to sales, waitlist double opt-in |
-| Analytics | Plausible or PostHog, consent-gated | Events from PRD F8 |
-| Hosting | Vercel | Preview deploys per branch for content and motion review |
-| Testing | Playwright, axe-core, Lighthouse CI | Flows, accessibility and performance checks |
+| Layer               | Choice                                                                                     | Why                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| Framework           | Next.js (App Router, latest stable), TypeScript                                            | Server rendering for SEO, static pages for speed, best ecosystem for React 3D and animation |
+| Styling             | Tailwind CSS v4 with design tokens as CSS variables                                        | Precise control over spacing and type; tokens keep the premium look consistent              |
+| Components          | Radix UI primitives, custom-styled (no stock UI kit look)                                  | Accessible behaviour without a generic template feel                                        |
+| Scroll storytelling | GSAP with ScrollTrigger and SplitText (free since 2025)                                    | Industry standard for pinned, scrubbed, timeline-based scroll animation                     |
+| Smooth scroll       | Lenis                                                                                      | Smooth, inertial scrolling that syncs with ScrollTrigger                                    |
+| UI motion           | Motion (formerly Framer Motion)                                                            | Micro-interactions, hover states, page and layout transitions                               |
+| 3D product scenes   | React Three Fiber + drei, GLB models, Draco/KTX2 compression                               | Real-time wearable and Robota that rotate and react to scroll                               |
+| Illustrated motion  | Rive (optional)                                                                            | Lightweight interactive animations for How it works and UI states                           |
+| Typography          | A premium variable typeface (licensed, e.g. a grotesk display face) with a clean text face | Type carries most of the premium feel                                                       |
+| CMS                 | Sanity                                                                                     | Editable copy, FAQ and partner pages; drafts and review workflow                            |
+| Forms               | Next.js route handlers, Zod validation, Turnstile spam protection                          | Demo and waitlist forms without a third-party form tool                                     |
+| CRM and email       | HubSpot (or your CRM) via API                                                              | Demo leads to sales, waitlist double opt-in                                                 |
+| Analytics           | Plausible or PostHog, consent-gated                                                        | Events from PRD F8                                                                          |
+| Hosting             | Vercel                                                                                     | Preview deploys per branch for content and motion review                                    |
+| Testing             | Playwright, axe-core, Lighthouse CI                                                        | Flows, accessibility and performance checks                                                 |
 
 **Before Phase 1, have ready:** logo and brand colors (or a request for placeholders), product renders and 3D models (GLB, or CAD to convert) of the wearable and Robota, a licensed typeface, CMS and CRM accounts, and a domain.
 
@@ -55,15 +55,15 @@ Premium here means restraint: few elements, large type, generous space, and moti
 
 **Signature motion moments**
 
-| Section | Moment | Technique |
-| --- | --- | --- |
-| Hero | Wearable rotates into view, a pulse line traces across it, then Robota glides in beside it | R3F scene + GSAP timeline |
-| The Wearable | Pinned section: the device turns as sensors highlight one by one (ECG, HRV, sleep, SpO2, temperature) with live-style readouts | ScrollTrigger pin + scrub, R3F camera moves |
-| Robota | Morning check-in plays as a short scene, then shifts to emergency mode: alert, call, AED retrieval | ScrollTrigger timeline, Rive or video for the sequence |
-| Headlines | Lines reveal word by word as they enter | SplitText + ScrollTrigger |
-| Features | Cards lift and tilt subtly on hover; staggered entry | Motion |
-| How it works | Four steps light up along one connecting line as you scroll | ScrollTrigger scrub, SVG path drawing |
-| Page transitions | Short fade-and-rise between routes | Motion layout transitions |
+| Section          | Moment                                                                                                                         | Technique                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| Hero             | Wearable rotates into view, a pulse line traces across it, then Robota glides in beside it                                     | R3F scene + GSAP timeline                              |
+| The Wearable     | Pinned section: the device turns as sensors highlight one by one (ECG, HRV, sleep, SpO2, temperature) with live-style readouts | ScrollTrigger pin + scrub, R3F camera moves            |
+| Robota           | Morning check-in plays as a short scene, then shifts to emergency mode: alert, call, AED retrieval                             | ScrollTrigger timeline, Rive or video for the sequence |
+| Headlines        | Lines reveal word by word as they enter                                                                                        | SplitText + ScrollTrigger                              |
+| Features         | Cards lift and tilt subtly on hover; staggered entry                                                                           | Motion                                                 |
+| How it works     | Four steps light up along one connecting line as you scroll                                                                    | ScrollTrigger scrub, SVG path drawing                  |
+| Page transitions | Short fade-and-rise between routes                                                                                             | Motion layout transitions                              |
 
 **Motion rules**
 
