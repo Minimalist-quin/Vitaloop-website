@@ -47,7 +47,7 @@ export function Hero() {
           fill
           priority
           sizes="100vw"
-          className="scale-125 object-cover blur-[18px]"
+          className="scale-110 object-cover blur-[6px]"
         />
         <video
           className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
@@ -59,7 +59,7 @@ export function Hero() {
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
       </div>
-      <div aria-hidden className="absolute inset-0 -z-10 bg-black/35" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-black/20" />
       <div
         aria-hidden
         className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-gradient-to-t from-black/70 to-transparent"
