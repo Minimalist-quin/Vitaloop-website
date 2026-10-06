@@ -44,17 +44,9 @@ function IconDna(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-const FEATURES = [
-  {
-    Icon: IconAnalysis,
-    title: "Real-Time Analysis",
-    description: "Fast, actionable insights without long wait times.",
-  },
-  {
-    Icon: IconDna,
-    title: "Personalized Health Insights",
-    description: "Tailored recommendations based on your unique biomarkers.",
-  },
+const EYEBROW_PILLS = [
+  { Icon: IconAnalysis, label: "Real-Time Analysis" },
+  { Icon: IconDna, label: "Personalized Health Insights" },
 ];
 
 function ArrowBadge({ dark = false }: { dark?: boolean }) {
@@ -118,6 +110,17 @@ export function Hero() {
 
       <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-end px-6 pt-10 pb-14">
         <div className="max-w-2xl">
+          <ul className="mb-7 flex flex-wrap gap-3">
+            {EYEBROW_PILLS.map(({ Icon, label }) => (
+              <li key={label}>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[13px] whitespace-nowrap backdrop-blur-sm">
+                  <Icon className="h-[18px] w-[18px] shrink-0" />
+                  {label}
+                </span>
+              </li>
+            ))}
+          </ul>
+
           <h1 className="text-[clamp(2.25rem,5vw,4.25rem)] leading-[1.12] font-light tracking-[-0.02em]">
             See Beyond.
             <br />
@@ -135,18 +138,6 @@ export function Hero() {
             Discover More
             <ArrowBadge dark />
           </a>
-
-          <ul className="mt-11 flex flex-col gap-6 sm:flex-row sm:gap-10">
-            {FEATURES.map(({ Icon, title, description }) => (
-              <li key={title} className="flex max-w-xs gap-3.5">
-                <Icon className="mt-0.5 h-6 w-6 shrink-0 text-white" />
-                <div>
-                  <p className="text-[14px] font-semibold">{title}</p>
-                  <p className="mt-1 text-[13px] leading-snug text-white/70">{description}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </section>
