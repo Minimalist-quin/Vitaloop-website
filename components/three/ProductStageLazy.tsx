@@ -4,12 +4,14 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
+import type { ProductStageDevice } from "./ProductStage";
 
 const ProductStage = dynamic(() => import("./ProductStage").then((m) => m.ProductStage), {
   ssr: false,
 });
 
 export interface ProductStageLazyProps {
+  device?: ProductStageDevice;
   className?: string;
 }
 
@@ -19,7 +21,7 @@ export interface ProductStageLazyProps {
  * fully static poster instead of the live scene when the viewer prefers
  * reduced motion — per CLAUDE.md's motion rules.
  */
-export function ProductStageLazy({ className }: ProductStageLazyProps) {
+export function ProductStageLazy({ device = "wearable", className }: ProductStageLazyProps) {
   const reducedMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
 
@@ -30,10 +32,18 @@ export function ProductStageLazy({ className }: ProductStageLazyProps) {
           aria-hidden
           className="absolute inset-0 flex items-center justify-center rounded-[var(--radius-lg)] bg-[var(--color-neutral-950)]"
         >
-          <div className="h-40 w-16 rounded-full bg-[var(--color-accent-500)] opacity-60" />
+          <div
+            className={cn(
+              "bg-[var(--color-accent-500)] opacity-60",
+              device === "wearable"
+                ? "h-40 w-16 rounded-full"
+                : "h-32 w-24 rounded-[var(--radius-lg)]",
+            )}
+          />
         </div>
       )}
       <ProductStage
+        device={device}
         static={reducedMotion}
         onCreated={() => setMounted(true)}
         className={cn(

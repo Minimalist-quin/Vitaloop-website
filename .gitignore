@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# reference-only material dropped in for design inspiration — not a site
+# asset and not meant to be committed (may include third-party screenshots)
+/Media/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
