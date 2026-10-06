@@ -8,15 +8,15 @@
   back down this stack. "SF Pro Rounded" hits Apple's downloadable font
   package if installed; ui-rounded is the CSS generic that maps to the
   system rounded face (Safari); "SF Compact Rounded" is the installed
-  system file. Nunito (loaded in app/layout.tsx) is the cross-platform
-  rounded stand-in for everyone else — notably Chrome, which resolves
-  none of the Apple candidates. Flat system sans is the last resort.
+  system file. Manrope (loaded in app/layout.tsx) is what everyone else
+  renders — notably Chrome, which resolves none of the Apple
+  candidates. System sans is the last resort.
 */
 @theme inline {
   --color-background: var(--color-bg);
   --color-foreground: var(--color-text);
   --font-sans:
-    "SF Pro Rounded", ui-rounded, "SF Compact Rounded", var(--font-nunito), system-ui,
+    "SF Pro Rounded", ui-rounded, "SF Compact Rounded", var(--font-manrope), system-ui,
     -apple-system, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }

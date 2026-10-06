@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
 import "./globals.css";
 
 /**
- * Cross-platform stand-in for SF Pro Rounded, which can't be served as a
- * webfont under Apple's license. Sits behind the Apple stack in
- * --font-sans, so Apple devices get the real thing and everyone else
- * gets a rounded face rather than falling back to a flat system sans.
+ * Cross-platform face behind the Apple stack in --font-sans, since
+ * SF Pro Rounded can't be served as a webfont under Apple's license.
+ * This is what Chrome and non-Apple platforms actually render.
  */
-const nunito = Nunito({
-  variable: "--font-nunito",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
   weight: "variable",
 });
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${nunito.variable} h-full antialiased`}>
+    <html lang="en" className={`${manrope.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <SmoothScrollProvider />
         <main className="flex-1">{children}</main>
