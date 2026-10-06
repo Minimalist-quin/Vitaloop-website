@@ -1,14 +1,13 @@
 import Image from "next/image";
 
 /**
- * ⚠️ LITERAL CLONE of Media/image.png — a screenshot of riseatseven.com.
- *
- * The wordmark, nav labels, headline, award claims, body copy and
- * photography below all belong to Rise at Seven, not Vitaloop. This is a
- * layout-matching exercise only: every string and image here must be
- * replaced before anything ships. The photography is extracted from the
- * supplied screenshot (public/hero-thumb.jpg), used both inline and —
- * scaled up and blurred — as the backdrop.
+ * ⚠️ CLONE of supplied reference screenshots — none of this copy is
+ * Vitaloop's. The navbar and blurred backdrop come from
+ * Media/image.png (riseatseven.com); the centre block — eyebrow pill,
+ * two-line headline, subhead, "Book demo" pill — comes from a second
+ * reference. Backdrop photography is cropped from the first screenshot
+ * (public/hero-thumb.jpg). Layout exercise only: every string and image
+ * here must be replaced before anything ships.
  */
 
 const NAV_LINKS = [
@@ -20,39 +19,6 @@ const NAV_LINKS = [
   { label: "Blog", hasPlus: false, badge: false },
   { label: "Webinar", hasPlus: false, badge: false },
 ];
-
-const AWARDS = ["Global Search Awards", "The Drum", "UK Social Media Awards", "Content Awards"];
-
-function Laurel({ flipped = false }: { flipped?: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 40 60"
-      aria-hidden
-      className="h-10 w-7 shrink-0 opacity-90"
-      style={flipped ? { transform: "scaleX(-1)" } : undefined}
-      fill="currentColor"
-      stroke="none"
-    >
-      <path
-        d="M30 3C15 11 7 26 11 43c1.4 6 3.8 10.5 7 13.6"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-      />
-      {[0, 1, 2, 3, 4, 5, 6].map((i) => (
-        <ellipse
-          key={i}
-          cx={26 - i * 3.1}
-          cy={8 + i * 7.4}
-          rx={7}
-          ry={3.1}
-          transform={`rotate(${-58 + i * 7} ${26 - i * 3.1} ${8 + i * 7.4})`}
-        />
-      ))}
-    </svg>
-  );
-}
 
 export function Hero() {
   return (
@@ -106,59 +72,32 @@ export function Hero() {
         </header>
 
         <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-          <p className="text-[13px] leading-snug tracking-[0.04em] uppercase">
-            #1 Most Recommended
+          <span className="rounded-full bg-white px-5 py-2.5 text-[14px] text-[#1b1b1b] shadow-sm">
+            Coming Fall 2024
+          </span>
+
+          <h1
+            className="mt-10 text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[1.05] font-bold tracking-[-0.035em]"
+            style={{ textShadow: "0 2px 24px rgba(0,0,0,0.25)" }}
+          >
+            A CRM that helps
             <br />
-            Content Marketing Agency
-          </p>
-
-          <div className="mt-5 flex items-center justify-center gap-4 text-white">
-            <Laurel />
-            <div className="flex items-center gap-6">
-              {AWARDS.map((award) => (
-                <span
-                  key={award}
-                  className="max-w-[88px] text-[9px] leading-tight font-semibold tracking-[0.02em] uppercase opacity-90"
-                >
-                  {award}
-                </span>
-              ))}
-            </div>
-            <Laurel flipped />
-          </div>
-
-          <h1 className="mt-8 text-[clamp(2.75rem,9vw,8rem)] leading-[0.95] font-bold tracking-[-0.02em]">
-            <span className="block">We Create</span>
-            <span className="flex flex-wrap items-center justify-center gap-x-[0.18em] gap-y-2">
-              Category
-              <Image
-                src="/hero-thumb.jpg"
-                alt=""
-                width={210}
-                height={228}
-                className="inline-block h-[1.08em] w-[1em] rounded-[0.18em] object-cover align-middle"
-              />
-              Leaders
-            </span>
+            you sell more.
           </h1>
 
-          <p className="mt-10 bg-black/45 px-8 py-2 text-[clamp(1rem,1.8vw,1.6rem)]">
-            on every searchable platform
+          <p className="mt-8 text-[clamp(1rem,1.3vw,1.15rem)] leading-relaxed text-white/75">
+            Finally an easy-to-use CRM built for small businesses:
+            <br />
+            fast, automated, and focused on customer relationships.
           </p>
-        </div>
 
-        <footer className="flex flex-col gap-4 px-10 py-8 text-[14px] leading-snug sm:flex-row sm:items-end sm:justify-between">
-          <p>
-            Organic media planners creating, distributing &amp; optimising
-            <br />
-            <strong className="font-semibold">search-first</strong> content for SEO, Social, PR
-          </p>
-          <p className="font-semibold sm:text-right">
-            4 Global Offices serving
-            <br />
-            UK, USA (New York) &amp; EU
-          </p>
-        </footer>
+          <a
+            href="#"
+            className="mt-14 inline-flex items-center rounded-full bg-white px-8 py-4 text-[16px] font-medium text-[#1b1b1b] shadow-lg"
+          >
+            Book demo
+          </a>
+        </div>
       </section>
     </div>
   );
