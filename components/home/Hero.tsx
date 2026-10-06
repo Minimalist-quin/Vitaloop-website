@@ -16,9 +16,8 @@ import { useReducedMotion } from "@/lib/use-reduced-motion";
  * Robota placeholder once on load.
  *
  * Color and type direction follow ouraring.com per user instruction: a
- * warm cream surface (semantic tokens — flips with the page theme, not
- * forced dark like the earlier version of this section), a light-weight
- * serif display face, and a solid dark pill for the secondary CTA.
+ * warm cream surface, a light-weight serif display face, and a solid
+ * dark pill for the secondary CTA. One theme only — no dark mode.
  */
 export function Hero() {
   const reducedMotion = useReducedMotion();

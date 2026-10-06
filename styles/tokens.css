@@ -11,10 +11,7 @@
   import in app/layout.tsx later; nothing else should need to change
   since every component reads these variables, not raw values.
 
-  Theme: :root carries the light (cream) values. prefers-color-scheme
-  flips them to the warm-dark variant for users with no explicit
-  preference; [data-theme="dark"] / "light" lets a manual theme switch
-  override that media query in either direction.
+  One theme only (light/cream) — no dark mode.
 */
 
 :root {
@@ -100,28 +97,4 @@
   --duration-fast: 300ms;
   --duration-base: 500ms;
   --duration-slow: 800ms;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --color-bg: var(--color-neutral-950);
-    --color-bg-raised: var(--color-neutral-900);
-    --color-bg-inverted: var(--color-neutral-50);
-    --color-text: var(--color-neutral-50);
-    --color-text-muted: var(--color-neutral-400);
-    --color-text-inverted: var(--color-neutral-950);
-    --color-border: var(--color-neutral-800);
-    --color-border-strong: var(--color-neutral-700);
-  }
-}
-
-:root[data-theme="dark"] {
-  --color-bg: var(--color-neutral-950);
-  --color-bg-raised: var(--color-neutral-900);
-  --color-bg-inverted: var(--color-neutral-50);
-  --color-text: var(--color-neutral-50);
-  --color-text-muted: var(--color-neutral-400);
-  --color-text-inverted: var(--color-neutral-950);
-  --color-border: var(--color-neutral-800);
-  --color-border-strong: var(--color-neutral-700);
 }
