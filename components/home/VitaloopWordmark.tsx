@@ -1,43 +1,44 @@
 /**
- * Hand-drawn "vitaloop" wordmark, styled after Nuro's logotype: heavy
- * geometric lowercase, uniform stroke, fully rounded terminals. The two
- * o's are fused into an infinity symbol.
+ * Hand-drawn "vitaloop" wordmark, styled after Nuro's logotype: geometric
+ * lowercase, uniform stroke, fully rounded terminals. The two o's are
+ * fused into an infinity symbol.
  *
  * Construction: every glyph is a stroked skeleton on a shared grid —
- * x-height spans y 0→100, stroke 34, so centrelines sit at y 17 and 83
- * and round caps land the outer edges exactly on the x-height. Change
- * strokeWidth alone and the whole mark stays consistent.
+ * x-height spans y 0→100 with stroke 26, so centrelines sit at y 13 and
+ * 87 and the round caps land the outer edges exactly on the x-height.
+ * Bowl radii are 37 for the same reason (37 + 13 = 50). Letters are set
+ * on a 4-unit gap, so they very nearly touch.
  */
 export function VitaloopWordmark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="-4 -71 684 240"
+      viewBox="-4 -71 618 240"
       className={className}
       role="img"
       aria-label="vitaloop"
       fill="none"
     >
-      <g stroke="currentColor" strokeWidth={34} strokeLinecap="round" strokeLinejoin="round">
+      <g stroke="currentColor" strokeWidth={26} strokeLinecap="round" strokeLinejoin="round">
         {/* v */}
-        <path d="M17 17 L50 83 L83 17" />
+        <path d="M13 13 L48 87 L83 13" />
         {/* i — stem */}
-        <path d="M129 17 L129 83" />
+        <path d="M113 13 L113 87" />
         {/* t */}
-        <path d="M193 -38 L193 83" />
-        <path d="M175 8 L219 8" />
+        <path d="M160 -42 L160 87" />
+        <path d="M143 4 L189 4" />
         {/* a — bowl + stem */}
-        <circle cx={298} cy={50} r={33} />
-        <path d="M331 17 L331 83" />
+        <circle cx={256} cy={50} r={37} />
+        <path d="M293 13 L293 87" />
         {/* l */}
-        <path d="M377 -50 L377 83" />
+        <path d="M323 -54 L323 87" />
         {/* oo — fused into an infinity symbol */}
-        <path d="M423 50 C423 6 463 6 485 50 C507 94 547 94 547 50 C547 6 507 6 485 50 C463 94 423 94 423 50 Z" />
+        <path d="M353 50 C353 1 398 1 423 50 C448 99 493 99 493 50 C493 1 448 1 423 50 C398 99 353 99 353 50 Z" />
         {/* p — bowl + descender */}
-        <circle cx={626} cy={50} r={33} />
-        <path d="M593 17 L593 148" />
+        <circle cx={560} cy={50} r={37} />
+        <path d="M523 13 L523 152" />
       </g>
       {/* i — dot */}
-      <circle cx={129} cy={-25} r={17} fill="currentColor" />
+      <circle cx={113} cy={-22} r={13} fill="currentColor" />
     </svg>
   );
 }

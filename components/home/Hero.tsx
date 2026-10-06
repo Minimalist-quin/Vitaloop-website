@@ -42,7 +42,7 @@ export function Hero() {
             ))}
           </nav>
 
-          <VitaloopWordmark className="absolute left-1/2 h-[56px] w-auto -translate-x-1/2 text-white" />
+          <VitaloopWordmark className="absolute left-1/2 h-[44px] w-auto -translate-x-1/2 text-white" />
 
           <a
             href="#"
