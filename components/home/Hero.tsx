@@ -17,16 +17,6 @@ import { VitaloopWordmark } from "./VitaloopWordmark";
 
 const NAV_LINKS = ["Technology", "Service", "Careers"];
 
-function IconAnalysis(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} {...props}>
-      <circle cx={12} cy={12} r={9} />
-      <path d="M12 3a9 9 0 0 1 9 9h-9z" fill="currentColor" stroke="none" />
-      <path d="M12 12 4.5 16.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 function IconDna(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -44,11 +34,6 @@ function IconDna(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-const EYEBROW_PILLS = [
-  { Icon: IconAnalysis, label: "Real-Time Analysis" },
-  { Icon: IconDna, label: "Personalized Health Insights" },
-];
-
 function ArrowBadge({ dark = false }: { dark?: boolean }) {
   return (
     <span
@@ -65,7 +50,15 @@ function ArrowBadge({ dark = false }: { dark?: boolean }) {
 export function Hero() {
   return (
     <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden text-white">
+      {/*
+        Product video backdrop. public/hero-video.mp4 is not in the repo
+        yet — until it is, the <video> fails to load and the poster (and
+        the Image beneath it) shows instead, so the hero still renders.
+        The Image also covers prefers-reduced-motion, where the looping
+        video is hidden outright.
+      */}
       <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
+        {/* Blurred: this fallback is a small crop, sharp only at thumbnail size. */}
         <Image
           src="/hero-thumb.jpg"
           alt=""
@@ -74,6 +67,15 @@ export function Hero() {
           sizes="100vw"
           className="scale-125 object-cover blur-[18px]"
         />
+        <video
+          className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
       </div>
       <div aria-hidden className="absolute inset-0 -z-10 bg-black/35" />
       <div
@@ -110,18 +112,12 @@ export function Hero() {
 
       <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-end px-6 pt-10 pb-14">
         <div className="max-w-2xl">
-          <ul className="mb-7 flex flex-wrap gap-3">
-            {EYEBROW_PILLS.map(({ Icon, label }) => (
-              <li key={label}>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[13px] whitespace-nowrap backdrop-blur-sm">
-                  <Icon className="h-[18px] w-[18px] shrink-0" />
-                  {label}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <span className="mb-7 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-2 text-[13px] whitespace-nowrap backdrop-blur-sm">
+            <IconDna className="h-[18px] w-[18px] shrink-0" />
+            Personalized Health Insights
+          </span>
 
-          <h1 className="text-[clamp(2.25rem,5vw,4.25rem)] leading-[1.12] font-light tracking-[-0.02em]">
+          <h1 className="text-[clamp(2.5rem,5.6vw,4.9rem)] leading-[1.1] font-normal tracking-[-0.02em]">
             See Beyond.
             <br />
             Unlock Your Health
