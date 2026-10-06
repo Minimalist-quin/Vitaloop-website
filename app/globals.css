@@ -2,18 +2,16 @@
 @import "../styles/tokens.css";
 
 /*
-  PLACEHOLDER typefaces: Geist (free, variable, grotesk) for body/UI text;
-  Fraunces stands in for ouraring.com's licensed serif ("Editorial New")
-  on display headlines. Swap the font imports in app/layout.tsx once real
-  choices are made — components reference --font-sans/--font-display via
-  Tailwind's theme, not these names directly.
+  PLACEHOLDER typeface: Geist (free, variable, grotesk) stands in for a
+  real brand typeface. Swap the font import in app/layout.tsx once
+  that's chosen — components reference --font-sans via Tailwind's
+  theme, not this name directly.
 */
 @theme inline {
   --color-background: var(--color-bg);
   --color-foreground: var(--color-text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-fraunces), serif;
 }
 
 body {
