@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { VitaloopWordmark } from "./VitaloopWordmark";
 
 /**
  * ⚠️ CLONE of supplied reference screenshots — none of this copy is
@@ -41,9 +42,7 @@ export function Hero() {
             ))}
           </nav>
 
-          <span className="absolute left-1/2 -translate-x-1/2 text-[28px] leading-none font-bold tracking-[-0.05em] [font-family:var(--font-wordmark)]">
-            vitaloop
-          </span>
+          <VitaloopWordmark className="absolute left-1/2 h-[56px] w-auto -translate-x-1/2 text-white" />
 
           <a
             href="#"
