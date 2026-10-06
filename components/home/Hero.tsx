@@ -56,8 +56,8 @@ function Laurel({ flipped = false }: { flipped?: boolean }) {
 
 export function Hero() {
   return (
-    <div className="min-h-[100svh] bg-[#f6f2ee] p-6">
-      <section className="relative isolate flex min-h-[calc(100svh-3rem)] flex-col overflow-hidden rounded-[28px] text-white">
+    <div className="min-h-[100svh]">
+      <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden text-white">
         <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
           <Image
             src="/hero-thumb.jpg"
