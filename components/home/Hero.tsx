@@ -1,119 +1,165 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/Button";
-import { ProductStageLazy } from "@/components/three/ProductStageLazy";
-import type { ProductStageDevice } from "@/components/three/ProductStage";
-import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
-import { useReducedMotion } from "@/lib/use-reduced-motion";
-
-const NAV_LINKS = [
-  { href: "#wearable", label: "Product" },
-  { href: "#how-it-works", label: "How it works" },
-  { href: "/partners", label: "For partners" },
-  { href: "/faq", label: "FAQ" },
-];
+import Image from "next/image";
 
 /**
- * Replicates Media/image.png's composition (nav over a dimmed full-bleed
- * backdrop; bold headline broken by an inline image; a dark subhead bar;
- * small meta text in both bottom corners) with Vitaloop's own content.
+ * ⚠️ LITERAL CLONE of Media/image.png — a screenshot of riseatseven.com.
  *
- * Two deliberate departures from the reference, per CLAUDE.md:
- * - No stock background photo — the backdrop is a CSS gradient standing
- *   in for the dimmed/blurred photo treatment.
- * - No awards/certification badges — "no invented proof" rule.
- *
- * Headline is a bold sans (not the serif used in the prior Oura-styled
- * pass) to match image.png's actual type treatment. The nav and both
- * CTA rows (image.png PRD requires primary+secondary hero CTAs it
- * doesn't itself have) are built inline here, not as separate
- * reusable Header/Footer components.
+ * The wordmark, nav labels, headline, award claims, body copy and
+ * photography below all belong to Rise at Seven, not Vitaloop. This is a
+ * layout-matching exercise only: every string and image here must be
+ * replaced before anything ships. The photography is extracted from the
+ * supplied screenshot (public/hero-thumb.jpg), used both inline and —
+ * scaled up and blurred — as the backdrop.
  */
-export function Hero() {
-  const reducedMotion = useReducedMotion();
-  const [device, setDevice] = useState<ProductStageDevice>("wearable");
-  const stageRef = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
-    if (reducedMotion || !stageRef.current) return;
+const NAV_LINKS = [
+  { label: "Services", hasPlus: true, badge: false },
+  { label: "International", hasPlus: true, badge: false },
+  { label: "About", hasPlus: true, badge: false },
+  { label: "Work", hasPlus: false, badge: true },
+  { label: "Careers", hasPlus: false, badge: false },
+  { label: "Blog", hasPlus: false, badge: false },
+  { label: "Webinar", hasPlus: false, badge: false },
+];
 
-    registerGsap();
-    const tl = gsap.timeline({ delay: 0.6 });
-    tl.to(stageRef.current, { opacity: 0, duration: 0.4, ease: VITALOOP_EASE, delay: 2.2 })
-      .call(() => setDevice("robota"))
-      .to(stageRef.current, { opacity: 1, duration: 0.4, ease: VITALOOP_EASE });
+const AWARDS = ["Global Search Awards", "The Drum", "UK Social Media Awards", "Content Awards"];
 
-    return () => {
-      tl.kill();
-    };
-  }, [reducedMotion]);
-
+function Laurel({ flipped = false }: { flipped?: boolean }) {
   return (
-    <section
-      id="hero"
-      className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-[var(--color-neutral-950)] text-[var(--color-neutral-0)]"
+    <svg
+      viewBox="0 0 40 60"
+      aria-hidden
+      className="h-10 w-7 shrink-0 opacity-90"
+      style={flipped ? { transform: "scaleX(-1)" } : undefined}
+      fill="currentColor"
+      stroke="none"
     >
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-1/3 left-1/4 h-[60vw] w-[60vw] rounded-full bg-[var(--color-accent-500)] opacity-20 blur-[120px]" />
-        <div className="absolute bottom-0 right-0 h-[50vw] w-[50vw] rounded-full bg-[var(--color-neutral-700)] opacity-40 blur-[100px]" />
-      </div>
+      <path
+        d="M30 3C15 11 7 26 11 43c1.4 6 3.8 10.5 7 13.6"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+      />
+      {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+        <ellipse
+          key={i}
+          cx={26 - i * 3.1}
+          cy={8 + i * 7.4}
+          rx={7}
+          ry={3.1}
+          transform={`rotate(${-58 + i * 7} ${26 - i * 3.1} ${8 + i * 7.4})`}
+        />
+      ))}
+    </svg>
+  );
+}
 
-      <div className="flex items-center justify-between px-[var(--space-6)] py-[var(--space-6)]">
-        <span className="text-[var(--font-size-h3)] font-semibold tracking-[var(--tracking-tight)]">
-          Vitaloop
-        </span>
+export function Hero() {
+  return (
+    <div className="min-h-[100svh] bg-[#f6f2ee] p-6">
+      <section className="relative isolate flex min-h-[calc(100svh-3rem)] flex-col overflow-hidden rounded-[28px] text-white">
+        <div aria-hidden className="absolute inset-0 -z-20 overflow-hidden">
+          <Image
+            src="/hero-thumb.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="scale-125 object-cover blur-[18px]"
+          />
+        </div>
+        <div aria-hidden className="absolute inset-0 -z-10 bg-black/35" />
 
-        <nav aria-label="Primary" className="hidden items-center gap-[var(--space-8)] md:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-[var(--font-size-body-sm)] text-[var(--color-neutral-300)] hover:text-[var(--color-neutral-0)]"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        <Button asChild size="sm">
-          <Link href="/demo">Request a demo</Link>
-        </Button>
-      </div>
-
-      <div className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center gap-[var(--space-10)] px-[var(--space-6)] text-center">
-        <h1 className="flex flex-wrap items-center justify-center gap-x-4 gap-y-6 text-[var(--font-size-display)] font-bold leading-[var(--line-height-tight)] tracking-[var(--tracking-tight)]">
-          <span>A wearable that detects.</span>
-          <span
-            ref={stageRef}
-            className="relative inline-block h-24 w-24 align-middle sm:h-28 sm:w-28"
-          >
-            <ProductStageLazy device={device} className="h-full w-full" />
+        <header className="flex items-center justify-between px-10 py-8">
+          <span className="text-2xl font-medium tracking-[-0.01em] whitespace-nowrap">
+            Rise at Seven<span className="ml-0.5 inline-block rotate-[-35deg]">↘</span>
           </span>
-          <span>A companion that responds.</span>
-        </h1>
 
-        <div className="w-full max-w-3xl rounded-[var(--radius-md)] bg-[var(--color-neutral-900)] px-[var(--space-8)] py-[var(--space-4)]">
-          <p className="text-[var(--font-size-body-lg)] text-[var(--color-neutral-100)]">
-            Vitaloop detects, alerts and guides.
+          <nav aria-label="Primary" className="hidden items-center gap-9 lg:flex">
+            {NAV_LINKS.map((link) => (
+              <span key={link.label} className="relative">
+                {link.badge && (
+                  <span
+                    aria-hidden
+                    className="absolute -top-5 left-1/2 flex h-5 w-8 -translate-x-1/2 items-center justify-center rounded-full bg-[#9fe8c4] text-[10px] text-[#1c3b2c]"
+                  >
+                    ↗
+                  </span>
+                )}
+                <a
+                  href="#"
+                  className="text-[15px] whitespace-nowrap text-white/90 hover:text-white"
+                >
+                  {link.label}
+                  {link.hasPlus && " +"}
+                </a>
+              </span>
+            ))}
+          </nav>
+
+          <a
+            href="#"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-[15px] whitespace-nowrap text-[#1b1b1b]"
+          >
+            Get In Touch <span aria-hidden>↗</span>
+          </a>
+        </header>
+
+        <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+          <p className="text-[13px] leading-snug tracking-[0.04em] uppercase">
+            #1 Most Recommended
+            <br />
+            Content Marketing Agency
+          </p>
+
+          <div className="mt-5 flex items-center justify-center gap-4 text-white">
+            <Laurel />
+            <div className="flex items-center gap-6">
+              {AWARDS.map((award) => (
+                <span
+                  key={award}
+                  className="max-w-[88px] text-[9px] leading-tight font-semibold tracking-[0.02em] uppercase opacity-90"
+                >
+                  {award}
+                </span>
+              ))}
+            </div>
+            <Laurel flipped />
+          </div>
+
+          <h1 className="mt-8 text-[clamp(2.75rem,9vw,8rem)] leading-[0.95] font-bold tracking-[-0.02em]">
+            <span className="block">We Create</span>
+            <span className="flex flex-wrap items-center justify-center gap-x-[0.18em] gap-y-2">
+              Category
+              <Image
+                src="/hero-thumb.jpg"
+                alt=""
+                width={210}
+                height={228}
+                className="inline-block h-[1.08em] w-[1em] rounded-[0.18em] object-cover align-middle"
+              />
+              Leaders
+            </span>
+          </h1>
+
+          <p className="mt-10 bg-black/45 px-8 py-2 text-[clamp(1rem,1.8vw,1.6rem)]">
+            on every searchable platform
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-[var(--space-4)]">
-          <Button asChild>
-            <Link href="#wearable">Learn more</Link>
-          </Button>
-          <Button asChild variant="dark">
-            <Link href="/partners">For partners</Link>
-          </Button>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-[var(--space-2)] px-[var(--space-6)] py-[var(--space-6)] text-[var(--font-size-body-sm)] text-[var(--color-neutral-400)] sm:flex-row sm:items-end sm:justify-between">
-        <p>[PLACEHOLDER] A preventive-health platform for the people you love.</p>
-        <p>[PLACEHOLDER] Built for insurers, employers, senior living &amp; health systems.</p>
-      </div>
-    </section>
+        <footer className="flex flex-col gap-4 px-10 py-8 text-[14px] leading-snug sm:flex-row sm:items-end sm:justify-between">
+          <p>
+            Organic media planners creating, distributing &amp; optimising
+            <br />
+            <strong className="font-semibold">search-first</strong> content for SEO, Social, PR
+          </p>
+          <p className="font-semibold sm:text-right">
+            4 Global Offices serving
+            <br />
+            UK, USA (New York) &amp; EU
+          </p>
+        </footer>
+      </section>
+    </div>
   );
 }
