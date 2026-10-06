@@ -6,13 +6,18 @@
  * Construction: every glyph is a stroked skeleton on a shared grid —
  * x-height spans y 0→100 with stroke 26, so centrelines sit at y 13 and
  * 87 and the round caps land the outer edges exactly on the x-height.
- * Bowl radii are 37 for the same reason (37 + 13 = 50). Letters are set
- * on a 4-unit gap, so they very nearly touch.
+ * Bowl radii are 37 for the same reason (37 + 13 = 50).
+ *
+ * Letters sit on a 4-unit gap, except "a", which is kerned 18 units
+ * closer: the "t" only reaches full width at its crossbar, so measuring
+ * from the crossbar left a visible hole at mid-height, where the "t" is
+ * just a stem. The overlap is safe — at crossbar height the a's bowl has
+ * narrowed enough to clear it.
  */
 export function VitaloopWordmark({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="-4 -71 618 240"
+      viewBox="-4 -71 600 240"
       className={className}
       role="img"
       aria-label="vitaloop"
@@ -26,16 +31,16 @@ export function VitaloopWordmark({ className }: { className?: string }) {
         {/* t */}
         <path d="M160 -42 L160 87" />
         <path d="M143 4 L189 4" />
-        {/* a — bowl + stem */}
-        <circle cx={256} cy={50} r={37} />
-        <path d="M293 13 L293 87" />
+        {/* a — bowl + stem, kerned into the t */}
+        <circle cx={238} cy={50} r={37} />
+        <path d="M275 13 L275 87" />
         {/* l */}
-        <path d="M323 -54 L323 87" />
+        <path d="M305 -54 L305 87" />
         {/* oo — fused into an infinity symbol */}
-        <path d="M353 50 C353 1 398 1 423 50 C448 99 493 99 493 50 C493 1 448 1 423 50 C398 99 353 99 353 50 Z" />
+        <path d="M335 50 C335 1 380 1 405 50 C430 99 475 99 475 50 C475 1 430 1 405 50 C380 99 335 99 335 50 Z" />
         {/* p — bowl + descender */}
-        <circle cx={560} cy={50} r={37} />
-        <path d="M523 13 L523 152" />
+        <circle cx={542} cy={50} r={37} />
+        <path d="M505 13 L505 152" />
       </g>
       {/* i — dot */}
       <circle cx={113} cy={-22} r={13} fill="currentColor" />
