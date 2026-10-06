@@ -2,22 +2,26 @@
 @import "../styles/tokens.css";
 
 /*
-  PLACEHOLDER typeface: Geist (free, variable, grotesk) stands in for a
-  real brand typeface. Swap the font import in app/layout.tsx once
-  that's chosen — components reference --font-sans via Tailwind's
-  theme, not this name directly.
+  Typeface: SF Pro Rounded. It's an Apple system font, so it resolves
+  locally on macOS/iOS and cannot be self-hosted or served to other
+  platforms under Apple's license — Windows/Android/Linux visitors fall
+  back down this stack. "SF Pro Rounded" hits Apple's downloadable font
+  package if installed; ui-rounded is the CSS generic that maps to the
+  system rounded face (Safari); "SF Compact Rounded" is the installed
+  system file; then the non-rounded system font as a last resort.
 */
 @theme inline {
   --color-background: var(--color-bg);
   --color-foreground: var(--color-text);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans:
+    "SF Pro Rounded", ui-rounded, "SF Compact Rounded", system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
 }
