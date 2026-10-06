@@ -1,0 +1,120 @@
+/*
+  Design tokens — Vitaloop.
+
+  PLACEHOLDER: the accent color and typeface are neutral stand-ins. Swap
+  --color-accent-* and the font imports in app/layout.tsx once real brand
+  colors and a licensed typeface are available; nothing else should need
+  to change since every component reads these variables, not raw values.
+
+  Theme: :root carries the light values. prefers-color-scheme flips them
+  for users with no explicit preference; [data-theme="dark"] / "light"
+  lets the styleguide's manual toggle (and later a real theme switch)
+  override that media query in either direction.
+*/
+
+:root {
+  /* Neutral ramp (light) */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f7f8f8;
+  --color-neutral-100: #eceeed;
+  --color-neutral-200: #d8dbda;
+  --color-neutral-300: #b7bcba;
+  --color-neutral-400: #8d9492;
+  --color-neutral-500: #6b7270;
+  --color-neutral-600: #4f5553;
+  --color-neutral-700: #383c3b;
+  --color-neutral-800: #242726;
+  --color-neutral-900: #141615;
+  --color-neutral-950: #0a0b0b;
+
+  /* Accent — PLACEHOLDER (neutral teal stand-in for the brand color) */
+  --color-accent-400: #4fc3a1;
+  --color-accent-500: #2fa786;
+  --color-accent-600: #22846a;
+  --color-accent-contrast: #ffffff;
+
+  --color-danger-500: #d6483f;
+
+  /* Semantic surface/text roles — components use these, never the ramp directly */
+  --color-bg: var(--color-neutral-0);
+  --color-bg-raised: var(--color-neutral-50);
+  --color-bg-inverted: var(--color-neutral-950);
+  --color-text: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-600);
+  --color-text-inverted: var(--color-neutral-0);
+  --color-border: var(--color-neutral-200);
+  --color-border-strong: var(--color-neutral-300);
+  --color-focus-ring: var(--color-accent-500);
+
+  /* Type scale — 16px is the minimum body size per PRD accessibility requirement */
+  --font-size-body-sm: 0.875rem; /* 14px, caption/meta use only */
+  --font-size-body: 1rem; /* 16px minimum */
+  --font-size-body-lg: 1.125rem; /* 18px */
+  --font-size-h3: 1.5rem; /* 24px */
+  --font-size-h2: 2rem; /* 32px */
+  --font-size-h1: 2.75rem; /* 44px */
+  --font-size-display: clamp(2.75rem, 6vw, 5rem);
+  --line-height-tight: 1.1;
+  --line-height-snug: 1.3;
+  --line-height-body: 1.6;
+  --tracking-tight: -0.02em;
+
+  /* Spacing scale (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-full: 999px;
+
+  /* Shadows — soft, low-contrast; premium feel avoids heavy drop shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 16px -4px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 16px 48px -12px rgb(0 0 0 / 0.14);
+
+  /*
+    Motion — the one shared ease curve + duration scale for the whole
+    site (CLAUDE.md: "use the shared easing curve and duration tokens
+    only"). This cubic-bezier must stay numerically identical to
+    EASE_DEFAULT in lib/motion.ts — one is for CSS transitions, the
+    other for GSAP/Motion tweens driven from JS.
+  */
+  --ease-default: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 300ms;
+  --duration-base: 500ms;
+  --duration-slow: 800ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: var(--color-neutral-950);
+    --color-bg-raised: var(--color-neutral-900);
+    --color-bg-inverted: var(--color-neutral-0);
+    --color-text: var(--color-neutral-50);
+    --color-text-muted: var(--color-neutral-400);
+    --color-text-inverted: var(--color-neutral-950);
+    --color-border: var(--color-neutral-700);
+    --color-border-strong: var(--color-neutral-600);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: var(--color-neutral-950);
+  --color-bg-raised: var(--color-neutral-900);
+  --color-bg-inverted: var(--color-neutral-0);
+  --color-text: var(--color-neutral-50);
+  --color-text-muted: var(--color-neutral-400);
+  --color-text-inverted: var(--color-neutral-950);
+  --color-border: var(--color-neutral-700);
+  --color-border-strong: var(--color-neutral-600);
+}
