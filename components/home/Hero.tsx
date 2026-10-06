@@ -44,25 +44,6 @@ function IconDna(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function IconHeart(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} {...props}>
-      <path
-        d="M12 20.5s-7.5-4.6-7.5-9.8A4.2 4.2 0 0 1 12 7.8a4.2 4.2 0 0 1 7.5 2.9c0 5.2-7.5 9.8-7.5 9.8z"
-        fill="currentColor"
-        stroke="none"
-      />
-      <path
-        d="M4.5 13.2h3l1.6-2.8 2 5 1.7-3.4 1.2 1.2h4"
-        stroke="var(--color-neutral-950, #15130f)"
-        strokeWidth={1.5}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 const FEATURES = [
   {
     Icon: IconAnalysis,
@@ -73,11 +54,6 @@ const FEATURES = [
     Icon: IconDna,
     title: "Personalized Health Insights",
     description: "Tailored recommendations based on your unique biomarkers.",
-  },
-  {
-    Icon: IconHeart,
-    title: "Holistic Health Monitoring",
-    description: "Combining physical, nutritional, and mental data for a complete picture.",
   },
 ];
 
@@ -140,17 +116,29 @@ export function Hero() {
         </a>
       </header>
 
-      <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-between gap-16 px-6 pt-10 pb-14">
-        <h1 className="max-w-4xl text-[clamp(2.25rem,5vw,4.25rem)] leading-[1.12] font-light tracking-[-0.02em]">
-          See Beyond.
-          <br />
-          Unlock Your Health
-        </h1>
+      <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-end px-6 pt-10 pb-14">
+        <div className="max-w-2xl">
+          <h1 className="text-[clamp(2.25rem,5vw,4.25rem)] leading-[1.12] font-light tracking-[-0.02em]">
+            See Beyond.
+            <br />
+            Unlock Your Health
+          </h1>
 
-        <div className="flex flex-col gap-12 lg:flex-row lg:items-end lg:justify-between">
-          <ul className="flex max-w-xs flex-col gap-6">
+          <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/75">
+            Your body holds the answers — we help you see them.
+          </p>
+
+          <a
+            href="#"
+            className="mt-7 inline-flex items-center gap-3 rounded-full bg-white py-1.5 pr-1.5 pl-6 text-[14px] whitespace-nowrap text-[#111]"
+          >
+            Discover More
+            <ArrowBadge dark />
+          </a>
+
+          <ul className="mt-11 flex flex-col gap-6 sm:flex-row sm:gap-10">
             {FEATURES.map(({ Icon, title, description }) => (
-              <li key={title} className="flex gap-3.5">
+              <li key={title} className="flex max-w-xs gap-3.5">
                 <Icon className="mt-0.5 h-6 w-6 shrink-0 text-white" />
                 <div>
                   <p className="text-[14px] font-semibold">{title}</p>
@@ -159,20 +147,6 @@ export function Hero() {
               </li>
             ))}
           </ul>
-
-          <div className="max-w-xl">
-            <p className="text-[clamp(1.35rem,2.4vw,2rem)] leading-snug font-light">
-              Your body holds the answers
-              <br />— we help you see them.
-            </p>
-            <a
-              href="#"
-              className="mt-7 inline-flex items-center gap-3 rounded-full bg-white py-1.5 pr-1.5 pl-6 text-[14px] whitespace-nowrap text-[#111]"
-            >
-              Discover More
-              <ArrowBadge dark />
-            </a>
-          </div>
         </div>
       </div>
     </section>
