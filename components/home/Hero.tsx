@@ -30,19 +30,22 @@ export function Hero() {
         <div aria-hidden className="absolute inset-0 -z-10 bg-black/35" />
 
         <header className="relative mx-auto flex w-full max-w-[1180px] items-center justify-between px-6 py-7">
-          <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+          <VitaloopWordmark className="h-[44px] w-auto text-white" />
+
+          <nav
+            aria-label="Primary"
+            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-9 md:flex"
+          >
             {NAV_LINKS.map((label) => (
               <a
                 key={label}
                 href="#"
-                className="text-[15px] whitespace-nowrap text-white/90 hover:text-white"
+                className="text-[17px] whitespace-nowrap text-white/90 hover:text-white"
               >
                 {label}
               </a>
             ))}
           </nav>
-
-          <VitaloopWordmark className="absolute left-1/2 h-[44px] w-auto -translate-x-1/2 text-white" />
 
           <a
             href="#"
