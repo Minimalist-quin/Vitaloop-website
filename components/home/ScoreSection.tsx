@@ -103,15 +103,17 @@ export function ScoreSection() {
 
           <PanelDeck />
 
-          <ul className="flex flex-col gap-9 lg:self-end lg:pb-24 lg:pl-6">
+          {/* Held at the foot of the viewport the way the copy is held at
+              the head, so the deck travels between the two. */}
+          <ul className="flex flex-col gap-7 lg:sticky lg:bottom-12 lg:self-end lg:pl-6">
             {FEATURES.map(({ icon: Icon, title, body }) => (
-              <li key={title} className="flex items-start gap-5">
-                <Icon aria-hidden className="mt-1 h-7 w-7 shrink-0 text-[#1a1a1a]" />
+              <li key={title} className="flex items-start gap-4">
+                <Icon aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-[#1a1a1a]" />
                 <div>
-                  <p className="text-[17px] leading-tight font-semibold tracking-[-0.01em]">
+                  <p className="text-[15px] leading-[1.5] font-medium tracking-[-0.01em]">
                     {title}
                   </p>
-                  <p className="mt-1.5 text-[14px] leading-[1.5] text-[#6f6b64]">{body}</p>
+                  <p className="mt-1 text-[13px] leading-[1.5] text-[#6f6b64]">{body}</p>
                 </div>
               </li>
             ))}
