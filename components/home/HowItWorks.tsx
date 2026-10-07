@@ -115,20 +115,63 @@ function BluetoothIcon() {
   );
 }
 
-/* The device's figures, exactly as supplied. */
-const SPECS: Spec[] = [
-  { label: "Health monitoring", value: "24/7", icon: MonitorIcon, accent: true },
-  { label: "Water resistance", value: "5 ATM", icon: DropletIcon },
-  { label: "Lightweight design", value: "<30 g", icon: FeatherIcon },
-  { label: "Connected", value: "Bluetooth", icon: BluetoothIcon },
-  {
-    label: "All-day battery",
-    sub: "Wear it through the day. Charge it once a week.",
-    value: "7+ days",
-    icon: BatteryIcon,
-    hero: true,
-  },
+/*
+  The device's figures, exactly as supplied, grouped into the columns the
+  reference uses: stacked pairs beside a single tall card, all running to
+  the same height as the device.
+*/
+const COLUMNS: Spec[][] = [
+  [
+    { label: "Health monitoring", value: "24/7", icon: MonitorIcon, accent: true },
+    { label: "Water resistance", value: "5 ATM", icon: DropletIcon },
+  ],
+  [
+    { label: "Lightweight design", value: "<30 g", icon: FeatherIcon },
+    { label: "Connected", value: "Bluetooth", icon: BluetoothIcon },
+  ],
+  [
+    {
+      label: "All-day battery",
+      sub: "Wear it through the day. Charge it once a week.",
+      value: "7+ days",
+      icon: BatteryIcon,
+      hero: true,
+    },
+  ],
 ];
+
+function SpecCard({ label, sub, value, icon: Icon, accent, hero }: Spec) {
+  return (
+    <div
+      className="flex flex-1 flex-col rounded-[20px] p-5"
+      style={{ background: accent ? ORANGE : CARD, color: accent ? "#ffffff" : INK }}
+    >
+      <p className="text-[17px] font-semibold tracking-[-0.01em]">{label}</p>
+      {sub && (
+        <p
+          className="mt-1.5 text-[14px] leading-[1.45]"
+          style={{ color: accent ? "rgba(255,255,255,0.8)" : BODY }}
+        >
+          {sub}
+        </p>
+      )}
+
+      {hero ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-6 py-8">
+          <span className="scale-[2.6]">
+            <Icon />
+          </span>
+          <span className="text-[30px] leading-none font-medium">{value}</span>
+        </div>
+      ) : (
+        <div className="mt-10 flex flex-1 items-end justify-between gap-4">
+          <Icon />
+          <span className="text-[26px] leading-none font-medium whitespace-nowrap">{value}</span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function PulseGlyph() {
   return (
@@ -177,55 +220,27 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-4 lg:mt-16 lg:grid-cols-2">
+        <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
           {/* ⚠️ PLACEHOLDER — the device mock goes here. */}
           <div
-            className="flex min-h-[380px] flex-col items-center justify-center rounded-[20px] border border-dashed p-8 text-center lg:min-h-[460px]"
+            className="flex min-h-[420px] flex-col items-center justify-center rounded-[20px] border border-dashed p-8 text-center"
             style={{ background: CARD, borderColor: "#cfcac1" }}
           >
             <p className="text-[12px] tracking-[0.18em] uppercase" style={{ color: MUTED }}>
               [PLACEHOLDER]
             </p>
-            <p className="mt-3 max-w-[26ch] text-[15px] leading-[1.5]" style={{ color: BODY }}>
+            <p className="mt-3 max-w-[22ch] text-[15px] leading-[1.5]" style={{ color: BODY }}>
               Device mock — the watch, showing the signal it is reading.
             </p>
           </div>
 
-          <div className="grid auto-rows-fr gap-4 sm:grid-cols-2">
-            {SPECS.map(({ label, sub, value, icon: Icon, accent, hero }) => (
-              <div
-                key={label}
-                className={`flex flex-col rounded-[20px] p-5 ${hero ? "sm:col-span-2" : "justify-between"}`}
-                style={{
-                  background: accent ? ORANGE : CARD,
-                  color: accent ? "#ffffff" : INK,
-                }}
-              >
-                <p className="text-[17px] font-semibold tracking-[-0.01em]">{label}</p>
-                {sub && (
-                  <p className="mt-1.5 text-[14px] leading-[1.45]" style={{ color: BODY }}>
-                    {sub}
-                  </p>
-                )}
-
-                {hero ? (
-                  <div className="flex flex-1 flex-col items-center justify-center gap-3 py-6">
-                    <span className="scale-[2.6]">
-                      <Icon />
-                    </span>
-                    <span className="mt-5 text-[30px] leading-none font-medium">{value}</span>
-                  </div>
-                ) : (
-                  <div className="mt-10 flex items-center justify-between gap-4">
-                    <Icon />
-                    <span className="text-[26px] leading-none font-medium whitespace-nowrap">
-                      {value}
-                    </span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          {COLUMNS.map((column) => (
+            <div key={column[0].label} className="flex flex-col gap-4">
+              {column.map((spec) => (
+                <SpecCard key={spec.label} {...spec} />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </section>
