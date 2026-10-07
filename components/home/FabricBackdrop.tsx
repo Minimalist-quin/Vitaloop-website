@@ -6,15 +6,18 @@
  * Original work in the project's own palette — it replaces a crop of a
  * supplied reference, which was another company's photograph.
  *
- * Three passes got this right, and the two that failed are worth
- * recording. One blur over everything flattens it into a brown gradient.
- * An angular ridge reads as pointed mountains, not dunes. What works is
- * what a dune actually is: soft irregular crests of differing height and
- * width, layered front to back, each one lighter along the windward side
- * and falling into shadow on the lee. The crests carry a moderate blur
- * so they stay legible as form; everything inside takes a heavy one, so
- * it stays tone. Every shape is drawn well outside the viewBox so no
- * blur reaches an edge and reveals one.
+ The dead ends are worth recording. One blur over everything flattens
+ * it into a brown gradient. An angular ridge reads as pointed mountains,
+ * not dunes. And a crest running clean across the frame reads as a
+ * horizon — the pale ground has to push down one side and over the sand
+ * to break it.
+ *
+ * What works is what a dune actually is: soft irregular crests of
+ * differing height and width, layered front to back, each lighter along
+ * the windward side and falling into shadow on the lee. Three blurs
+ * carry it — crests moderate so they stay legible as form, folds softer,
+ * and everything inside heavy so it stays tone. Every shape is drawn
+ * well outside the viewBox so no blur reaches an edge and reveals one.
  */
 
 const HAZE = "#eae8e1";
@@ -47,7 +50,10 @@ export function FabricBackdrop({ className }: { className?: string }) {
         </linearGradient>
 
         <filter id="dune-form" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="9" />
+          <feGaussianBlur stdDeviation="5" />
+        </filter>
+        <filter id="dune-fold" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="12" />
         </filter>
         <filter id="dune-tone" x="-45%" y="-45%" width="190%" height="190%">
           <feGaussianBlur stdDeviation="30" />
@@ -99,6 +105,36 @@ export function FabricBackdrop({ className }: { className?: string }) {
              C 598 420 664 414 700 404
              L700 520 L-80 520 Z"
           fill="url(#dune-front)"
+        />
+      </g>
+
+      {/* The pale ground doesn't stop at the crest: it pushes down the
+          left of the frame and over the sand, which is what keeps the
+          boundary from reading as one continuous horizon. */}
+      <g filter="url(#dune-fold)">
+        <path
+          d="M-80 -40 L 126 -40 C 152 110 120 236 52 330 C 16 380 -34 406 -80 420 Z"
+          fill={HAZE}
+        />
+        <path
+          d="M700 -40 L700 214 C 648 236 604 276 566 318 C 598 240 622 138 614 -40 Z"
+          fill={HAZE}
+          opacity="0.85"
+        />
+      </g>
+
+      {/* A fold running down from the right edge, catching the light on
+          one side of its spine and losing it on the other. */}
+      <g filter="url(#dune-fold)">
+        <path
+          d="M700 232 C 640 258 596 300 560 344 L598 352 C 636 310 672 276 700 262 Z"
+          fill={RUST_LIT}
+          opacity="0.55"
+        />
+        <path
+          d="M700 268 C 660 290 620 326 584 366 L612 388 C 648 342 678 310 700 296 Z"
+          fill={RUST_DEEP}
+          opacity="0.3"
         />
       </g>
 
