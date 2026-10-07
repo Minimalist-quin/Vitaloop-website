@@ -6,7 +6,7 @@ import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { ORANGE, PANEL } from "./panel-theme";
 
 /**
- * The five stages, read as one sequence rather than five items.
+ * The four stages, read as one sequence rather than four items.
  *
  * A single hairline runs down the left margin and fills with the
  * section's scroll, its leading end feathered so the colour looks like
@@ -24,8 +24,10 @@ const STEPS = [
   { title: "Monitor", body: "Track your health continuously." },
   { title: "Understand", body: "Turn data into clear, personal insights." },
   { title: "Check in", body: "Get thoughtful support from Avora." },
-  { title: "Respond", body: "Know when something needs attention and what to do." },
-  { title: "Care", body: "Get the right support when it matters." },
+  {
+    title: "Respond",
+    body: "In an emergency, the health robot alerts the right people and helps get you the support you need.",
+  },
 ];
 
 /* How much of the signal's leading end is feathered out. */
