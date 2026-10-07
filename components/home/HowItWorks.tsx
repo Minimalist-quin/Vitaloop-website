@@ -1,25 +1,22 @@
 import { ORANGE } from "./panel-theme";
 
 /**
- * "How it works" — a centred heading band over a card grid.
+ * "How it works" — a centred heading over a card grid: the device on the
+ * left, its specifications beside it.
  *
  * ⚠️ The left card is a deliberate placeholder: the reference puts a
  * device mock there and there is no asset for it yet.
  *
- * ⚠️ Two figures the reference fills in are marked [STAT NEEDED]: the
- * sensing count and the on-device percentage. Nothing here may invent
- * them. The checklist is the project's approved claim set, verbatim —
- * detect, alert, guide, bring an AED, wellness insights — so it can
- * ship as written.
+ * Every figure below is the one supplied for the device. None are
+ * invented, and none may be — see the project's rule on statistics.
  */
 
-const COVERS = [
-  "Detects irregular heart signals",
-  "Alerts emergency services and your contacts",
-  "Guides bystanders through first aid",
-  "Brings an AED to the scene",
-  "Wellness insights",
-];
+type Spec = {
+  label: string;
+  value: string;
+  icon: () => React.ReactElement;
+  accent?: boolean;
+};
 
 const INK = "#1a1a1a";
 const BODY = "#6f6b64";
@@ -27,8 +24,101 @@ const MUTED = "#8a8780";
 const CARD = "#f4f3f0";
 const RULE = "#e3e0da";
 
-/* Bar heights for the sensing waveform, as a share of the track. */
-const WAVE = [0.3, 0.55, 0.85, 0.45, 1, 0.65, 0.35, 0.8, 0.5, 0.95, 0.4, 0.7, 0.25];
+const ICON = "h-6 w-6";
+
+function MonitorIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden
+      className={ICON}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2.5 12h3.6l1.8-5.2 3.4 11 2.3-8 1.7 4.4h6.2" />
+    </svg>
+  );
+}
+
+function BatteryIcon() {
+  return (
+    <svg
+      viewBox="0 0 28 24"
+      aria-hidden
+      className="h-6 w-7"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+    >
+      <rect x={1.5} y={6.5} width={21} height={11} rx={3.2} />
+      <rect x={4} y={9} width={12} height={6} rx={1.4} fill="currentColor" stroke="none" />
+      <path d="M25 10.5v3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function DropletIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden
+      className={ICON}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinejoin="round"
+    >
+      <path d="M12 2.8c3.4 4 6.2 7.2 6.2 10.6a6.2 6.2 0 0 1-12.4 0c0-3.4 2.8-6.6 6.2-10.6" />
+    </svg>
+  );
+}
+
+function FeatherIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden
+      className={ICON}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20.2 12.2a6 6 0 0 0-8.5-8.5L5 10.5V19h8.5z" />
+      <path d="M16 8 2 22M17.5 15H9" />
+    </svg>
+  );
+}
+
+function BluetoothIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden
+      className={ICON}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m6.5 7.8 11 8.4L12 20.5v-17l5.5 4.3-11 8.4" />
+    </svg>
+  );
+}
+
+/* The device's figures, exactly as supplied. */
+const SPECS: Spec[] = [
+  { label: "Health monitoring", value: "24/7", icon: MonitorIcon, accent: true },
+  { label: "Battery life", value: "7+ days", icon: BatteryIcon },
+  { label: "Water resistance", value: "5 ATM", icon: DropletIcon },
+  { label: "Lightweight design", value: "<30 g", icon: FeatherIcon },
+  { label: "Connected", value: "Bluetooth", icon: BluetoothIcon },
+];
 
 function PulseGlyph() {
   return (
@@ -44,36 +134,6 @@ function PulseGlyph() {
     >
       <path d="M3 12h3.8l2.2-6 3.4 12 2.4-6H21" />
     </svg>
-  );
-}
-
-function ShieldIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden
-      className="h-6 w-6"
-      fill="none"
-      stroke={INK}
-      strokeWidth={1.5}
-    >
-      <path d="M12 2.6 4.6 5.8v6c0 4.4 3.1 7.9 7.4 9.6 4.3-1.7 7.4-5.2 7.4-9.6v-6z" />
-      <path d="m8.8 12 2.3 2.3 4.1-4.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function CheckBox() {
-  return (
-    <span
-      aria-hidden
-      className="mt-[1px] flex h-[15px] w-[15px] shrink-0 items-center justify-center rounded-[4px]"
-      style={{ background: ORANGE }}
-    >
-      <svg viewBox="0 0 12 12" className="h-2.5 w-2.5" fill="none" stroke="#fff" strokeWidth={2}>
-        <path d="m2.5 6.3 2.3 2.3L9.5 3.6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
   );
 }
 
@@ -121,69 +181,28 @@ export function HowItWorks() {
             </p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-4">
-              <div className="rounded-[20px] p-5 text-white" style={{ background: ORANGE }}>
-                <p className="text-[17px] font-semibold tracking-[-0.01em]">Knows your rhythm</p>
-
-                <div className="mt-10 flex items-end justify-between gap-4">
-                  <span aria-hidden className="flex h-7 items-end gap-[3px]">
-                    {WAVE.map((h, i) => (
-                      <span
-                        key={i}
-                        className="w-[3px] rounded-full bg-white"
-                        style={{ height: `${h * 100}%` }}
-                      />
-                    ))}
-                  </span>
-                  {/* Sized for the marker, not for the figure it stands
-                        in for — take this back up to ~26px once a real
-                        number replaces it. */}
-                  <span className="text-[14px] leading-none font-semibold tracking-[0.02em]">
-                    [STAT NEEDED]
-                  </span>
-                </div>
-              </div>
-
+          <div className="grid auto-rows-fr gap-4 sm:grid-cols-2">
+            {SPECS.map(({ label, value, icon: Icon, accent }, i) => (
               <div
-                className="flex flex-1 flex-col justify-between rounded-[20px] p-5"
-                style={{ background: CARD }}
+                key={label}
+                className={`flex flex-col justify-between rounded-[20px] p-5 ${
+                  i === SPECS.length - 1 ? "sm:col-span-2" : ""
+                }`}
+                style={{
+                  background: accent ? ORANGE : CARD,
+                  color: accent ? "#ffffff" : INK,
+                }}
               >
-                <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: INK }}>
-                  Reads on the wrist
-                </p>
+                <p className="text-[17px] font-semibold tracking-[-0.01em]">{label}</p>
 
                 <div className="mt-10 flex items-center justify-between gap-4">
-                  <ShieldIcon />
-                  <span
-                    className="text-[14px] leading-none font-semibold tracking-[0.02em]"
-                    style={{ color: INK }}
-                  >
-                    [STAT NEEDED]
+                  <Icon />
+                  <span className="text-[26px] leading-none font-medium whitespace-nowrap">
+                    {value}
                   </span>
                 </div>
               </div>
-            </div>
-
-            <div className="rounded-[20px] p-6" style={{ background: CARD }}>
-              <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: INK }}>
-                Works when it matters
-              </p>
-              <p className="mt-1.5 text-[14px]" style={{ color: BODY }}>
-                It watches so you don&rsquo;t have to.
-              </p>
-
-              <ul className="mt-6 flex flex-col gap-3.5">
-                {COVERS.map((cover) => (
-                  <li key={cover} className="flex items-start gap-2.5">
-                    <CheckBox />
-                    <span className="text-[14px] leading-[1.4]" style={{ color: INK }}>
-                      {cover}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            ))}
           </div>
         </div>
       </div>
