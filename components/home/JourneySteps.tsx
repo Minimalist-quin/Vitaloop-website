@@ -6,44 +6,30 @@ import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { ORANGE, PANEL } from "./panel-theme";
 
 /**
- * The five stages, lit in turn as the section is scrolled through.
+ * The five stages, read as one sequence rather than five items.
  *
- * One signal runs the whole way down: a hairline that draws from stage
- * to stage with a soft point of light travelling at its head, so each
- * stage reads as the consequence of the one above it rather than as a
- * separate item. The stage at the head is set in ink; the ones it has
- * passed stay legible but step back; the ones ahead wait in the muted
- * tone. Nothing moves except the signal.
+ * A single hairline runs down the left margin and fills with the
+ * section's scroll, its leading end feathered so the colour looks like
+ * it is flowing rather than being drawn by a marker. The stage the
+ * signal has reached is set in ink; the ones behind it stay legible but
+ * step back; the ones ahead wait in the muted tone. Nothing slides,
+ * bounces or pulses — the only movement is the line's travel and the
+ * weight passing from one stage to the next.
  *
- * Reduced motion: no trigger, no travel — every stage renders at full
- * strength with the line already drawn.
+ * Reduced motion: no trigger, no travel — the line is drawn and every
+ * stage is set at full strength.
  */
 
 const STEPS = [
-  {
-    title: "Monitor",
-    body: "Your wearable continuously captures important health signals throughout your day.",
-  },
-  {
-    title: "Understand",
-    body: "Vitaloop transforms those signals into clear, personalized insights that help you understand your health.",
-  },
-  {
-    title: "Check in",
-    body: "Avora creates a more human layer of care through thoughtful, timely conversations and check-ins.",
-  },
-  {
-    title: "Respond",
-    body: "When something needs attention, Vitaloop helps you understand what to do next and can support emergency response when necessary.",
-  },
-  {
-    title: "Care",
-    body: "Because better health isn’t just about knowing your numbers. It’s about having the right support when it matters.",
-  },
+  { title: "Monitor", body: "Track your health continuously." },
+  { title: "Understand", body: "Turn data into clear, personal insights." },
+  { title: "Check in", body: "Get thoughtful support from Avora." },
+  { title: "Respond", body: "Know when something needs attention and what to do." },
+  { title: "Care", body: "Get the right support when it matters." },
 ];
 
-/* The rail sits under the node centres; the nodes are 9px across. */
-const RAIL_X = 4;
+/* How much of the signal's leading end is feathered out. */
+const SIGNAL_TIP = 40;
 const EASE = "var(--ease-default)";
 const DURATION = "var(--duration-base)";
 
@@ -51,12 +37,11 @@ const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : us
 
 export function JourneySteps() {
   const root = useRef<HTMLDivElement>(null);
-  const rail = useRef<HTMLDivElement>(null);
-  const signal = useRef<HTMLDivElement>(null);
-  const head = useRef<HTMLDivElement>(null);
+  const rail = useRef<HTMLOListElement>(null);
+  const signal = useRef<HTMLSpanElement>(null);
   const reducedMotion = useReducedMotion();
 
-  const [active, setActive] = useState(reducedMotion ? STEPS.length - 1 : 0);
+  const [active, setActive] = useState(0);
 
   useIsomorphicLayoutEffect(() => {
     const section = root.current?.closest("section");
@@ -65,20 +50,17 @@ export function JourneySteps() {
     registerGsap();
 
     const ctx = gsap.context(() => {
-      const setFill = gsap.quickSetter(signal.current, "scaleY");
-      const setHead = gsap.quickSetter(head.current, "y", "px");
+      const setLength = gsap.quickSetter(signal.current, "height", "px");
       let current = -1;
 
       const trigger = ScrollTrigger.create({
         trigger: section,
         start: "top top",
         end: "bottom bottom",
-        /* Scrubbed rather than stepped, so the signal is always between
-           two stages instead of jumping when one takes over. */
+        /* Scrubbed, so the signal is always somewhere between two stages
+           rather than jumping when one takes over. */
         onUpdate: ({ progress }) => {
-          const travel = rail.current?.clientHeight ?? 0;
-          setFill(progress);
-          setHead(progress * travel);
+          setLength(progress * (rail.current?.clientHeight ?? 0));
 
           const next = Math.min(Math.floor(progress * STEPS.length), STEPS.length - 1);
           if (next !== current) {
@@ -95,77 +77,58 @@ export function JourneySteps() {
   }, [reducedMotion]);
 
   return (
-    <div ref={root} className="mt-8">
-      <ol className="relative">
-        <div
-          ref={rail}
+    <div ref={root} className="mt-12">
+      <ol ref={rail} className="relative pl-7">
+        <span
           aria-hidden
-          className="absolute top-[7px] bottom-[9px] w-px"
-          style={{ left: RAIL_X, background: PANEL.rule }}
+          className="absolute inset-y-0 left-0 w-px"
+          style={{ background: PANEL.rule }}
         />
-
-        {/* The signal: drawn line, then the point of light at its head. */}
-        <div
+        <span
           ref={signal}
           aria-hidden
-          className="absolute top-[7px] bottom-[9px] w-px origin-top"
+          className="absolute top-0 left-0 w-px"
           style={{
-            left: RAIL_X,
-            background: ORANGE,
-            transform: reducedMotion ? undefined : "scaleY(0)",
+            height: reducedMotion ? "100%" : 0,
+            background: `linear-gradient(to bottom, ${ORANGE} 0, ${ORANGE} calc(100% - ${SIGNAL_TIP}px), transparent 100%)`,
           }}
         />
-        {!reducedMotion && (
-          <div
-            ref={head}
-            aria-hidden
-            className="absolute h-[14px] w-[14px] -translate-x-1/2 rounded-full"
-            style={{
-              top: 0,
-              left: RAIL_X,
-              background: ORANGE,
-              opacity: 0.22,
-              filter: "blur(4px)",
-            }}
-          />
-        )}
 
         {STEPS.map(({ title, body }, i) => {
-          const state = i === active ? "active" : i < active ? "past" : "ahead";
+          const lit = reducedMotion || i === active;
+          const passed = i < active;
 
           return (
-            <li key={title} className="relative pb-6 pl-7 last:pb-0">
+            <li key={title} className="flex gap-4 py-[0.85rem] first:pt-0 last:pb-0">
               <span
-                aria-hidden
-                className="absolute h-[9px] w-[9px] -translate-x-1/2 rounded-full"
+                className="w-4 shrink-0 pt-[3px] text-[11px] tabular-nums"
                 style={{
-                  top: 3,
-                  left: RAIL_X,
-                  background: state === "ahead" ? PANEL.rule : ORANGE,
-                  transform: `translateX(-50%) scale(${state === "active" ? 1.25 : 1})`,
-                  opacity: state === "past" ? 0.5 : 1,
-                  transition: `background ${DURATION} ${EASE}, transform ${DURATION} ${EASE}, opacity ${DURATION} ${EASE}`,
-                }}
-              />
-
-              <p
-                className="text-[10.5px] font-semibold tracking-[0.16em] uppercase"
-                style={{
-                  color: state === "active" ? "#1a1a1a" : PANEL.muted,
+                  color: lit ? ORANGE : PANEL.muted,
                   transition: `color ${DURATION} ${EASE}`,
                 }}
               >
-                {title}
-              </p>
-              <p
-                className="mt-1.5 text-[13px] leading-[1.5]"
-                style={{
-                  color: state === "ahead" ? PANEL.muted : "#6f6b64",
-                  opacity: state === "active" ? 1 : 0.72,
-                  transition: `color ${DURATION} ${EASE}, opacity ${DURATION} ${EASE}`,
-                }}
-              >
-                {body}
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <p className="text-[15px] leading-[1.5]">
+                <span
+                  className="font-medium tracking-[-0.01em]"
+                  style={{
+                    color: lit ? "#1a1a1a" : passed ? "#6f6b64" : PANEL.muted,
+                    transition: `color ${DURATION} ${EASE}`,
+                  }}
+                >
+                  {title}
+                </span>
+                <span
+                  style={{
+                    color: lit ? "#6f6b64" : PANEL.muted,
+                    transition: `color ${DURATION} ${EASE}`,
+                  }}
+                >
+                  {" "}
+                  &mdash; {body}
+                </span>
               </p>
             </li>
           );
