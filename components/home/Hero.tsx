@@ -75,25 +75,7 @@ export function Hero() {
       />
 
       <header className="relative mx-auto flex w-full max-w-[1180px] items-center gap-3 px-6 py-7">
-        {/* Narrow screens get the menu control in the outlined-circle
-            style of the supplied reference, on the left. The links it
-            stands in for are still the inline nav from md up. */}
-        <button
-          type="button"
-          aria-label="Open menu"
-          className="flex h-9 w-9 shrink-0 flex-col items-center justify-center gap-[4px] rounded-full border border-white/45 md:hidden"
-        >
-          <span aria-hidden className="block h-[1.5px] w-[15px] rounded-full bg-white" />
-          <span aria-hidden className="block h-[1.5px] w-[15px] rounded-full bg-white" />
-        </button>
-
-        {/* Centred in the space the menu and the CTA leave, rather than
-            on the header's true centre — at phone widths the CTA reaches
-            past that centre and the two would overlap. Back on the left
-            from md up, where the nav takes the middle. */}
-        <div className="flex flex-1 justify-center md:flex-none md:justify-start">
-          <VitaloopWordmark className="h-[24px] w-auto text-white md:h-[44px]" />
-        </div>
+        <VitaloopWordmark className="h-[40px] w-auto shrink-0 text-white md:h-[44px]" />
 
         <nav
           aria-label="Primary"
@@ -120,6 +102,18 @@ export function Hero() {
           Join Waitlist
           <ArrowBadge size="h-6 w-6 text-[11px] md:h-9 md:w-9 md:text-[15px]" />
         </a>
+
+        {/* Narrow screens get the menu control in the outlined-circle
+            style of the supplied reference, last in the row. The links
+            it stands in for are the inline nav from md up. */}
+        <button
+          type="button"
+          aria-label="Open menu"
+          className="flex h-9 w-9 shrink-0 flex-col items-center justify-center gap-[4px] rounded-full border border-white/45 md:hidden"
+        >
+          <span aria-hidden className="block h-[1.5px] w-[15px] rounded-full bg-white" />
+          <span aria-hidden className="block h-[1.5px] w-[15px] rounded-full bg-white" />
+        </button>
       </header>
 
       <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-end px-6 pt-10 pb-14">
