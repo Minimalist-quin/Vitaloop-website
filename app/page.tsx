@@ -1,13 +1,13 @@
 import { Hero } from "@/components/home/Hero";
 import { ScoreSection } from "@/components/home/ScoreSection";
-import { DemoSection } from "@/components/home/DemoSection";
+import { HowItWorks } from "@/components/home/HowItWorks";
 
 export default function Home() {
   return (
     <>
       <Hero />
       <ScoreSection />
-      <DemoSection />
+      <HowItWorks />
     </>
   );
 }
