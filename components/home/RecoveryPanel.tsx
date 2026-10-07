@@ -19,7 +19,9 @@ import { cn } from "@/lib/cn";
  * before launch.
  */
 
-const ORANGE = "#f4650b";
+/* Deep enough that the white body copy on the headline panel clears
+   WCAG AA (4.9:1) — the brighter orange it replaced did not. */
+const ORANGE = "#c24a06";
 
 /* ---------- top panel: heart rate ---------- */
 
@@ -150,7 +152,7 @@ function TemperatureGauge() {
         {["38", "37", "36"].map((label, i) => (
           <span
             key={label}
-            className="absolute right-[2px] text-[7px] text-black/45"
+            className="absolute right-[2px] text-[7px] text-white/75"
             style={{ top: `${18 + i * 24}%` }}
           >
             {label}
