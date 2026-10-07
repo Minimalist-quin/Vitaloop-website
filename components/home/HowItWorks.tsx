@@ -79,33 +79,35 @@ function CheckBox() {
 
 export function HowItWorks() {
   return (
-    <section>
-      <div className="bg-white px-6 py-20 text-center lg:py-24">
-        <p
-          className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[14px]"
-          style={{ borderColor: RULE, color: INK }}
-        >
-          <PulseGlyph />
-          How it works
-        </p>
+    /* One block: the heading and the grid share a container and a single
+       set of padding, rather than two stacked bands meeting at a seam. */
+    <section className="bg-white px-4 py-20 lg:px-10 lg:py-28">
+      <div className="mx-auto max-w-[1180px]">
+        <div className="text-center">
+          <p
+            className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[14px]"
+            style={{ borderColor: RULE, color: INK }}
+          >
+            <PulseGlyph />
+            How it works
+          </p>
 
-        <h2
-          className="mx-auto mt-8 max-w-[14ch] text-[clamp(2.1rem,5vw,3.5rem)] leading-[1.08] font-semibold tracking-[-0.03em]"
-          style={{ color: INK }}
-        >
-          From signal to support, in 3 steps.
-        </h2>
+          <h2
+            className="mx-auto mt-8 max-w-[14ch] text-[clamp(2.1rem,5vw,3.5rem)] leading-[1.08] font-semibold tracking-[-0.03em]"
+            style={{ color: INK }}
+          >
+            From signal to support, in 3 steps.
+          </h2>
 
-        <p
-          className="mx-auto mt-6 max-w-[34ch] text-[clamp(1rem,1.5vw,1.15rem)] leading-[1.5]"
-          style={{ color: BODY }}
-        >
-          Wear it and forget it, see what changes early, and get help the moment it matters.
-        </p>
-      </div>
+          <p
+            className="mx-auto mt-6 max-w-[34ch] text-[clamp(1rem,1.5vw,1.15rem)] leading-[1.5]"
+            style={{ color: BODY }}
+          >
+            Wear it and forget it, see what changes early, and get help the moment it matters.
+          </p>
+        </div>
 
-      <div className="bg-white px-4 pt-6 pb-20 lg:px-10 lg:pb-28">
-        <div className="mx-auto grid max-w-[1180px] gap-4 lg:grid-cols-2">
+        <div className="mt-14 grid gap-4 lg:mt-16 lg:grid-cols-2">
           {/* ⚠️ PLACEHOLDER — the device mock goes here. */}
           <div
             className="flex min-h-[380px] flex-col items-center justify-center rounded-[20px] border border-dashed p-8 text-center lg:min-h-[460px]"
