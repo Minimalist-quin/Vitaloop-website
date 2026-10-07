@@ -90,7 +90,9 @@ export function ScoreSection() {
         <div className="mt-14 grid items-center gap-12 lg:mt-20 lg:grid-cols-[1fr_minmax(0,320px)_1fr] lg:gap-12">
           {/* The two text columns are staggered against the deck: the
               positioning copy high, the features low. */}
-          <div className="max-w-[24rem] lg:self-start lg:pt-24 lg:pr-4">
+          {/* Fixed while the deck scrolls past it: the copy is the frame
+              the panels are read inside, so it stays put. */}
+          <div className="max-w-[24rem] lg:sticky lg:top-24 lg:self-start lg:pr-4">
             <p className="text-[clamp(1.1rem,1.6vw,1.35rem)] leading-[1.4] font-medium tracking-[-0.01em]">
               Vitaloop is a preventive health platform designed to help people understand
               what&rsquo;s happening in their bodies before something feels wrong.
