@@ -94,9 +94,8 @@ export function ScoreSection() {
               the panels are read inside, so it stays put. */}
           <div className="max-w-[24rem] lg:sticky lg:top-24 lg:self-start lg:pr-4">
             <p className="text-[clamp(1.1rem,1.6vw,1.35rem)] leading-[1.45] font-medium tracking-[-0.01em]">
-              Vitaloop is a preventive health platform that combines continuous monitoring,
-              intelligent insights, and responsive care to help people understand their health,
-              recognize changes early, and get the support they need when it matters.
+              Vitaloop is a preventive health platform that helps you understand your health, detect
+              changes early, and get the right support when it matters.
             </p>
           </div>
 
