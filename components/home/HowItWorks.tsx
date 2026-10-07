@@ -220,7 +220,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
+        <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
           {/* ⚠️ PLACEHOLDER — the device mock goes here. */}
           <div
             className="flex min-h-[420px] flex-col items-center justify-center rounded-[20px] border border-dashed p-8 text-center"
