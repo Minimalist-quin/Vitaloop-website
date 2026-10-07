@@ -122,7 +122,7 @@ function BluetoothIcon() {
 */
 const COLUMNS: Spec[][] = [
   [
-    { label: "Health monitoring", value: "24/7", icon: MonitorIcon, accent: true },
+    { label: "Health monitoring", value: "24/7", icon: MonitorIcon },
     { label: "Water resistance", value: "5 ATM", icon: DropletIcon },
   ],
   [
@@ -136,6 +136,7 @@ const COLUMNS: Spec[][] = [
       value: "7+ days",
       icon: BatteryIcon,
       hero: true,
+      accent: true,
     },
   ],
 ];
