@@ -81,15 +81,15 @@ export function PanelDeck() {
   if (reducedMotion) {
     return (
       <div className="order-first mx-auto flex w-full max-w-[320px] flex-col gap-3 lg:order-none">
-        <RecoveryPanel />
         <SleepPanel />
+        <RecoveryPanel />
       </div>
     );
   }
 
   return (
     <div ref={root} className="order-first mx-auto w-full max-w-[320px] lg:order-none">
-      {[RecoveryPanel, SleepPanel].map((Panel, i) => (
+      {[SleepPanel, RecoveryPanel].map((Panel, i) => (
         <div
           key={i}
           data-deck-card
