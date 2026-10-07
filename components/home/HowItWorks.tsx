@@ -1,3 +1,4 @@
+import { FabricBackdrop } from "./FabricBackdrop";
 import { ACCENT } from "./panel-theme";
 
 /**
@@ -230,21 +231,9 @@ export function HowItWorks() {
         <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-[2.4fr_1fr_1fr_1fr]">
           {/* ⚠️ PLACEHOLDER — the device mock goes on top of this.
               The backdrop is extracted from a supplied reference: its
-              fabric fold, with the reference's own text, gauge and
-              button cropped away. */}
-          <div
-            className="relative min-h-[420px] overflow-hidden rounded-[20px]"
-            style={{
-              /* Whole band, full width, sitting on the bottom edge, with
-                 the cream sampled from the source above it — the
-                 reference's own composition rather than a crop of it. */
-              backgroundColor: "#eae8e1",
-              backgroundImage: "url(/device-bg.jpg)",
-              backgroundSize: "100% auto",
-              backgroundPosition: "bottom center",
-              backgroundRepeat: "no-repeat",
-            }}
-          >
+              backdrop is drawn, not photographed — see FabricBackdrop. */}
+          <div className="relative min-h-[420px] overflow-hidden rounded-[20px]">
+            <FabricBackdrop className="absolute inset-0 h-full w-full" />
             {/* The label has to read over both the pale fold and the deep
                 fabric, so it sits on its own scrim rather than trusting
                 whichever part of the photo lands behind it. */}
