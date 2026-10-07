@@ -80,7 +80,7 @@ function CheckBox() {
 export function HowItWorks() {
   return (
     <section>
-      <div className="bg-[#f7f7f6] px-6 py-20 text-center lg:py-24">
+      <div className="bg-white px-6 py-20 text-center lg:py-24">
         <p
           className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[14px]"
           style={{ borderColor: RULE, color: INK }}
