@@ -5,16 +5,18 @@ import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
-import { ORANGE, PANEL, STAGE } from "./panel-theme";
+import { BLUE, PANEL, STAGE } from "./panel-theme";
 
 /**
- * Recovery panel — the warm half of the "Why Vitaloop" pair.
+ * Recovery panel — the lower half of the "Why Vitaloop" pair.
  *
  * The structure (a headline block over a tile grid, the radial burst,
  * the column gauge) follows a supplied reference; the labels, wording
- * and every figure are ours and deliberately differ from it. Surfaces
- * and ink come from [panel-theme], which carries the card look both
- * panels share.
+ * and every figure are ours and deliberately differ from it. Surfaces,
+ * ink and data colours all come from [panel-theme], and the data
+ * colours are the sleep panel's: the core blue carries this panel's own
+ * readings, breathing keeps the lighter blue it has there, and the
+ * sleep tile names the stages the same way. The two panels are one set.
  *
  * ⚠️ All copy and data here are illustrative mock-up values for the
  * screen design — not measurements, and not final copy. Replace both
@@ -63,7 +65,7 @@ function VariabilityChart() {
           bottom: hrvY(low),
           height: Math.max(hrvY(high) - hrvY(low), HRV_BAR),
           width: HRV_BAR,
-          background: ORANGE,
+          background: BLUE,
         };
 
         return (
@@ -78,7 +80,7 @@ function VariabilityChart() {
               <div
                 data-var-dot
                 className="absolute left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full"
-                style={{ bottom: hrvY(loose), background: ORANGE }}
+                style={{ bottom: hrvY(loose), background: BLUE }}
               />
             )}
           </div>
@@ -177,7 +179,7 @@ function RespiratoryBurst() {
                 strokeWidth={0.7}
               />
               {radii.map((r) => (
-                <circle key={r} cx={cos * r} cy={sin * r} r={1.5} fill={ORANGE} />
+                <circle key={r} cx={cos * r} cy={sin * r} r={1.5} fill={STAGE.rem} />
               ))}
             </g>
           );
@@ -206,7 +208,7 @@ function TemperatureGauge() {
       <div
         data-temp-fill
         className="absolute inset-y-0 left-0 w-[19px]"
-        style={{ background: ORANGE }}
+        style={{ background: BLUE }}
       >
         {["38", "37", "36"].map((label, i) => (
           <span
@@ -347,7 +349,7 @@ function HrvLine() {
       <span
         data-hrv-dot
         className="absolute right-0 h-[7px] w-[7px] -translate-y-1/2 rounded-full"
-        style={{ top: "16%", background: ORANGE }}
+        style={{ top: "16%", background: BLUE }}
       />
     </div>
   );
