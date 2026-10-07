@@ -65,7 +65,19 @@ export function Hero() {
         className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-gradient-to-t from-black/70 to-transparent"
       />
 
-      <header className="relative mx-auto flex w-full max-w-[1180px] items-center justify-between px-6 py-7">
+      <header className="relative mx-auto flex w-full max-w-[1180px] items-center gap-3 px-6 py-7">
+        {/* Narrow screens get the menu control in the outlined-circle
+            style of the supplied reference, ahead of the wordmark. The
+            links it stands in for are still the inline nav from md up. */}
+        <button
+          type="button"
+          aria-label="Open menu"
+          className="flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-[5px] rounded-full border border-white/45 md:hidden"
+        >
+          <span aria-hidden className="block h-[1.5px] w-[18px] rounded-full bg-white" />
+          <span aria-hidden className="block h-[1.5px] w-[18px] rounded-full bg-white" />
+        </button>
+
         <VitaloopWordmark className="h-[44px] w-auto text-white" />
 
         <nav
@@ -83,12 +95,17 @@ export function Hero() {
           ))}
         </nav>
 
+        {/* Narrow screens get the compact pill of the supplied reference:
+            no arrow badge, which is what sets the full-size button's
+            height. The badge and the wider padding return from md up. */}
         <a
           href="#"
-          className="ml-auto inline-flex items-center gap-3 rounded-full bg-[#111] py-1.5 pr-1.5 pl-6 text-[14px] font-semibold whitespace-nowrap text-white"
+          className="ml-auto inline-flex items-center gap-3 rounded-full bg-[#111] px-4 py-2 text-[13px] font-semibold whitespace-nowrap text-white md:py-1.5 md:pr-1.5 md:pl-6 md:text-[14px]"
         >
           Join Waitlist
-          <ArrowBadge />
+          <span className="hidden md:inline-flex">
+            <ArrowBadge />
+          </span>
         </a>
       </header>
 
