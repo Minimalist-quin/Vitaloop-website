@@ -1,11 +1,13 @@
 import { Hero } from "@/components/home/Hero";
-import { AppSection } from "@/components/home/AppSection";
+import { ScoreSection } from "@/components/home/ScoreSection";
+import { FeaturedTreatment } from "@/components/home/FeaturedTreatment";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <AppSection />
+      <ScoreSection />
+      <FeaturedTreatment />
     </>
   );
 }
