@@ -384,7 +384,11 @@ export function RecoveryPanel({ className }: { className?: string }) {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root.current,
-          start: "top 80%",
+          /* This panel rides up over the one above it, so it starts well
+             below the fold. It waits until a third of the viewport holds
+             it — the charts are on screen before they draw, not under
+             the card in front or off the bottom edge. */
+          start: "top 65%",
           /* Replays on every entry from above, and resets on the way back
              up so there is something to replay. Re-entering from below
              leaves it finished — the charts were already read. */
