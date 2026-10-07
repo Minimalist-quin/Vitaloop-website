@@ -93,18 +93,10 @@ export function ScoreSection() {
           {/* Fixed while the deck scrolls past it: the copy is the frame
               the panels are read inside, so it stays put. */}
           <div className="max-w-[24rem] lg:sticky lg:top-24 lg:self-start lg:pr-4">
-            <p className="text-[clamp(1.1rem,1.6vw,1.35rem)] leading-[1.4] font-medium tracking-[-0.01em]">
-              Vitaloop is a preventive health platform designed to help people understand
-              what&rsquo;s happening in their bodies before something feels wrong.
-            </p>
-            <p className="mt-5 text-[15px] leading-[1.6] text-[#6f6b64]">
-              It brings together continuous health monitoring, intelligent insights, and responsive
-              care in one connected experience.
-            </p>
-            <p className="mt-4 text-[15px] leading-[1.6] text-[#6f6b64]">
-              From a wearable that quietly tracks your health throughout the day to your intelligent
-              health companion that checks in, helps you understand your data, and responds when you
-              need support.
+            <p className="text-[clamp(1.1rem,1.6vw,1.35rem)] leading-[1.45] font-medium tracking-[-0.01em]">
+              Vitaloop is a preventive health platform that combines continuous monitoring,
+              intelligent insights, and responsive care to help people understand their health,
+              recognize changes early, and get the support they need when it matters.
             </p>
           </div>
 
