@@ -1,17 +1,17 @@
 import type { SVGProps } from "react";
 
-import { PhoneScreen } from "./PhoneScreen";
+import { SleepPanel } from "./SleepPanel";
+import { RecoveryPanel } from "./RecoveryPanel";
 
 /**
- * ⚠️ CLONE of three supplied reference screenshots — none of this copy
- * is Vitaloop's. The section frame and greeting come from the "Why
- * Sinteo" reference, the three features from a dark feature-list
- * screenshot, and the phone screen from an iOS Health screenshot
- * (Sleep: Stages + Respiratory Rate). Layout exercise only; every
- * string must be replaced before anything ships.
+ * "Why Vitaloop" — a stacked pair of product panels with the greeting
+ * set high on one side and the feature list low on the other.
  *
- * The sleep and breathing figures are the reference's own numbers, not
- * measurements — they stand in for a real screen design.
+ * ⚠️ The greeting and the three feature items are still cloned from
+ * supplied reference screenshots: not Vitaloop's copy, and the "26%" in
+ * the greeting is an invented figure. Both must be rewritten before
+ * anything ships. The two panels have been taken off the references —
+ * see SleepPanel and RecoveryPanel.
  */
 
 const SECTION_BG = "#f2efe9";
@@ -25,12 +25,7 @@ function PieIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" {...props}>
       <circle cx={12} cy={12} r={9.5} fill="currentColor" />
-      <path
-        fill="none"
-        stroke={SECTION_BG}
-        strokeWidth={1.6}
-        d="M12 12V2.5M12 12h9.5M12 12H2.5"
-      />
+      <path fill="none" stroke={SECTION_BG} strokeWidth={1.6} d="M12 12V2.5M12 12h9.5M12 12H2.5" />
     </svg>
   );
 }
@@ -92,12 +87,12 @@ export function ScoreSection() {
   return (
     <section className="bg-[#f2efe9] py-20 text-[#1a1a1a] lg:py-28">
       <div className="mx-auto max-w-6xl px-6 lg:px-10">
-        <p className="text-center text-[12px] tracking-[0.14em] text-[#8a8780]">Why Sinteo</p>
+        <p className="text-center text-[12px] tracking-[0.14em] text-[#8a8780]">Why Vitaloop</p>
 
-        <div className="mt-14 grid items-center gap-12 lg:mt-20 lg:grid-cols-[1fr_minmax(0,300px)_1fr] lg:gap-10">
-          {/* The two text columns sit off-centre against the card the way
-              the reference staggers them: the greeting high, the points low. */}
-          <div className="lg:self-start lg:pt-20 lg:pr-4">
+        <div className="mt-14 grid items-center gap-12 lg:mt-20 lg:grid-cols-[1fr_minmax(0,320px)_1fr] lg:gap-12">
+          {/* The two text columns are staggered against the stack: the
+              greeting beside the night, the features beside the recovery. */}
+          <div className="lg:self-start lg:pt-24 lg:pr-4">
             <p className="text-[11px] tracking-[0.18em] text-[#8a8780] uppercase">Monday 18</p>
             <p className="mt-5 max-w-[20rem] text-[clamp(1.25rem,2vw,1.6rem)] leading-[1.32] font-medium tracking-[-0.01em]">
               Hey John! your score could soar by up to 26% points per week! Let&rsquo;s elevate your
@@ -105,9 +100,14 @@ export function ScoreSection() {
             </p>
           </div>
 
-          <PhoneScreen />
+          {/* The two panels stack into one column, so the section reads
+              top to bottom: the night, then what it left you with. */}
+          <div className="order-first flex flex-col items-center gap-3 lg:order-none">
+            <SleepPanel />
+            <RecoveryPanel />
+          </div>
 
-          <ul className="flex flex-col gap-9 lg:self-center lg:pl-6">
+          <ul className="flex flex-col gap-9 lg:self-end lg:pb-24 lg:pl-6">
             {FEATURES.map(({ icon: Icon, title, body }) => (
               <li key={title} className="flex items-start gap-5">
                 <Icon aria-hidden className="mt-1 h-7 w-7 shrink-0 text-[#1a1a1a]" />

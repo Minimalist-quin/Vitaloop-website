@@ -4,13 +4,18 @@ import { useEffect, useLayoutEffect, useRef, type CSSProperties, type SVGProps }
 import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
+import { cn } from "@/lib/cn";
 
 /**
- * ⚠️ CLONE of a supplied iOS Health screenshot (Sleep: Stages +
- * Respiratory Rate) — none of this copy is Vitaloop's, and the sleep and
- * breathing figures are the reference's own numbers, not measurements.
- * Layout exercise only; every string must be replaced before anything
- * ships.
+ * Sleep panel — the dark half of the "Why Vitaloop" pair.
+ *
+ * The visual language (dark cards, a stage ribbon, floating range bars)
+ * follows a supplied reference; the labels, wording and every figure are
+ * ours and deliberately differ from it.
+ *
+ * ⚠️ All copy and data here are illustrative mock-up values for the
+ * screen design — not measurements, and not final copy. Replace both
+ * before launch.
  */
 
 function BedIcon(props: SVGProps<SVGSVGElement>) {
@@ -52,36 +57,34 @@ const bandTop = (stage: Stage) => STAGE_ORDER.indexOf(stage) * BAND_PITCH;
 const CHART_HEIGHT = STAGE_ORDER.length * BAND_PITCH - (BAND_PITCH - BAND_HEIGHT);
 
 const STAGE_ROWS: { stage: Stage; label: string; duration: string }[] = [
-  { stage: "awake", label: "Awake", duration: "13m" },
-  { stage: "rem", label: "REM", duration: "1h 45m" },
-  { stage: "core", label: "Core", duration: "3h 32m" },
-  { stage: "deep", label: "Deep", duration: "1h 1m" },
+  { stage: "awake", label: "Awake", duration: "9m" },
+  { stage: "rem", label: "REM", duration: "1h 38m" },
+  { stage: "core", label: "Core", duration: "3h 47m" },
+  { stage: "deep", label: "Deep", duration: "1h 12m" },
 ];
 
-/* The night as [stage, start%, end%] across the 2:18AM–9:03AM axis. */
+/* The night as [stage, start%, end%] across the 11:42PM–6:58AM axis. */
 const HYPNOGRAM: [Stage, number, number][] = [
-  ["core", 0, 4],
-  ["deep", 4, 9],
-  ["core", 9, 12],
-  ["deep", 12, 17],
-  ["core", 17, 20],
-  ["rem", 20, 25],
-  ["core", 25, 29],
-  ["deep", 29, 34],
-  ["core", 34, 37],
-  ["deep", 37, 42],
-  ["core", 42, 45],
-  ["rem", 45, 52],
-  ["core", 52, 58],
-  ["awake", 58, 59.5],
-  ["core", 59.5, 64],
-  ["awake", 64, 65.5],
-  ["rem", 65.5, 75],
-  ["core", 75, 80],
-  ["awake", 80, 81.5],
-  ["core", 81.5, 84],
-  ["awake", 84, 85.5],
-  ["core", 85.5, 100],
+  ["core", 0, 6],
+  ["deep", 6, 13],
+  ["core", 13, 16],
+  ["deep", 16, 24],
+  ["core", 24, 28],
+  ["rem", 28, 34],
+  ["core", 34, 38],
+  ["deep", 38, 44],
+  ["core", 44, 48],
+  ["awake", 48, 49.5],
+  ["core", 49.5, 54],
+  ["rem", 54, 62],
+  ["core", 62, 67],
+  ["deep", 67, 71],
+  ["core", 71, 76],
+  ["awake", 76, 77.5],
+  ["rem", 77.5, 86],
+  ["core", 86, 91],
+  ["awake", 91, 92.5],
+  ["core", 92.5, 100],
 ];
 
 function SleepStagesChart() {
@@ -156,24 +159,24 @@ function SleepStagesChart() {
 
 /* Breaths per minute, [low, high] per reading. */
 const BREATHS: [number, number][] = [
-  [18.4, 19.9],
-  [17.8, 19.3],
-  [16.9, 18.1],
-  [17.9, 19.4],
-  [16, 17.2],
-  [16.6, 17.9],
-  [17.2, 18.6],
-  [18.2, 19.6],
   [16.8, 18.2],
-  [19.1, 20.5],
-  [18.6, 19.9],
-  [17.9, 19.2],
-  [16.9, 18.3],
-  [16.4, 16.4],
+  [16.2, 17.6],
+  [15.4, 16.8],
+  [16.4, 17.9],
+  [13.8, 15.1],
+  [15.1, 16.4],
+  [15.8, 17.1],
+  [16.7, 18.1],
+  [15.3, 16.7],
+  [17.9, 19.8],
+  [17.1, 18.4],
+  [16.4, 17.7],
+  [15.4, 16.8],
+  [14.9, 14.9],
 ];
 
-const BREATH_MIN = 15.4;
-const BREATH_MAX = 21;
+const BREATH_MIN = 13.2;
+const BREATH_MAX = 20.4;
 const BREATH_TRACK = 86;
 const BREATH_BAR = 7;
 
@@ -214,7 +217,7 @@ function RespiratoryChart() {
                   style={{ bottom: breathY(high) + 8 }}
                 >
                   <p className="text-[8px] font-semibold tracking-[0.08em] text-[#3aa9f5]">MAX</p>
-                  <p className="text-[13px] leading-tight font-medium text-[#3aa9f5]">20.5</p>
+                  <p className="text-[13px] leading-tight font-medium text-[#3aa9f5]">19.8</p>
                 </div>
               </div>
             )}
@@ -230,7 +233,7 @@ function RespiratoryChart() {
                   style={{ top: BREATH_TRACK - breathY(low) + 8 }}
                 >
                   <p className="text-[8px] font-semibold tracking-[0.08em] text-[#3aa9f5]">MIN</p>
-                  <p className="text-[13px] leading-tight font-medium text-[#3aa9f5]">16</p>
+                  <p className="text-[13px] leading-tight font-medium text-[#3aa9f5]">13.8</p>
                 </div>
               </div>
             )}
@@ -246,7 +249,7 @@ function RespiratoryChart() {
    full value first. */
 const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
-export function PhoneScreen() {
+export function SleepPanel({ className }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
 
@@ -298,20 +301,15 @@ export function PhoneScreen() {
   }, [reducedMotion]);
 
   return (
-    /* Lime body, dark screen: the card keeps the section's accent while
-       the screen itself matches the Health reference. */
-    <div
-      ref={root}
-      className="order-first mx-auto w-full max-w-[300px] rounded-[30px] bg-[#d9ee4a] p-2.5 lg:order-none"
-    >
-      <div className="space-y-2.5 rounded-[22px] bg-black p-2.5">
+    <div ref={root} className={cn("w-full rounded-[22px] bg-black p-2.5", className)}>
+      <div className="space-y-2.5">
         <section className="rounded-[14px] bg-[#1c1c1e] p-3">
           <h3 className="flex items-center gap-1.5 text-[11.5px] font-semibold text-[#30d5c0]">
             <BedIcon aria-hidden className="h-[13px] w-[13px]" />
-            Sleep: Stages
+            Sleep rhythm
           </h3>
           <p className="mt-2 text-[12px] leading-snug font-semibold text-white">
-            Here are the sleep stages from your recent night&rsquo;s sleep.
+            Last night, from first drift to waking.
           </p>
 
           <div className="mt-3 border-t border-[#38383a]" />
@@ -321,8 +319,8 @@ export function PhoneScreen() {
           <div data-sleep-axis>
             <div className="mt-2.5 ml-[60px] border-t border-dotted border-[#48484a]" />
             <div className="mt-1.5 ml-[60px] flex justify-between text-[9px] text-[#8e8e93]">
-              <span>2:18AM</span>
-              <span>9:03AM</span>
+              <span>11:42PM</span>
+              <span>6:58AM</span>
             </div>
           </div>
         </section>
@@ -330,10 +328,10 @@ export function PhoneScreen() {
         <section className="rounded-[14px] bg-[#1c1c1e] p-3">
           <h3 className="flex items-center gap-1.5 text-[11.5px] font-semibold text-[#3aa9f5]">
             <LungsIcon aria-hidden className="h-[13px] w-[13px]" />
-            Respiratory Rate: Sleep
+            Breathing rate
           </h3>
           <p className="mt-2 text-[12px] leading-snug font-semibold text-white">
-            Here&rsquo;s a look at your breathing rate while you were sleeping.
+            Breaths per minute, measured across the night.
           </p>
 
           <div className="mt-3 border-t border-[#38383a]" />
