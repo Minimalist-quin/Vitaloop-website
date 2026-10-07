@@ -16,6 +16,10 @@ type Spec = {
   value: string;
   icon: () => React.ReactElement;
   accent?: boolean;
+  /* The hero card runs the width of the row and shows its figure under a
+     large glyph, the way the reference treats battery. */
+  sub?: string;
+  hero?: boolean;
 };
 
 const INK = "#1a1a1a";
@@ -114,10 +118,16 @@ function BluetoothIcon() {
 /* The device's figures, exactly as supplied. */
 const SPECS: Spec[] = [
   { label: "Health monitoring", value: "24/7", icon: MonitorIcon, accent: true },
-  { label: "Battery life", value: "7+ days", icon: BatteryIcon },
   { label: "Water resistance", value: "5 ATM", icon: DropletIcon },
   { label: "Lightweight design", value: "<30 g", icon: FeatherIcon },
   { label: "Connected", value: "Bluetooth", icon: BluetoothIcon },
+  {
+    label: "All-day battery",
+    sub: "Wear it through the day. Charge it once a week.",
+    value: "7+ days",
+    icon: BatteryIcon,
+    hero: true,
+  },
 ];
 
 function PulseGlyph() {
@@ -182,25 +192,37 @@ export function HowItWorks() {
           </div>
 
           <div className="grid auto-rows-fr gap-4 sm:grid-cols-2">
-            {SPECS.map(({ label, value, icon: Icon, accent }, i) => (
+            {SPECS.map(({ label, sub, value, icon: Icon, accent, hero }) => (
               <div
                 key={label}
-                className={`flex flex-col justify-between rounded-[20px] p-5 ${
-                  i === SPECS.length - 1 ? "sm:col-span-2" : ""
-                }`}
+                className={`flex flex-col rounded-[20px] p-5 ${hero ? "sm:col-span-2" : "justify-between"}`}
                 style={{
                   background: accent ? ORANGE : CARD,
                   color: accent ? "#ffffff" : INK,
                 }}
               >
                 <p className="text-[17px] font-semibold tracking-[-0.01em]">{label}</p>
+                {sub && (
+                  <p className="mt-1.5 text-[14px] leading-[1.45]" style={{ color: BODY }}>
+                    {sub}
+                  </p>
+                )}
 
-                <div className="mt-10 flex items-center justify-between gap-4">
-                  <Icon />
-                  <span className="text-[26px] leading-none font-medium whitespace-nowrap">
-                    {value}
-                  </span>
-                </div>
+                {hero ? (
+                  <div className="flex flex-1 flex-col items-center justify-center gap-3 py-6">
+                    <span className="scale-[2.6]">
+                      <Icon />
+                    </span>
+                    <span className="mt-5 text-[30px] leading-none font-medium">{value}</span>
+                  </div>
+                ) : (
+                  <div className="mt-10 flex items-center justify-between gap-4">
+                    <Icon />
+                    <span className="text-[26px] leading-none font-medium whitespace-nowrap">
+                      {value}
+                    </span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
