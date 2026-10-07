@@ -5,6 +5,7 @@ import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
+import { ORANGE, PANEL, STAGE } from "./panel-theme";
 
 /**
  * Recovery panel — the warm half of the "Why Vitaloop" pair.
@@ -18,12 +19,6 @@ import { cn } from "@/lib/cn";
  * screen design — not measurements, and not final copy. Replace both
  * before launch.
  */
-
-const ORANGE = "#c24a06";
-
-/* The headline block borrows the sleep panel's card surface, so the two
-   stacked panels share one dark; orange stays the accent on the tiles. */
-const INK = "#1c1c1e";
 
 /* ---------- top panel: heart rate ---------- */
 
@@ -52,15 +47,29 @@ const HR_MARKERS = [
 
 function HeartRatePanel() {
   return (
-    <div className="px-4 pt-4 pb-5" style={{ background: INK }}>
-      <p className="text-[11px] font-medium text-white">Recovery</p>
+    <div
+      className="px-4 pt-4 pb-5"
+      style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}
+    >
+      <p
+        className="text-[9.5px] font-semibold tracking-[0.14em] uppercase"
+        style={{ color: PANEL.muted }}
+      >
+        Recovery
+      </p>
 
-      <p className="mt-6 text-[10px] text-white/90">Resting heart rate</p>
+      <p className="mt-6 text-[10px]" style={{ color: PANEL.body }}>
+        Resting heart rate
+      </p>
 
       <div className="mt-1 flex items-center gap-2">
         <p className="flex shrink-0 items-baseline gap-1">
-          <span className="text-[38px] leading-none font-light text-white">48</span>
-          <span className="text-[13px] text-white/80">bpm</span>
+          <span className="text-[38px] leading-none font-light" style={{ color: PANEL.ink }}>
+            48
+          </span>
+          <span className="text-[13px]" style={{ color: PANEL.muted }}>
+            bpm
+          </span>
         </p>
 
         <div className="relative h-[52px] flex-1">
@@ -73,7 +82,7 @@ function HeartRatePanel() {
               data-hr-line
               d={HR_PATH}
               fill="none"
-              stroke="rgba(255,255,255,0.75)"
+              stroke="rgba(23,22,26,0.55)"
               strokeWidth={0.6}
               vectorEffect="non-scaling-stroke"
             />
@@ -82,18 +91,20 @@ function HeartRatePanel() {
           {HR_MARKERS.map(({ value, left, top }) => (
             <p
               key={value}
-              className="absolute text-[8px] whitespace-nowrap text-white"
-              style={{ left, top }}
+              className="absolute text-[8px] font-medium whitespace-nowrap"
+              style={{ left, top, color: PANEL.ink }}
             >
               {value}
-              <span className="text-white/70"> bpm</span>
+              <span style={{ color: PANEL.muted }}> bpm</span>
             </p>
           ))}
         </div>
       </div>
 
-      <p className="mt-4 text-[9.5px] leading-relaxed text-white/85">
-        Your overnight heart rate sat below its usual range &mdash; a calm, well-rested night.
+      <p className="mt-4 text-[10.5px] leading-relaxed" style={{ color: PANEL.body }}>
+        Your overnight heart rate sat{" "}
+        <strong style={{ color: PANEL.ink }}>below its usual range</strong> &mdash; a calm,
+        well-rested night.
       </p>
     </div>
   );
@@ -106,21 +117,21 @@ const BURST_RAYS = 44;
 function RespiratoryBurst() {
   return (
     <div className="relative mx-auto mt-4 h-[104px] w-[104px]">
-      <svg viewBox="-60 -60 120 120" className="h-full w-full">
+      <svg viewBox="-66 -66 132 132" className="h-full w-full">
         {Array.from({ length: BURST_RAYS }, (_, i) => {
           const angle = (i / BURST_RAYS) * Math.PI * 2;
           const cos = Math.cos(angle);
           const sin = Math.sin(angle);
-          const radii = i % 2 === 0 ? [25, 31, 37, 43] : [25, 31, 37];
+          const radii = i % 2 === 0 ? [34, 40, 46, 52] : [34, 40, 46];
 
           return (
             <g key={i} data-burst-ray>
               <line
-                x1={cos * 47}
-                y1={sin * 47}
-                x2={cos * 57}
-                y2={sin * 57}
-                stroke="#c9c5c1"
+                x1={cos * 56}
+                y1={sin * 56}
+                x2={cos * 64}
+                y2={sin * 64}
+                stroke={PANEL.rule}
                 strokeWidth={0.7}
               />
               {radii.map((r) => (
@@ -132,8 +143,12 @@ function RespiratoryBurst() {
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <p className="text-[20px] leading-none font-medium text-[#1a1a1a]">14</p>
-        <p className="mt-1 text-[9px] text-[#8a8780]">Steady</p>
+        <p className="text-[20px] leading-none font-semibold" style={{ color: PANEL.ink }}>
+          14
+        </p>
+        <p className="mt-1 text-[9px]" style={{ color: PANEL.muted }}>
+          Steady
+        </p>
       </div>
     </div>
   );
@@ -145,7 +160,7 @@ const TEMP_TICKS = 24;
 
 function TemperatureGauge() {
   return (
-    <div className="relative h-[74px] w-[34px] shrink-0 overflow-hidden rounded-[2px]">
+    <div className="relative h-[74px] w-[34px] shrink-0 overflow-hidden rounded-[6px]">
       <div
         data-temp-fill
         className="absolute inset-y-0 left-0 w-[19px]"
@@ -154,7 +169,7 @@ function TemperatureGauge() {
         {["38", "37", "36"].map((label, i) => (
           <span
             key={label}
-            className="absolute right-[2px] text-[7px] text-white/75"
+            className="absolute right-[2px] text-[7px] text-white/80"
             style={{ top: `${18 + i * 24}%` }}
           >
             {label}
@@ -162,12 +177,17 @@ function TemperatureGauge() {
         ))}
       </div>
 
-      <div className="absolute inset-y-0 right-0 w-[15px] bg-[#111]">
+      <div className="absolute inset-y-0 right-0 w-[15px]" style={{ background: "#ddd9d3" }}>
         {Array.from({ length: TEMP_TICKS }, (_, i) => (
           <span
             key={i}
-            className="absolute left-0 h-px bg-white/55"
-            style={{ top: `${(i / (TEMP_TICKS - 1)) * 100}%`, width: i % 4 === 0 ? 10 : 6 }}
+            className="absolute left-0 h-px"
+            style={{
+              top: `${(i / (TEMP_TICKS - 1)) * 100}%`,
+              width: i % 4 === 0 ? 10 : 6,
+              background: PANEL.ink,
+              opacity: 0.45,
+            }}
           />
         ))}
       </div>
@@ -191,9 +211,11 @@ function stepArea(points: [number, number][]) {
   return d.join(" ");
 }
 
+/* The tile borrows the sleep panel's stage colours, so the two panels
+   name the same stages the same way. */
 const SLEEP_BANDS = [
   {
-    color: "#161616",
+    color: STAGE.rem,
     points: [
       [0, 30],
       [22, 30],
@@ -204,7 +226,7 @@ const SLEEP_BANDS = [
     ],
   },
   {
-    color: ORANGE,
+    color: STAGE.awake,
     points: [
       [0, 15],
       [30, 15],
@@ -217,9 +239,9 @@ const SLEEP_BANDS = [
 ] as const;
 
 const SLEEP_LABELS = [
-  { text: "Awake", top: "4%", left: "4%" },
-  { text: "REM", top: "42%", left: "58%" },
-  { text: "Light", top: "64%", left: "4%" },
+  { text: "Awake", top: "4%", left: "4%", color: "#ffffff" },
+  { text: "REM", top: "42%", left: "58%", color: PANEL.ink },
+  { text: "Light", top: "64%", left: "4%", color: PANEL.ink },
 ];
 
 function SleepStages() {
@@ -227,14 +249,14 @@ function SleepStages() {
     <div data-sleep-plot className="relative mt-3 h-[54px] w-full overflow-hidden rounded-[2px]">
       <svg viewBox="0 0 100 46" preserveAspectRatio="none" className="h-full w-full">
         {/* Light is the floor the other two stages sit on. */}
-        <rect width={100} height={46} fill="#9a9894" />
+        <rect width={100} height={46} fill="#cfcbc4" />
         {SLEEP_BANDS.map(({ color, points }) => (
           <path key={color} d={stepArea(points as unknown as [number, number][])} fill={color} />
         ))}
       </svg>
 
-      {SLEEP_LABELS.map(({ text, top, left }) => (
-        <span key={text} className="absolute text-[8px] text-white/85" style={{ top, left }}>
+      {SLEEP_LABELS.map(({ text, top, left, color }) => (
+        <span key={text} className="absolute text-[8px]" style={{ top, left, color }}>
           {text}
         </span>
       ))}
@@ -275,7 +297,7 @@ function HrvLine() {
           data-hrv-line
           d={HRV_PATH}
           fill="none"
-          stroke="#161616"
+          stroke={PANEL.ink}
           strokeWidth={0.8}
           vectorEffect="non-scaling-stroke"
         />
@@ -294,7 +316,14 @@ function HrvLine() {
 const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 function CardTitle({ children }: { children: string }) {
-  return <p className="text-[10px] font-medium text-[#1a1a1a]">{children}</p>;
+  return (
+    <p
+      className="text-[9.5px] font-semibold tracking-[0.14em] uppercase"
+      style={{ color: PANEL.muted }}
+    >
+      {children}
+    </p>
+  );
 }
 
 export function RecoveryPanel({ className }: { className?: string }) {
@@ -374,29 +403,44 @@ export function RecoveryPanel({ className }: { className?: string }) {
   }, [reducedMotion]);
 
   return (
-    <div ref={root} className={cn("w-full overflow-hidden rounded-[22px] bg-[#e2e0dd]", className)}>
-      <div>
+    <div
+      ref={root}
+      className={cn("w-full p-3", className)}
+      style={{
+        background: PANEL.surface,
+        borderRadius: PANEL.radius,
+        boxShadow: PANEL.shadow,
+      }}
+    >
+      <div className="space-y-2">
         <HeartRatePanel />
 
-        <div className="grid grid-cols-2 gap-[3px] p-[3px]">
-          <div className="flex flex-col gap-[3px]">
-            <div className="flex-1 bg-[#efeeec] p-3">
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-col gap-2">
+            <div className="flex-1 p-3.5" style={{ background: PANEL.tile, borderRadius: 22 }}>
               <CardTitle>Breathing</CardTitle>
               <RespiratoryBurst />
             </div>
 
-            <div className="bg-[#efeeec] p-3">
+            <div className="p-3.5" style={{ background: PANEL.tile, borderRadius: 22 }}>
               <CardTitle>Sleep</CardTitle>
               <p className="mt-1.5 flex items-baseline gap-1">
-                <span className="text-[19px] leading-none font-medium text-[#1a1a1a]">7h 26m</span>
-                <span className="text-[9px] text-[#8a8780]">Restful</span>
+                <span
+                  className="text-[19px] leading-none font-semibold"
+                  style={{ color: PANEL.ink }}
+                >
+                  7h 26m
+                </span>
+                <span className="text-[9px]" style={{ color: PANEL.muted }}>
+                  Restful
+                </span>
               </p>
               <SleepStages />
             </div>
           </div>
 
-          <div className="flex flex-col gap-[3px]">
-            <div className="bg-[#efeeec] p-3">
+          <div className="flex flex-col gap-2">
+            <div className="p-3.5" style={{ background: PANEL.tile, borderRadius: 22 }}>
               <CardTitle>Skin temperature</CardTitle>
 
               {/* Value and gauge share a row, so the title keeps the full
@@ -404,24 +448,38 @@ export function RecoveryPanel({ className }: { className?: string }) {
               <div className="mt-3 flex items-start gap-2">
                 <div className="flex-1">
                   <p className="flex items-baseline gap-1">
-                    <span className="text-[19px] leading-none font-medium text-[#1a1a1a]">
+                    <span
+                      className="text-[19px] leading-none font-semibold"
+                      style={{ color: PANEL.ink }}
+                    >
                       36.9
                     </span>
-                    <span className="text-[9px] text-[#8a8780]">&deg;C</span>
+                    <span className="text-[9px]" style={{ color: PANEL.muted }}>
+                      &deg;C
+                    </span>
                   </p>
-                  <div className="mt-2 h-px bg-[#c9c6c3]" />
-                  <p className="mt-1.5 text-[9px] text-[#8a8780]">Above your norm</p>
+                  <div className="mt-2 h-px" style={{ background: PANEL.rule }} />
+                  <p className="mt-1.5 text-[9px]" style={{ color: PANEL.muted }}>
+                    Above your norm
+                  </p>
                 </div>
 
                 <TemperatureGauge />
               </div>
             </div>
 
-            <div className="flex-1 bg-[#efeeec] p-3">
+            <div className="flex-1 p-3.5" style={{ background: PANEL.tile, borderRadius: 22 }}>
               <CardTitle>HRV balance</CardTitle>
               <p className="mt-1.5 flex items-baseline gap-1">
-                <span className="text-[19px] leading-none font-medium text-[#1a1a1a]">68</span>
-                <span className="text-[9px] text-[#8a8780]">ms &middot; balanced</span>
+                <span
+                  className="text-[19px] leading-none font-semibold"
+                  style={{ color: PANEL.ink }}
+                >
+                  68
+                </span>
+                <span className="text-[9px]" style={{ color: PANEL.muted }}>
+                  ms &middot; balanced
+                </span>
               </p>
               <HrvLine />
             </div>

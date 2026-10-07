@@ -5,6 +5,7 @@ import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
+import { BLUE, PANEL, STAGE, TEAL } from "./panel-theme";
 
 /**
  * Sleep panel — the dark half of the "Why Vitaloop" pair.
@@ -41,13 +42,6 @@ function LungsIcon(props: SVGProps<SVGSVGElement>) {
 /* ---------- Sleep: Stages ---------- */
 
 type Stage = "awake" | "rem" | "core" | "deep";
-
-const STAGE_COLOR: Record<Stage, string> = {
-  awake: "#ff6b4a",
-  rem: "#7cd3f5",
-  core: "#1a8cff",
-  deep: "#3f3fd4",
-};
 
 /* Rows are 20px tall on a 34px pitch, so the dotted rules land midway. */
 const BAND_HEIGHT = 20;
@@ -93,8 +87,12 @@ function SleepStagesChart() {
       <div className="relative w-[52px] shrink-0" style={{ height: CHART_HEIGHT }}>
         {STAGE_ROWS.map(({ stage, label, duration }) => (
           <div key={stage} className="absolute left-0" style={{ top: bandTop(stage) - 3 }}>
-            <p className="text-[9.5px] leading-tight text-white">{label}</p>
-            <p className="text-[9px] leading-tight text-[#8e8e93]">{duration}</p>
+            <p className="text-[9.5px] leading-tight font-medium" style={{ color: PANEL.ink }}>
+              {label}
+            </p>
+            <p className="text-[9px] leading-tight" style={{ color: PANEL.muted }}>
+              {duration}
+            </p>
           </div>
         ))}
       </div>
@@ -107,7 +105,7 @@ function SleepStagesChart() {
             className="absolute inset-x-0 h-px"
             style={{
               top: bandTop(stage) + BAND_HEIGHT + (BAND_PITCH - BAND_HEIGHT) / 2,
-              background: "repeating-linear-gradient(90deg,#48484a 0 1.5px,transparent 1.5px 5px)",
+              background: `repeating-linear-gradient(90deg,${PANEL.rule} 0 1.5px,transparent 1.5px 5px)`,
             }}
           />
         ))}
@@ -130,7 +128,7 @@ function SleepStagesChart() {
                   left: `calc(${start}% - 1px)`,
                   top: bandTop(upper) + 2,
                   height: bandTop(lower) + BAND_HEIGHT - bandTop(upper) - 4,
-                  background: `linear-gradient(to bottom, ${STAGE_COLOR[upper]}, ${STAGE_COLOR[lower]})`,
+                  background: `linear-gradient(to bottom, ${STAGE[upper]}, ${STAGE[lower]})`,
                 }}
               />
             );
@@ -145,7 +143,7 @@ function SleepStagesChart() {
                 width: `${end - start}%`,
                 top: bandTop(stage),
                 height: BAND_HEIGHT,
-                background: STAGE_COLOR[stage],
+                background: STAGE[stage],
               }}
             />
           ))}
@@ -200,8 +198,8 @@ function RespiratoryChart() {
           <div key={`${low}-${high}`} className="relative flex-1" style={{ height: BREATH_TRACK }}>
             <div
               data-breath-bar
-              className="absolute left-1/2 -translate-x-1/2 rounded-full bg-[#7cd3f5]"
-              style={bar}
+              className="absolute left-1/2 -translate-x-1/2 rounded-full"
+              style={{ ...bar, background: STAGE.rem }}
             />
 
             {/* The two extremes are capped with a dot and direct-labelled,
@@ -209,15 +207,22 @@ function RespiratoryChart() {
             {i === MAX_INDEX && (
               <div data-breath-extreme>
                 <div
-                  className="absolute left-1/2 h-[7px] w-[7px] -translate-x-1/2 rounded-full bg-[#7cd3f5]"
-                  style={{ bottom: breathY(high) - 3.5 }}
+                  className="absolute left-1/2 h-[7px] w-[7px] -translate-x-1/2 rounded-full"
+                  style={{ bottom: breathY(high) - 3.5, background: STAGE.rem }}
                 />
                 <div
                   className="absolute left-1/2 -translate-x-1/2 text-center whitespace-nowrap"
                   style={{ bottom: breathY(high) + 8 }}
                 >
-                  <p className="text-[8px] font-semibold tracking-[0.08em] text-[#3aa9f5]">MAX</p>
-                  <p className="text-[13px] leading-tight font-medium text-[#3aa9f5]">19.8</p>
+                  <p
+                    className="text-[8px] font-semibold tracking-[0.12em]"
+                    style={{ color: PANEL.muted }}
+                  >
+                    MAX
+                  </p>
+                  <p className="text-[13px] leading-tight font-semibold" style={{ color: BLUE }}>
+                    19.8
+                  </p>
                 </div>
               </div>
             )}
@@ -225,15 +230,22 @@ function RespiratoryChart() {
             {i === MIN_INDEX && (
               <div data-breath-extreme>
                 <div
-                  className="absolute left-1/2 h-[7px] w-[7px] -translate-x-1/2 rounded-full bg-[#7cd3f5]"
-                  style={{ bottom: breathY(low) - 3.5 }}
+                  className="absolute left-1/2 h-[7px] w-[7px] -translate-x-1/2 rounded-full"
+                  style={{ bottom: breathY(low) - 3.5, background: STAGE.rem }}
                 />
                 <div
                   className="absolute left-1/2 -translate-x-1/2 text-center whitespace-nowrap"
                   style={{ top: BREATH_TRACK - breathY(low) + 8 }}
                 >
-                  <p className="text-[8px] font-semibold tracking-[0.08em] text-[#3aa9f5]">MIN</p>
-                  <p className="text-[13px] leading-tight font-medium text-[#3aa9f5]">13.8</p>
+                  <p
+                    className="text-[8px] font-semibold tracking-[0.12em]"
+                    style={{ color: PANEL.muted }}
+                  >
+                    MIN
+                  </p>
+                  <p className="text-[13px] leading-tight font-semibold" style={{ color: BLUE }}>
+                    13.8
+                  </p>
                 </div>
               </div>
             )}
@@ -301,40 +313,61 @@ export function SleepPanel({ className }: { className?: string }) {
   }, [reducedMotion]);
 
   return (
-    <div ref={root} className={cn("w-full rounded-[22px] bg-black p-2.5", className)}>
-      <div className="space-y-2.5">
-        <section className="rounded-[14px] bg-[#1c1c1e] p-3">
-          <h3 className="flex items-center gap-1.5 text-[11.5px] font-semibold text-[#30d5c0]">
-            <BedIcon aria-hidden className="h-[13px] w-[13px]" />
+    <div
+      ref={root}
+      className={cn("w-full p-3", className)}
+      style={{
+        background: PANEL.surface,
+        borderRadius: PANEL.radius,
+        boxShadow: PANEL.shadow,
+      }}
+    >
+      <div className="space-y-2">
+        <section className="p-4" style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}>
+          <h3
+            className="flex items-center gap-1.5 text-[9.5px] font-semibold tracking-[0.14em] uppercase"
+            style={{ color: TEAL }}
+          >
+            <BedIcon aria-hidden className="h-[12px] w-[12px]" />
             Sleep rhythm
           </h3>
-          <p className="mt-2 text-[12px] leading-snug font-semibold text-white">
-            Last night, from first drift to waking.
+          <p className="mt-2.5 text-[13px] leading-snug" style={{ color: PANEL.body }}>
+            Last night, <strong style={{ color: PANEL.ink }}>from first drift to waking</strong>.
           </p>
 
-          <div className="mt-3 border-t border-[#38383a]" />
+          <div className="mt-3 h-px" style={{ background: PANEL.rule }} />
 
           <SleepStagesChart />
 
           <div data-sleep-axis>
-            <div className="mt-2.5 ml-[60px] border-t border-dotted border-[#48484a]" />
-            <div className="mt-1.5 ml-[60px] flex justify-between text-[9px] text-[#8e8e93]">
+            <div
+              className="mt-2.5 ml-[60px] border-t border-dotted"
+              style={{ borderColor: PANEL.rule }}
+            />
+            <div
+              className="mt-1.5 ml-[60px] flex justify-between text-[9px]"
+              style={{ color: PANEL.muted }}
+            >
               <span>11:42PM</span>
               <span>6:58AM</span>
             </div>
           </div>
         </section>
 
-        <section className="rounded-[14px] bg-[#1c1c1e] p-3">
-          <h3 className="flex items-center gap-1.5 text-[11.5px] font-semibold text-[#3aa9f5]">
-            <LungsIcon aria-hidden className="h-[13px] w-[13px]" />
+        <section className="p-4" style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}>
+          <h3
+            className="flex items-center gap-1.5 text-[9.5px] font-semibold tracking-[0.14em] uppercase"
+            style={{ color: BLUE }}
+          >
+            <LungsIcon aria-hidden className="h-[12px] w-[12px]" />
             Breathing rate
           </h3>
-          <p className="mt-2 text-[12px] leading-snug font-semibold text-white">
-            Breaths per minute, measured across the night.
+          <p className="mt-2.5 text-[13px] leading-snug" style={{ color: PANEL.body }}>
+            <strong style={{ color: PANEL.ink }}>Breaths per minute</strong>, measured across the
+            night.
           </p>
 
-          <div className="mt-3 border-t border-[#38383a]" />
+          <div className="mt-3 h-px" style={{ background: PANEL.rule }} />
 
           <RespiratoryChart />
         </section>
