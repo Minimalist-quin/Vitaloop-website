@@ -1,11 +1,10 @@
 import type { SVGProps } from "react";
 
-import { SleepPanel } from "./SleepPanel";
-import { RecoveryPanel } from "./RecoveryPanel";
+import { PanelDeck } from "./PanelDeck";
 
 /**
- * "Why Vitaloop" — a stacked pair of product panels with the greeting
- * set high on one side and the feature list low on the other.
+ * "Why Vitaloop" — a deck of product panels with the greeting set high
+ * on one side and the feature list low on the other.
  *
  * ⚠️ The greeting and the three feature items are still cloned from
  * supplied reference screenshots: not Vitaloop's copy, and the "26%" in
@@ -100,12 +99,7 @@ export function ScoreSection() {
             </p>
           </div>
 
-          {/* The two panels stack into one column, so the section reads
-              top to bottom: the night, then what it left you with. */}
-          <div className="order-first flex flex-col items-center gap-3 lg:order-none">
-            <SleepPanel />
-            <RecoveryPanel />
-          </div>
+          <PanelDeck />
 
           <ul className="flex flex-col gap-9 lg:self-end lg:pb-24 lg:pl-6">
             {FEATURES.map(({ icon: Icon, title, body }) => (
