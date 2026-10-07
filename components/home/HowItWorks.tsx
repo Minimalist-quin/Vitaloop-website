@@ -15,7 +15,8 @@ type Spec = {
   label: string;
   value: string;
   icon: () => React.ReactElement;
-  accent?: boolean;
+  /* Which face the card wears. Default is the neutral card surface. */
+  face?: "accent" | "charcoal";
   /* The hero card runs the width of the row and shows its figure under a
      large glyph, the way the reference treats battery. */
   sub?: string;
@@ -24,9 +25,9 @@ type Spec = {
 
 const INK = "#1a1a1a";
 const BODY = "#6f6b64";
-const MUTED = "#8a8780";
 const CARD = "#f4f3f0";
 const RULE = "#e3e0da";
+const CHARCOAL = "#24221d";
 
 const ICON = "h-6 w-6";
 
@@ -123,7 +124,7 @@ function BluetoothIcon() {
 const COLUMNS: Spec[][] = [
   [
     { label: "Health monitoring", value: "24/7", icon: MonitorIcon },
-    { label: "Water resistance", value: "5 ATM", icon: DropletIcon },
+    { label: "Water resistance", value: "5 ATM", icon: DropletIcon, face: "charcoal" },
   ],
   [
     { label: "Lightweight design", value: "<30 g", icon: FeatherIcon },
@@ -136,23 +137,28 @@ const COLUMNS: Spec[][] = [
       value: "7+ days",
       icon: BatteryIcon,
       hero: true,
-      accent: true,
+      face: "accent",
     },
   ],
 ];
 
-function SpecCard({ label, sub, value, icon: Icon, accent, hero }: Spec) {
+const FACES = {
+  accent: { background: ACCENT, color: "#ffffff", sub: "rgba(255,255,255,0.82)" },
+  charcoal: { background: CHARCOAL, color: "#ffffff", sub: "rgba(255,255,255,0.72)" },
+  default: { background: CARD, color: INK, sub: BODY },
+} as const;
+
+function SpecCard({ label, sub, value, icon: Icon, face, hero }: Spec) {
+  const skin = FACES[face ?? "default"];
+
   return (
     <div
       className="flex flex-1 flex-col rounded-[20px] p-5"
-      style={{ background: accent ? ACCENT : CARD, color: accent ? "#ffffff" : INK }}
+      style={{ background: skin.background, color: skin.color }}
     >
       <p className="text-[17px] font-semibold tracking-[-0.01em]">{label}</p>
       {sub && (
-        <p
-          className="mt-1.5 text-[14px] leading-[1.45]"
-          style={{ color: accent ? "rgba(255,255,255,0.82)" : BODY }}
-        >
+        <p className="mt-1.5 text-[14px] leading-[1.45]" style={{ color: skin.sub }}>
           {sub}
         </p>
       )}
@@ -222,17 +228,34 @@ export function HowItWorks() {
         </div>
 
         <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-[2.4fr_1fr_1fr_1fr]">
-          {/* ⚠️ PLACEHOLDER — the device mock goes here. */}
+          {/* ⚠️ PLACEHOLDER — the device mock goes on top of this.
+              The backdrop is extracted from a supplied reference: its
+              fabric fold, with the reference's own text, gauge and
+              button cropped away. */}
           <div
-            className="flex min-h-[420px] flex-col items-center justify-center rounded-[20px] border border-dashed p-8 text-center"
-            style={{ background: CARD, borderColor: "#cfcac1" }}
+            className="relative min-h-[420px] overflow-hidden rounded-[20px]"
+            style={{
+              /* Whole band, full width, sitting on the bottom edge, with
+                 the cream sampled from the source above it — the
+                 reference's own composition rather than a crop of it. */
+              backgroundColor: "#eae8e1",
+              backgroundImage: "url(/device-bg.jpg)",
+              backgroundSize: "100% auto",
+              backgroundPosition: "bottom center",
+              backgroundRepeat: "no-repeat",
+            }}
           >
-            <p className="text-[12px] tracking-[0.18em] uppercase" style={{ color: MUTED }}>
-              [PLACEHOLDER]
-            </p>
-            <p className="mt-3 max-w-[22ch] text-[15px] leading-[1.5]" style={{ color: BODY }}>
-              Device mock — the watch, showing the signal it is reading.
-            </p>
+            {/* The label has to read over both the pale fold and the deep
+                fabric, so it sits on its own scrim rather than trusting
+                whichever part of the photo lands behind it. */}
+            <div className="absolute inset-x-0 bottom-0 p-5">
+              <p
+                className="inline-flex rounded-full px-3 py-1.5 text-[11px] tracking-[0.18em] uppercase backdrop-blur-sm"
+                style={{ background: "rgba(26,26,26,0.55)", color: "#ffffff" }}
+              >
+                [PLACEHOLDER] &mdash; device mock
+              </p>
+            </div>
           </div>
 
           {COLUMNS.map((column) => (
