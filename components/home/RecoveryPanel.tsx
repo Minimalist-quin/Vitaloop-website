@@ -10,10 +10,11 @@ import { ORANGE, PANEL, STAGE } from "./panel-theme";
 /**
  * Recovery panel — the warm half of the "Why Vitaloop" pair.
  *
- * The visual language (an orange headline panel over a tile grid, the
- * radial burst, the column gauge) follows a supplied reference; the
- * labels, wording and every figure are ours and deliberately differ
- * from it.
+ * The structure (a headline block over a tile grid, the radial burst,
+ * the column gauge) follows a supplied reference; the labels, wording
+ * and every figure are ours and deliberately differ from it. Surfaces
+ * and ink come from [panel-theme], which carries the card look both
+ * panels share.
  *
  * ⚠️ All copy and data here are illustrative mock-up values for the
  * screen design — not measurements, and not final copy. Replace both
