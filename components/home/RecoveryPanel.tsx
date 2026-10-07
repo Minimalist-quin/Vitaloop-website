@@ -5,7 +5,7 @@ import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
-import { ORANGE, PANEL, STAGE } from "./panel-theme";
+import { BLUE, ORANGE, PANEL, STAGE } from "./panel-theme";
 
 /**
  * Recovery panel — the lower half of the "Why Vitaloop" pair.
@@ -14,10 +14,8 @@ import { ORANGE, PANEL, STAGE } from "./panel-theme";
  * the column gauge) follows a supplied reference; the labels, wording
  * and every figure are ours and deliberately differ from it. Surfaces,
  * ink and data colours all come from [panel-theme]: variability carries
- * the accent orange, HRV balance and breathing the lighter blue,
- * temperature the deep stage's purple, and the sleep tile names the
- * stages exactly as the sleep panel does. One reading, one colour,
- * across both panels.
+ * the core blue, breathing and HRV balance the lighter blue, temperature
+ * the accent orange. One reading, one colour, across both panels.
  *
  * ⚠️ All copy and data here are illustrative mock-up values for the
  * screen design — not measurements, and not final copy. Replace both
@@ -66,7 +64,7 @@ function VariabilityChart() {
           bottom: hrvY(low),
           height: Math.max(hrvY(high) - hrvY(low), HRV_BAR),
           width: HRV_BAR,
-          background: ORANGE,
+          background: BLUE,
         };
 
         return (
@@ -81,7 +79,7 @@ function VariabilityChart() {
               <div
                 data-var-dot
                 className="absolute left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full"
-                style={{ bottom: hrvY(loose), background: ORANGE }}
+                style={{ bottom: hrvY(loose), background: BLUE }}
               />
             )}
           </div>
@@ -209,7 +207,7 @@ function TemperatureGauge() {
       <div
         data-temp-fill
         className="absolute inset-y-0 left-0 w-[19px]"
-        style={{ background: STAGE.deep }}
+        style={{ background: ORANGE }}
       >
         {["38", "37", "36"].map((label, i) => (
           <span
@@ -260,7 +258,7 @@ function stepArea(points: [number, number][]) {
    name the same stages the same way. */
 const SLEEP_BANDS = [
   {
-    color: STAGE.rem,
+    color: STAGE.deep,
     points: [
       [0, 30],
       [22, 30],
@@ -285,7 +283,7 @@ const SLEEP_BANDS = [
 
 const SLEEP_LABELS = [
   { text: "Awake", top: "4%", left: "4%", color: "#ffffff" },
-  { text: "REM", top: "42%", left: "58%", color: PANEL.ink },
+  { text: "REM", top: "42%", left: "58%", color: "#ffffff" },
   { text: "Light", top: "64%", left: "4%", color: PANEL.ink },
 ];
 
