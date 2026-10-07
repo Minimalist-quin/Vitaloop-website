@@ -121,73 +121,68 @@ export function HowItWorks() {
             </p>
           </div>
 
-          <div className="border-t pt-4" style={{ borderColor: INK }}>
-            <div className="grid h-full gap-4 sm:grid-cols-2">
-              <div className="flex flex-col gap-4">
-                <div className="rounded-[20px] p-5 text-white" style={{ background: ORANGE }}>
-                  <p className="text-[17px] font-semibold tracking-[-0.01em]">Knows your rhythm</p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-4">
+              <div className="rounded-[20px] p-5 text-white" style={{ background: ORANGE }}>
+                <p className="text-[17px] font-semibold tracking-[-0.01em]">Knows your rhythm</p>
 
-                  <div className="mt-10 flex items-end justify-between gap-4">
-                    <span aria-hidden className="flex h-7 items-end gap-[3px]">
-                      {WAVE.map((h, i) => (
-                        <span
-                          key={i}
-                          className="w-[3px] rounded-full bg-white"
-                          style={{ height: `${h * 100}%` }}
-                        />
-                      ))}
-                    </span>
-                    {/* Sized for the marker, not for the figure it stands
+                <div className="mt-10 flex items-end justify-between gap-4">
+                  <span aria-hidden className="flex h-7 items-end gap-[3px]">
+                    {WAVE.map((h, i) => (
+                      <span
+                        key={i}
+                        className="w-[3px] rounded-full bg-white"
+                        style={{ height: `${h * 100}%` }}
+                      />
+                    ))}
+                  </span>
+                  {/* Sized for the marker, not for the figure it stands
                         in for — take this back up to ~26px once a real
                         number replaces it. */}
-                    <span className="text-[14px] leading-none font-semibold tracking-[0.02em]">
-                      [STAT NEEDED]
-                    </span>
-                  </div>
+                  <span className="text-[14px] leading-none font-semibold tracking-[0.02em]">
+                    [STAT NEEDED]
+                  </span>
                 </div>
+              </div>
 
-                <div
-                  className="flex flex-1 flex-col justify-between rounded-[20px] p-5"
-                  style={{ background: CARD }}
-                >
-                  <p
-                    className="text-[17px] font-semibold tracking-[-0.01em]"
+              <div
+                className="flex flex-1 flex-col justify-between rounded-[20px] p-5"
+                style={{ background: CARD }}
+              >
+                <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: INK }}>
+                  Reads on the wrist
+                </p>
+
+                <div className="mt-10 flex items-center justify-between gap-4">
+                  <ShieldIcon />
+                  <span
+                    className="text-[14px] leading-none font-semibold tracking-[0.02em]"
                     style={{ color: INK }}
                   >
-                    Reads on the wrist
-                  </p>
-
-                  <div className="mt-10 flex items-center justify-between gap-4">
-                    <ShieldIcon />
-                    <span
-                      className="text-[14px] leading-none font-semibold tracking-[0.02em]"
-                      style={{ color: INK }}
-                    >
-                      [STAT NEEDED]
-                    </span>
-                  </div>
+                    [STAT NEEDED]
+                  </span>
                 </div>
               </div>
+            </div>
 
-              <div className="rounded-[20px] p-6" style={{ background: CARD }}>
-                <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: INK }}>
-                  Works when it matters
-                </p>
-                <p className="mt-1.5 text-[14px]" style={{ color: BODY }}>
-                  It watches so you don&rsquo;t have to.
-                </p>
+            <div className="rounded-[20px] p-6" style={{ background: CARD }}>
+              <p className="text-[17px] font-semibold tracking-[-0.01em]" style={{ color: INK }}>
+                Works when it matters
+              </p>
+              <p className="mt-1.5 text-[14px]" style={{ color: BODY }}>
+                It watches so you don&rsquo;t have to.
+              </p>
 
-                <ul className="mt-6 flex flex-col gap-3.5">
-                  {COVERS.map((cover) => (
-                    <li key={cover} className="flex items-start gap-2.5">
-                      <CheckBox />
-                      <span className="text-[14px] leading-[1.4]" style={{ color: INK }}>
-                        {cover}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <ul className="mt-6 flex flex-col gap-3.5">
+                {COVERS.map((cover) => (
+                  <li key={cover} className="flex items-start gap-2.5">
+                    <CheckBox />
+                    <span className="text-[14px] leading-[1.4]" style={{ color: INK }}>
+                      {cover}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
