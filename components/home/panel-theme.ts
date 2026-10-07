@@ -50,9 +50,3 @@ export const DATA = CLAY;
   white.
 */
 export const ACCENT = COPPER;
-
-/*
-  The accent lightened, for fills big enough that the full-strength tone
-  would shout: the spec cards carry this, the small marks carry ACCENT.
-*/
-export const ACCENT_SOFT = "#ddb48c";
