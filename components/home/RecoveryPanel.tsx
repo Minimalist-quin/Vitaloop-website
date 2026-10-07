@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, type CSSProperties } from "react";
 import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
@@ -21,92 +21,133 @@ import { ORANGE, PANEL, STAGE } from "./panel-theme";
  * before launch.
  */
 
-/* ---------- top panel: heart rate ---------- */
+/* ---------- top: heart rate + variability ---------- */
+
+const HRV_COUNT = 30;
+const HRV_MIN = 16;
+const HRV_MAX = 110;
+const HRV_TRACK = 96;
+const HRV_BAR = 6;
 
 /*
-  The sleeping trace: a fixed waveform, not random, so server and client
-  render the same path. The envelope swells toward the right the way the
-  reference's does.
+  A day of readings: low overnight, climbing through the morning, widest
+  either side of the afternoon. Fixed arithmetic rather than random, so
+  server and client render the same chart. Every third column also
+  carries a single loose reading below its range, the way the reference
+  scatters dots under its bars.
 */
-const HR_TRACE = Array.from({ length: 72 }, (_, i) => {
-  const t = i / 71;
-  const envelope = 3 + 7 * Math.sin(t * Math.PI * 0.9);
-  const wobble = Math.sin(i * 2.7) * 0.55 + Math.sin(i * 1.31) * 0.3 + Math.sin(i * 5.17) * 0.15;
-  return [t * 100, 20 - wobble * envelope] as const;
+const HRV_READINGS = Array.from({ length: HRV_COUNT }, (_, i) => {
+  const t = i / (HRV_COUNT - 1);
+  const centre =
+    60 + 20 * Math.sin((t - 0.12) * Math.PI * 1.15) + 9 * Math.sin(i * 1.9) + 6 * Math.sin(i * 0.7);
+  const half = 6 + 9 * Math.abs(Math.sin(i * 1.37));
+
+  return {
+    low: centre - half,
+    high: centre + half,
+    loose: i % 3 === 1 ? Math.max(centre - half - 15, HRV_MIN + 3) : null,
+  };
 });
 
-const HR_PATH = HR_TRACE.map(
-  ([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(2)} ${y.toFixed(2)}`,
-).join(" ");
+const HOURS = ["12am", "4am", "8am", "12pm", "4pm", "8pm"];
+/* The reading the headline figure is taken from. */
+const HOUR_NOW = 4;
 
-const HR_MARKERS = [
-  { value: "96", left: "4%", top: "12%" },
-  { value: "118", left: "62%", top: "0%" },
-  { value: "44", left: "30%", top: "80%" },
-  { value: "53", left: "70%", top: "70%" },
-];
+const hrvY = (value: number) => ((value - HRV_MIN) / (HRV_MAX - HRV_MIN)) * HRV_TRACK;
+
+function VariabilityChart() {
+  return (
+    <div className="mt-4 flex items-end gap-[2px]" style={{ height: HRV_TRACK }}>
+      {HRV_READINGS.map(({ low, high, loose }, i) => {
+        const bar: CSSProperties = {
+          bottom: hrvY(low),
+          height: Math.max(hrvY(high) - hrvY(low), HRV_BAR),
+          width: HRV_BAR,
+          background: ORANGE,
+        };
+
+        return (
+          <div key={i} className="relative flex-1" style={{ height: HRV_TRACK }}>
+            <div
+              data-var-bar
+              className="absolute left-1/2 -translate-x-1/2 rounded-full"
+              style={bar}
+            />
+
+            {loose !== null && (
+              <div
+                data-var-dot
+                className="absolute left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full"
+                style={{ bottom: hrvY(loose), background: ORANGE }}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 function HeartRatePanel() {
   return (
-    <div
-      className="px-4 pt-4 pb-5"
-      style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}
-    >
-      <p
-        className="text-[9.5px] font-semibold tracking-[0.14em] uppercase"
-        style={{ color: PANEL.muted }}
-      >
-        Recovery
-      </p>
-
-      <p className="mt-6 text-[10px]" style={{ color: PANEL.body }}>
-        Resting heart rate
-      </p>
-
-      <div className="mt-1 flex items-center gap-2">
-        <p className="flex shrink-0 items-baseline gap-1">
-          <span className="text-[38px] leading-none font-light" style={{ color: PANEL.ink }}>
-            48
+    <div>
+      <div className="px-3 pt-2 pb-5">
+        <p className="flex items-start gap-1.5">
+          <span
+            className="text-[52px] leading-[0.85] font-light tracking-[-0.03em]"
+            style={{ color: PANEL.ink }}
+          >
+            95
           </span>
-          <span className="text-[13px]" style={{ color: PANEL.muted }}>
+          <span className="text-[15px] leading-none font-medium" style={{ color: PANEL.ink }}>
             bpm
           </span>
         </p>
 
-        <div className="relative h-[52px] flex-1">
-          <svg
-            viewBox="0 0 100 40"
-            preserveAspectRatio="none"
-            className="h-full w-full overflow-visible"
-          >
-            <path
-              data-hr-line
-              d={HR_PATH}
-              fill="none"
-              stroke="rgba(23,22,26,0.55)"
-              strokeWidth={0.6}
-              vectorEffect="non-scaling-stroke"
-            />
-          </svg>
+        <p className="mt-4 text-right text-[11px]">
+          <span className="font-medium" style={{ color: PANEL.ink }}>
+            240
+          </span>
+          <span style={{ color: PANEL.muted }}> Max&ensp;</span>
+          <span className="font-medium" style={{ color: PANEL.ink }}>
+            60
+          </span>
+          <span style={{ color: PANEL.muted }}> Min</span>
+        </p>
+      </div>
 
-          {HR_MARKERS.map(({ value, left, top }) => (
-            <p
-              key={value}
-              className="absolute text-[8px] font-medium whitespace-nowrap"
-              style={{ left, top, color: PANEL.ink }}
+      <div
+        className="px-4 pt-4 pb-3"
+        style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}
+      >
+        <div className="flex items-baseline justify-between">
+          <p className="text-[10.5px]" style={{ color: PANEL.body }}>
+            Heart Rate Variability
+          </p>
+          <p className="flex items-baseline gap-1">
+            <span className="text-[20px] leading-none font-medium" style={{ color: PANEL.ink }}>
+              82
+            </span>
+            <span className="text-[11px]" style={{ color: PANEL.muted }}>
+              ms
+            </span>
+          </p>
+        </div>
+
+        <VariabilityChart />
+
+        <div className="mt-3 flex justify-between text-[9px]">
+          {HOURS.map((hour, i) => (
+            <span
+              key={hour}
+              className={i === HOUR_NOW ? "font-semibold" : undefined}
+              style={{ color: i === HOUR_NOW ? PANEL.ink : PANEL.muted }}
             >
-              {value}
-              <span style={{ color: PANEL.muted }}> bpm</span>
-            </p>
+              {hour}
+            </span>
           ))}
         </div>
       </div>
-
-      <p className="mt-4 text-[10.5px] leading-relaxed" style={{ color: PANEL.body }}>
-        Your overnight heart rate sat{" "}
-        <strong style={{ color: PANEL.ink }}>below its usual range</strong> &mdash; a calm,
-        well-rested night.
-      </p>
     </div>
   );
 }
@@ -343,12 +384,9 @@ export function RecoveryPanel({ className }: { className?: string }) {
         scrollTrigger: { trigger: root.current, start: "top 80%", once: true },
       });
 
-      /* Both traces draw along their own length rather than fading in, so
-         each reads as a measurement taken over time. */
-      for (const [selector, position] of [
-        ["[data-hr-line]", 0],
-        ["[data-hrv-line]", 0.35],
-      ] as const) {
+      /* The HRV balance line draws along its own length rather than
+         fading in, so it reads as a measurement taken over time. */
+      for (const [selector, position] of [["[data-hrv-line]", 0.35]] as const) {
         const path = self.selector?.(selector)[0] as SVGPathElement | undefined;
         if (!path) continue;
         const length = path.getTotalLength();
@@ -366,16 +404,34 @@ export function RecoveryPanel({ className }: { className?: string }) {
         );
       }
 
+      /* Each column of the variability chart grows from its low reading
+         up to its high one, left to right across the day. */
       tl.from(
-        "[data-burst-ray]",
+        "[data-var-bar]",
         {
-          opacity: 0,
+          scaleY: 0,
+          transformOrigin: "50% 100%",
           duration: DURATION.fast,
           ease: VITALOOP_EASE,
-          stagger: { each: 0.012, from: "start" },
+          stagger: 0.02,
         },
-        0.15,
+        0,
       )
+        .from(
+          "[data-var-dot]",
+          { scale: 0, duration: DURATION.fast, ease: VITALOOP_EASE, stagger: 0.02 },
+          0.35,
+        )
+        .from(
+          "[data-burst-ray]",
+          {
+            opacity: 0,
+            duration: DURATION.fast,
+            ease: VITALOOP_EASE,
+            stagger: { each: 0.012, from: "start" },
+          },
+          0.15,
+        )
         /* The gauge fills from the bottom, the way the reading climbs. */
         .from(
           "[data-temp-fill]",
