@@ -80,7 +80,7 @@ export function PanelDeck() {
 
   if (reducedMotion) {
     return (
-      <div className="order-first mx-auto flex w-full max-w-[320px] flex-col gap-3 lg:order-none">
+      <div className="mx-auto flex w-full max-w-[320px] flex-col gap-3">
         <SleepPanel />
         <RecoveryPanel />
       </div>
@@ -88,7 +88,7 @@ export function PanelDeck() {
   }
 
   return (
-    <div ref={root} className="order-first mx-auto w-full max-w-[320px] lg:order-none">
+    <div ref={root} className="mx-auto w-full max-w-[320px]">
       {[SleepPanel, RecoveryPanel].map((Panel, i) => (
         <div
           key={i}

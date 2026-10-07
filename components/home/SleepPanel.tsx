@@ -302,7 +302,14 @@ export function SleepPanel({ className }: { className?: string }) {
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: root.current, start: "top 80%", once: true },
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top 80%",
+          /* Replays on every entry from above, and resets on the way back
+             up so there is something to replay. Re-entering from below
+             leaves it finished — the charts were already read. */
+          toggleActions: "restart none none reset",
+        },
       });
 
       /* The night fills in from its first stage to its last, so the

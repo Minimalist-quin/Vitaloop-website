@@ -382,7 +382,14 @@ export function RecoveryPanel({ className }: { className?: string }) {
 
     const ctx = gsap.context((self) => {
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: root.current, start: "top 80%", once: true },
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top 80%",
+          /* Replays on every entry from above, and resets on the way back
+             up so there is something to replay. Re-entering from below
+             leaves it finished — the charts were already read. */
+          toggleActions: "restart none none reset",
+        },
       });
 
       /* The HRV balance line draws along its own length rather than
