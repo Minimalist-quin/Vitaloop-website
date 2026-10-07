@@ -1,4 +1,6 @@
-import type { SVGProps } from "react";
+"use client";
+
+import { useEffect, useRef, useState, type SVGProps } from "react";
 
 import { PanelDeck } from "./PanelDeck";
 import { JourneySteps } from "./JourneySteps";
@@ -83,6 +85,33 @@ const FEATURES = [
 ];
 
 export function ScoreSection() {
+  const lead = useRef<HTMLDivElement>(null);
+  const [leadHeight, setLeadHeight] = useState<number>();
+
+  /* Both side columns hang from one bottom line. The copy column is the
+     one that sets it — it is the taller of the two and its height moves
+     with the column width — so the feature list is given that height to
+     fill and bottom-aligns its items inside it. Measured rather than
+     guessed, since the copy rewraps at every breakpoint. */
+  useEffect(() => {
+    const node = lead.current;
+    if (!node) return;
+
+    const wide = window.matchMedia("(min-width: 1024px)");
+
+    const measure = () => setLeadHeight(wide.matches ? node.offsetHeight : undefined);
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(node);
+    wide.addEventListener("change", measure);
+
+    return () => {
+      observer.disconnect();
+      wide.removeEventListener("change", measure);
+    };
+  }, []);
+
   return (
     <section className="bg-[#f2efe9] py-20 text-[#1a1a1a] lg:py-28">
       <div className="mx-auto max-w-6xl px-6 lg:px-10">
@@ -93,7 +122,7 @@ export function ScoreSection() {
               stages are the frame the panels are read inside, and the
               stages need the section's scroll to light up in turn. Both
               side columns hang from the same bottom line. */}
-          <div className="max-w-[24rem] lg:sticky lg:bottom-12 lg:self-end lg:pr-4">
+          <div ref={lead} className="max-w-[24rem] lg:sticky lg:top-12 lg:self-start lg:pr-4">
             <p className="text-[clamp(1.1rem,1.6vw,1.35rem)] leading-[1.45] font-medium tracking-[-0.01em]">
               Vitaloop is a preventive health platform that helps you understand your health, detect
               changes early, and get the right support when it matters.
@@ -104,9 +133,10 @@ export function ScoreSection() {
 
           <PanelDeck />
 
-          {/* Held at the foot of the viewport the way the copy is held at
-              the head, so the deck travels between the two. */}
-          <ul className="flex flex-col gap-7 lg:sticky lg:bottom-12 lg:self-end lg:pl-6">
+          <ul
+            className="flex flex-col justify-end gap-7 lg:sticky lg:top-12 lg:self-start lg:pl-6"
+            style={{ minHeight: leadHeight }}
+          >
             {FEATURES.map(({ icon: Icon, title, body }) => (
               <li key={title} className="flex items-start gap-4">
                 <Icon aria-hidden className="mt-0.5 h-5 w-5 shrink-0 text-[#1a1a1a]" />
