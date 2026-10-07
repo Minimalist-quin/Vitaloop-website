@@ -20,20 +20,39 @@ export const PANEL = {
   shadow: "0 22px 48px -20px rgba(28,24,16,0.28)",
 } as const;
 
-/** Sleep stages, stepped down for a light ground. */
+/*
+  The supplied palette. Four warm, low-chroma tones, each given one job
+  below. Names say what a colour is for, never what hue it is, so a
+  repaint is an edit here and nowhere else.
+*/
+const COPPER = "#c08143";
+const CLAY = "#aa7658";
+const OLIVE = "#88854f";
+const SLATE = "#688485";
+
+/** Sleep stages. All four tones, so no two bands share a colour. */
 export const STAGE = {
-  awake: "#e0552d",
-  rem: "#58b6dd",
-  core: "#1a7fd4",
-  deep: "#3b3bb0",
+  awake: COPPER,
+  rem: CLAY,
+  core: SLATE,
+  deep: OLIVE,
 } as const;
 
-export const TEAL = "#0e8f80";
-export const BLUE = "#1a7fd4";
+/** Marks the sleep card — its badge and its headline figure's label. */
+export const SLEEP_MARK = SLATE;
+
+/** Carries measured series: the breathing bars and the variability chart. */
+export const DATA = CLAY;
 
 /*
-  The one accent. Named for the job, not the hue, so a change of colour
-  stays a one-line edit here. Gold is light enough that anything sitting
-  on a field of it takes ink, not white.
+  The one accent: the spec card, the stage signal, the gauge. These tones
+  are light enough that anything sitting on a field of one takes ink, not
+  white.
 */
-export const ACCENT = "#c8992f";
+export const ACCENT = COPPER;
+
+/*
+  The accent lightened, for fills big enough that the full-strength tone
+  would shout: the spec cards carry this, the small marks carry ACCENT.
+*/
+export const ACCENT_SOFT = "#ddb48c";

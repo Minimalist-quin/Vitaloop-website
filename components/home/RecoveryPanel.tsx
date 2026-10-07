@@ -5,7 +5,7 @@ import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
-import { ACCENT, BLUE, PANEL, STAGE } from "./panel-theme";
+import { ACCENT, DATA, PANEL, STAGE } from "./panel-theme";
 
 /**
  * Recovery panel — the lower half of the "Why Vitaloop" pair.
@@ -13,9 +13,10 @@ import { ACCENT, BLUE, PANEL, STAGE } from "./panel-theme";
  * The structure (a headline block over a tile grid, the radial burst,
  * the column gauge) follows a supplied reference; the labels, wording
  * and every figure are ours and deliberately differ from it. Surfaces,
- * ink and data colours all come from [panel-theme]: variability carries
- * the core blue, breathing and HRV balance the lighter blue, temperature
- * the accent. One reading, one colour, across both panels.
+ * ink and data colours all come from [panel-theme]: variability,
+ * breathing and HRV balance carry the data tone, temperature the accent,
+ * and the sleep tile names the stages as the sleep panel does. One
+ * reading, one colour, across both panels.
  *
  * ⚠️ All copy and data here are illustrative mock-up values for the
  * screen design — not measurements, and not final copy. Replace both
@@ -64,7 +65,7 @@ function VariabilityChart() {
           bottom: hrvY(low),
           height: Math.max(hrvY(high) - hrvY(low), HRV_BAR),
           width: HRV_BAR,
-          background: BLUE,
+          background: DATA,
         };
 
         return (
@@ -79,7 +80,7 @@ function VariabilityChart() {
               <div
                 data-var-dot
                 className="absolute left-1/2 h-[5px] w-[5px] -translate-x-1/2 rounded-full"
-                style={{ bottom: hrvY(loose), background: BLUE }}
+                style={{ bottom: hrvY(loose), background: DATA }}
               />
             )}
           </div>

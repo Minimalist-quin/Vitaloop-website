@@ -1,4 +1,4 @@
-import { ACCENT } from "./panel-theme";
+import { ACCENT_SOFT } from "./panel-theme";
 
 /**
  * "How it works" — a centred heading over a card grid: the device on the
@@ -144,7 +144,7 @@ function SpecCard({ label, sub, value, icon: Icon, accent, hero }: Spec) {
   return (
     <div
       className="flex flex-1 flex-col rounded-[20px] p-5"
-      style={{ background: accent ? ACCENT : CARD, color: INK }}
+      style={{ background: accent ? ACCENT_SOFT : CARD, color: INK }}
     >
       <p className="text-[17px] font-semibold tracking-[-0.01em]">{label}</p>
       {sub && (

@@ -5,7 +5,7 @@ import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
-import { BLUE, PANEL, STAGE, TEAL } from "./panel-theme";
+import { DATA, PANEL, STAGE, SLEEP_MARK } from "./panel-theme";
 
 /**
  * Sleep panel — the upper half of the "Why Vitaloop" pair.
@@ -101,7 +101,7 @@ function SleepCard() {
 
         <span
           className="flex h-7 w-7 items-center justify-center rounded-full"
-          style={{ background: TEAL }}
+          style={{ background: SLEEP_MARK }}
         >
           <MoonIcon aria-hidden className="h-[14px] w-[14px] text-white" />
         </span>
@@ -128,7 +128,7 @@ function SleepCard() {
         </span>
       </p>
 
-      <p className="mt-2 text-center text-[11px] font-medium" style={{ color: TEAL }}>
+      <p className="mt-2 text-center text-[11px] font-medium" style={{ color: SLEEP_MARK }}>
         Asleep time
       </p>
 
@@ -248,7 +248,7 @@ function RespiratoryChart() {
                   >
                     MAX
                   </p>
-                  <p className="text-[13px] leading-tight font-semibold" style={{ color: BLUE }}>
+                  <p className="text-[13px] leading-tight font-semibold" style={{ color: DATA }}>
                     19.8
                   </p>
                 </div>
@@ -271,7 +271,7 @@ function RespiratoryChart() {
                   >
                     MIN
                   </p>
-                  <p className="text-[13px] leading-tight font-semibold" style={{ color: BLUE }}>
+                  <p className="text-[13px] leading-tight font-semibold" style={{ color: DATA }}>
                     13.8
                   </p>
                 </div>
@@ -363,7 +363,7 @@ export function SleepPanel({ className }: { className?: string }) {
         <section className="p-4" style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}>
           <h3
             className="flex items-center gap-1.5 text-[9.5px] font-semibold tracking-[0.14em] uppercase"
-            style={{ color: BLUE }}
+            style={{ color: DATA }}
           >
             <LungsIcon aria-hidden className="h-[12px] w-[12px]" />
             Breathing rate
