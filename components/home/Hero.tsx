@@ -97,10 +97,10 @@ export function Hero() {
             it and the padding both step up from md. */}
         <a
           href="#"
-          className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#111] py-1 pr-1 pl-3.5 text-[12px] font-semibold whitespace-nowrap text-white md:gap-3 md:py-1.5 md:pr-1.5 md:pl-6 md:text-[14px]"
+          className="ml-auto inline-flex shrink-0 items-center gap-2 rounded-full bg-[#111] py-1.5 pr-1.5 pl-4 text-[13px] font-semibold whitespace-nowrap text-white md:gap-3 md:pl-6 md:text-[14px]"
         >
           Join Waitlist
-          <ArrowBadge size="h-6 w-6 text-[11px] md:h-9 md:w-9 md:text-[15px]" />
+          <ArrowBadge size="h-7 w-7 text-[12px] md:h-9 md:w-9 md:text-[15px]" />
         </a>
 
         {/* Narrow screens get the menu control in the outlined-circle
