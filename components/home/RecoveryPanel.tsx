@@ -19,9 +19,11 @@ import { cn } from "@/lib/cn";
  * before launch.
  */
 
-/* Deep enough that the white body copy on the headline panel clears
-   WCAG AA (4.9:1) — the brighter orange it replaced did not. */
 const ORANGE = "#c24a06";
+
+/* The headline block borrows the sleep panel's card surface, so the two
+   stacked panels share one dark; orange stays the accent on the tiles. */
+const INK = "#1c1c1e";
 
 /* ---------- top panel: heart rate ---------- */
 
@@ -50,7 +52,7 @@ const HR_MARKERS = [
 
 function HeartRatePanel() {
   return (
-    <div className="px-4 pt-4 pb-5" style={{ background: ORANGE }}>
+    <div className="px-4 pt-4 pb-5" style={{ background: INK }}>
       <p className="text-[11px] font-medium text-white">Recovery</p>
 
       <p className="mt-6 text-[10px] text-white/90">Resting heart rate</p>
