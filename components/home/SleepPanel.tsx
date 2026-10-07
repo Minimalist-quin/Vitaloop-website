@@ -8,23 +8,41 @@ import { cn } from "@/lib/cn";
 import { BLUE, PANEL, STAGE, TEAL } from "./panel-theme";
 
 /**
- * Sleep panel — the dark half of the "Why Vitaloop" pair.
+ * Sleep panel — the upper half of the "Why Vitaloop" pair.
  *
- * The visual language (dark cards, a stage ribbon, floating range bars)
- * follows a supplied reference; the labels, wording and every figure are
- * ours and deliberately differ from it.
+ * The two cards follow supplied references (a sleep summary and a
+ * breathing chart); the labels, wording and every figure are ours and
+ * deliberately differ from them. Surfaces and ink come from
+ * [panel-theme], which carries the card look both panels share.
  *
  * ⚠️ All copy and data here are illustrative mock-up values for the
  * screen design — not measurements, and not final copy. Replace both
  * before launch.
  */
 
-function BedIcon(props: SVGProps<SVGSVGElement>) {
+function MoonIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M2.6 9.4h18.8a1.6 1.6 0 0 1 1.6 1.6v4.3H1V11a1.6 1.6 0 0 1 1.6-1.6" />
-      <path d="M1 16.4h22v2.2h-22z" />
-      <circle cx={6} cy={7.4} r={2.4} />
+      <path d="M20.5 15.2A8.6 8.6 0 0 1 9.4 4.1a8.6 8.6 0 1 0 11.1 11.1" />
+      <circle cx={17.4} cy={6.2} r={1} />
+      <circle cx={20.4} cy={9} r={0.7} />
+    </svg>
+  );
+}
+
+function ClockIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} {...props}>
+      <circle cx={12} cy={12} r={8.6} />
+      <path d="M12 7.2V12l3.2 2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function HeartIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M12 21c-1.7-1.2-8.3-5.5-8.3-11.3A5 5 0 0 1 12 6a5 5 0 0 1 8.3 3.7C20.3 15.5 13.7 19.8 12 21" />
     </svg>
   );
 }
@@ -39,117 +57,127 @@ function LungsIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/* ---------- Sleep: Stages ---------- */
+/* ---------- Sleep ---------- */
 
-type Stage = "awake" | "rem" | "core" | "deep";
-
-/* Rows are 20px tall on a 34px pitch, so the dotted rules land midway. */
-const BAND_HEIGHT = 20;
-const BAND_PITCH = 34;
-const STAGE_ORDER: Stage[] = ["awake", "rem", "core", "deep"];
-const bandTop = (stage: Stage) => STAGE_ORDER.indexOf(stage) * BAND_PITCH;
-const CHART_HEIGHT = STAGE_ORDER.length * BAND_PITCH - (BAND_PITCH - BAND_HEIGHT);
-
-const STAGE_ROWS: { stage: Stage; label: string; duration: string }[] = [
-  { stage: "awake", label: "Awake", duration: "9m" },
-  { stage: "rem", label: "REM", duration: "1h 38m" },
-  { stage: "core", label: "Core", duration: "3h 47m" },
-  { stage: "deep", label: "Deep", duration: "1h 12m" },
+/*
+  One night, in minutes. Asleep is the three sleep stages; the span
+  below is time in bed, which is why the two differ by the waking
+  minutes.
+*/
+const STAGES = [
+  { key: "awake", label: "Awake", minutes: 9, colour: STAGE.awake },
+  { key: "rem", label: "REM", minutes: 98, colour: STAGE.rem },
+  { key: "core", label: "Core", minutes: 267, colour: STAGE.core },
+  { key: "deep", label: "Deep", minutes: 72, colour: STAGE.deep },
 ];
 
-/* The night as [stage, start%, end%] across the 11:42PM–6:58AM axis. */
-const HYPNOGRAM: [Stage, number, number][] = [
-  ["core", 0, 6],
-  ["deep", 6, 13],
-  ["core", 13, 16],
-  ["deep", 16, 24],
-  ["core", 24, 28],
-  ["rem", 28, 34],
-  ["core", 34, 38],
-  ["deep", 38, 44],
-  ["core", 44, 48],
-  ["awake", 48, 49.5],
-  ["core", 49.5, 54],
-  ["rem", 54, 62],
-  ["core", 62, 67],
-  ["deep", 67, 71],
-  ["core", 71, 76],
-  ["awake", 76, 77.5],
-  ["rem", 77.5, 86],
-  ["core", 86, 91],
-  ["awake", 91, 92.5],
-  ["core", 92.5, 100],
-];
+const IN_BED = "11:42PM – 7:08AM";
+const AVG_BPM = "48 BPM AVG";
 
-function SleepStagesChart() {
+const TOTAL = STAGES.reduce((sum, s) => sum + s.minutes, 0);
+const ASLEEP = TOTAL - STAGES[0].minutes;
+
+function duration(minutes: number) {
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  if (!hours) return `${rest}m`;
+  return rest ? `${hours}h ${rest}m` : `${hours}h`;
+}
+
+function SleepCard() {
   return (
-    <div className="mt-3 flex gap-2">
-      <div className="relative w-[52px] shrink-0" style={{ height: CHART_HEIGHT }}>
-        {STAGE_ROWS.map(({ stage, label, duration }) => (
-          <div key={stage} className="absolute left-0" style={{ top: bandTop(stage) - 3 }}>
-            <p className="text-[9.5px] leading-tight font-medium" style={{ color: PANEL.ink }}>
-              {label}
-            </p>
-            <p className="text-[9px] leading-tight" style={{ color: PANEL.muted }}>
-              {duration}
-            </p>
-          </div>
-        ))}
+    <section className="p-4" style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}>
+      <div className="flex items-center justify-between">
+        <span
+          className="rounded-full px-2.5 py-1 text-[9px] tracking-[0.08em] uppercase"
+          style={{ background: PANEL.surface, color: PANEL.muted }}
+        >
+          Wed 27
+        </span>
+
+        <p className="text-[13px] font-medium" style={{ color: PANEL.ink }}>
+          Sleep
+        </p>
+
+        <span
+          className="flex h-7 w-7 items-center justify-center rounded-full"
+          style={{ background: TEAL }}
+        >
+          <MoonIcon aria-hidden className="h-[14px] w-[14px] text-white" />
+        </span>
       </div>
 
-      <div className="relative flex-1" style={{ height: CHART_HEIGHT }}>
-        {/* Recessive dotted rules, one between each pair of bands. */}
-        {STAGE_ORDER.slice(0, -1).map((stage) => (
-          <div
-            key={stage}
-            className="absolute inset-x-0 h-px"
-            style={{
-              top: bandTop(stage) + BAND_HEIGHT + (BAND_PITCH - BAND_HEIGHT) / 2,
-              background: `repeating-linear-gradient(90deg,${PANEL.rule} 0 1.5px,transparent 1.5px 5px)`,
-            }}
-          />
-        ))}
+      <p className="mt-5 flex items-baseline justify-center gap-1.5">
+        <span
+          className="text-[34px] leading-none font-light tracking-[-0.03em]"
+          style={{ color: PANEL.ink }}
+        >
+          {Math.floor(ASLEEP / 60)}
+        </span>
+        <span className="text-[13px]" style={{ color: PANEL.muted }}>
+          hr
+        </span>
+        <span
+          className="text-[34px] leading-none font-light tracking-[-0.03em]"
+          style={{ color: PANEL.ink }}
+        >
+          {String(ASLEEP % 60).padStart(2, "0")}
+        </span>
+        <span className="text-[13px]" style={{ color: PANEL.muted }}>
+          min
+        </span>
+      </p>
 
-        {/* The night itself, wiped in left to right — see the timeline below. */}
-        <div data-sleep-plot className="absolute inset-0">
-          {/* Connectors first, so the stage bars sit on top of them. The
-              gradient runs from the upper band's colour to the lower one's,
-              which is what gives the awake spikes their orange-to-blue shaft. */}
-          {HYPNOGRAM.slice(1).map(([stage, start], i) => {
-            const previous = HYPNOGRAM[i][0];
-            const upper = bandTop(stage) < bandTop(previous) ? stage : previous;
-            const lower = upper === stage ? previous : stage;
+      <p className="mt-2 text-center text-[11px] font-medium" style={{ color: TEAL }}>
+        Asleep time
+      </p>
 
-            return (
-              <div
-                key={`link-${start}`}
-                className="absolute w-[2px]"
-                style={{
-                  left: `calc(${start}% - 1px)`,
-                  top: bandTop(upper) + 2,
-                  height: bandTop(lower) + BAND_HEIGHT - bandTop(upper) - 4,
-                  background: `linear-gradient(to bottom, ${STAGE[upper]}, ${STAGE[lower]})`,
-                }}
-              />
-            );
-          })}
-
-          {HYPNOGRAM.map(([stage, start, end]) => (
-            <div
-              key={`${stage}-${start}`}
-              className="absolute rounded-[6px]"
-              style={{
-                left: `${start}%`,
-                width: `${end - start}%`,
-                top: bandTop(stage),
-                height: BAND_HEIGHT,
-                background: STAGE[stage],
-              }}
+      <div
+        className="mt-5 p-3"
+        style={{ background: PANEL.surface, borderRadius: PANEL.tileRadius - 8 }}
+      >
+        {/* Widths are the stages' share of the night; the shortest would
+            vanish at its true share, so each keeps a floor. */}
+        <div data-sleep-plot className="flex gap-[3px]">
+          {STAGES.map(({ key, minutes, colour }) => (
+            <span
+              key={key}
+              className="h-9 rounded-[7px]"
+              style={{ flex: `${minutes} 1 0`, minWidth: 10, background: colour }}
             />
           ))}
         </div>
+
+        <div className="mt-3 grid grid-cols-4 gap-1.5">
+          {STAGES.map(({ key, label, minutes, colour }) => (
+            <div key={key}>
+              <p className="flex items-center gap-1 text-[9.5px]" style={{ color: PANEL.body }}>
+                {label}
+                <span
+                  aria-hidden
+                  className="h-[5px] w-[5px] rounded-full"
+                  style={{ background: colour }}
+                />
+              </p>
+              <p className="mt-0.5 text-[12px] font-medium" style={{ color: PANEL.ink }}>
+                {duration(minutes)}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+
+      <div data-sleep-axis className="mt-4 flex items-center justify-between text-[10.5px]">
+        <p className="flex items-center gap-1.5" style={{ color: PANEL.ink }}>
+          <ClockIcon aria-hidden className="h-3.5 w-3.5" style={{ color: PANEL.muted }} />
+          {IN_BED}
+        </p>
+        <p className="flex items-center gap-1.5" style={{ color: PANEL.ink }}>
+          <HeartIcon aria-hidden className="h-3.5 w-3.5" style={{ color: PANEL.muted }} />
+          {AVG_BPM}
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -267,7 +295,7 @@ export function SleepPanel({ className }: { className?: string }) {
 
   useIsomorphicLayoutEffect(() => {
     /* Reduced motion: every tween below is a `from`/`fromTo`, so skipping
-       them leaves both charts rendered at their final values. */
+       them leaves both cards rendered at their final values. */
     if (reducedMotion || !root.current) return;
 
     registerGsap();
@@ -277,8 +305,8 @@ export function SleepPanel({ className }: { className?: string }) {
         scrollTrigger: { trigger: root.current, start: "top 80%", once: true },
       });
 
-      /* The night replays in time order rather than appearing at once,
-         so the shape of the sleep reads as a sequence. */
+      /* The night fills in from its first stage to its last, so the
+         stages read in the order they were slept. */
       tl.fromTo(
         "[data-sleep-plot]",
         { clipPath: "inset(0% 100% 0% 0%)" },
@@ -323,36 +351,7 @@ export function SleepPanel({ className }: { className?: string }) {
       }}
     >
       <div className="space-y-2">
-        <section className="p-4" style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}>
-          <h3
-            className="flex items-center gap-1.5 text-[9.5px] font-semibold tracking-[0.14em] uppercase"
-            style={{ color: TEAL }}
-          >
-            <BedIcon aria-hidden className="h-[12px] w-[12px]" />
-            Sleep rhythm
-          </h3>
-          <p className="mt-2.5 text-[13px] leading-snug" style={{ color: PANEL.body }}>
-            Last night, <strong style={{ color: PANEL.ink }}>from first drift to waking</strong>.
-          </p>
-
-          <div className="mt-3 h-px" style={{ background: PANEL.rule }} />
-
-          <SleepStagesChart />
-
-          <div data-sleep-axis>
-            <div
-              className="mt-2.5 ml-[60px] border-t border-dotted"
-              style={{ borderColor: PANEL.rule }}
-            />
-            <div
-              className="mt-1.5 ml-[60px] flex justify-between text-[9px]"
-              style={{ color: PANEL.muted }}
-            >
-              <span>11:42PM</span>
-              <span>6:58AM</span>
-            </div>
-          </div>
-        </section>
+        <SleepCard />
 
         <section className="p-4" style={{ background: PANEL.tile, borderRadius: PANEL.tileRadius }}>
           <h3
