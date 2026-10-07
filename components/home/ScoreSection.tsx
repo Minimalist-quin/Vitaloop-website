@@ -1,6 +1,7 @@
 import type { SVGProps } from "react";
 
 import { PanelDeck } from "./PanelDeck";
+import { JourneySteps } from "./JourneySteps";
 
 /**
  * "Why Vitaloop" — a deck of product panels with the positioning copy
@@ -88,15 +89,16 @@ export function ScoreSection() {
         <p className="text-center text-[12px] tracking-[0.14em] text-[#8a8780]">Why Vitaloop</p>
 
         <div className="mt-14 grid items-center gap-12 lg:mt-20 lg:grid-cols-[1fr_minmax(0,320px)_1fr] lg:gap-12">
-          {/* The two text columns are staggered against the deck: the
-              positioning copy high, the features low. */}
-          {/* Fixed while the deck scrolls past it: the copy is the frame
-              the panels are read inside, so it stays put. */}
-          <div className="max-w-[24rem] lg:sticky lg:top-24 lg:self-start lg:pr-4">
+          {/* Fixed while the deck scrolls past it: the copy and the five
+              stages are the frame the panels are read inside, and the
+              stages need the section's scroll to light up in turn. */}
+          <div className="max-w-[24rem] lg:sticky lg:top-12 lg:self-start lg:pr-4">
             <p className="text-[clamp(1.1rem,1.6vw,1.35rem)] leading-[1.45] font-medium tracking-[-0.01em]">
               Vitaloop is a preventive health platform that helps you understand your health, detect
               changes early, and get the right support when it matters.
             </p>
+
+            <JourneySteps />
           </div>
 
           <PanelDeck />
