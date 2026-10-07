@@ -258,7 +258,7 @@ function stepArea(points: [number, number][]) {
    name the same stages the same way. */
 const SLEEP_BANDS = [
   {
-    color: STAGE.deep,
+    color: STAGE.rem,
     points: [
       [0, 30],
       [22, 30],
@@ -283,7 +283,7 @@ const SLEEP_BANDS = [
 
 const SLEEP_LABELS = [
   { text: "Awake", top: "4%", left: "4%", color: "#ffffff" },
-  { text: "REM", top: "42%", left: "58%", color: "#ffffff" },
+  { text: "REM", top: "42%", left: "58%", color: PANEL.ink },
   { text: "Light", top: "64%", left: "4%", color: PANEL.ink },
 ];
 
