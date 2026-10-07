@@ -3,14 +3,13 @@ import type { SVGProps } from "react";
 import { PanelDeck } from "./PanelDeck";
 
 /**
- * "Why Vitaloop" — a deck of product panels with the greeting set high
- * on one side and the feature list low on the other.
+ * "Why Vitaloop" — a deck of product panels with the positioning copy
+ * set high on one side and the feature list low on the other.
  *
- * ⚠️ The greeting and the three feature items are still cloned from
- * supplied reference screenshots: not Vitaloop's copy, and the "26%" in
- * the greeting is an invented figure. Both must be rewritten before
- * anything ships. The two panels have been taken off the references —
- * see SleepPanel and RecoveryPanel.
+ * The positioning copy is the user's own. ⚠️ The three feature items are
+ * still cloned from a supplied reference screenshot and must be
+ * rewritten before anything ships; the two panels have been taken off
+ * their references already — see SleepPanel and RecoveryPanel.
  */
 
 const SECTION_BG = "#f2efe9";
@@ -89,13 +88,21 @@ export function ScoreSection() {
         <p className="text-center text-[12px] tracking-[0.14em] text-[#8a8780]">Why Vitaloop</p>
 
         <div className="mt-14 grid items-center gap-12 lg:mt-20 lg:grid-cols-[1fr_minmax(0,320px)_1fr] lg:gap-12">
-          {/* The two text columns are staggered against the stack: the
-              greeting beside the night, the features beside the recovery. */}
-          <div className="lg:self-start lg:pt-24 lg:pr-4">
-            <p className="text-[11px] tracking-[0.18em] text-[#8a8780] uppercase">Monday 18</p>
-            <p className="mt-5 max-w-[20rem] text-[clamp(1.25rem,2vw,1.6rem)] leading-[1.32] font-medium tracking-[-0.01em]">
-              Hey John! your score could soar by up to 26% points per week! Let&rsquo;s elevate your
-              eco-friendly game!
+          {/* The two text columns are staggered against the deck: the
+              positioning copy high, the features low. */}
+          <div className="max-w-[24rem] lg:self-start lg:pt-24 lg:pr-4">
+            <p className="text-[clamp(1.1rem,1.6vw,1.35rem)] leading-[1.4] font-medium tracking-[-0.01em]">
+              Vitaloop is a preventive health platform designed to help people understand
+              what&rsquo;s happening in their bodies before something feels wrong.
+            </p>
+            <p className="mt-5 text-[15px] leading-[1.6] text-[#6f6b64]">
+              It brings together continuous health monitoring, intelligent insights, and responsive
+              care in one connected experience.
+            </p>
+            <p className="mt-4 text-[15px] leading-[1.6] text-[#6f6b64]">
+              From a wearable that quietly tracks your health throughout the day to your intelligent
+              health companion that checks in, helps you understand your data, and responds when you
+              need support.
             </p>
           </div>
 

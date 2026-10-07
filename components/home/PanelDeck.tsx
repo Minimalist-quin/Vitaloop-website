@@ -7,22 +7,28 @@ import { SleepPanel } from "./SleepPanel";
 import { RecoveryPanel } from "./RecoveryPanel";
 
 /**
- * The two panels as a deck, after a supplied reference: each card comes
- * to rest a little lower than the one before it, so the card behind
- * keeps a strip of its top edge showing above the one in front.
+ * The two panels as a deck: every card parks at the same height, so the
+ * card in front covers the one behind it completely once it lands —
+ * nothing of the card behind shows above it.
  *
  * The stacking is sticky positioning, not a pinned scroll scene — every
  * panel is read in full on the way past, and only then slides under the
- * next one. The scrubbed tween just settles the covered card back a
- * touch so the depth reads.
+ * next one. The scrubbed tween settles the covered card back as it goes,
+ * which reads while it is still uncovered.
  *
  * Reduced motion: no sticky, no scrub — the panels sit one under the
  * other and nothing overlaps.
  */
 
-/* Where each card parks, and how much of the one behind stays visible. */
+/* Where every card parks. */
 const DECK_TOP = 24;
-const DECK_STEP = 26;
+/* Room below the last card, so it can travel up to DECK_TOP and hold
+   there — without it, the last card's sticky range is already spent and
+   it never covers the one behind. */
+const DECK_TAIL = 320;
+/* The covered card fades out over this much of the next card's travel,
+   so it is gone before the next card lands on it. */
+const DECK_FADE = 220;
 
 const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
@@ -48,7 +54,21 @@ export function PanelDeck() {
           scrollTrigger: {
             trigger: cards[i + 1],
             start: "top bottom",
-            end: `top top+=${DECK_TOP + DECK_STEP * (i + 1)}`,
+            end: `top top+=${DECK_TOP}`,
+            scrub: true,
+          },
+        });
+
+        /* The panels are not the same height, so a covered card would
+           otherwise show along whichever edge it outruns. It fades out
+           over the end of the next card's travel instead. */
+        gsap.to(card, {
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: cards[i + 1],
+            start: `top top+=${DECK_TOP + DECK_FADE}`,
+            end: `top top+=${DECK_TOP}`,
             scrub: true,
           },
         });
@@ -75,17 +95,22 @@ export function PanelDeck() {
           data-deck-card
           className="sticky"
           style={{
-            top: DECK_TOP + DECK_STEP * i,
+            top: DECK_TOP,
             zIndex: i + 1,
             marginTop: i === 0 ? 0 : 16,
-            /* The card settles back from its own top edge, so the strip
-               it leaves showing stays put as it recedes. */
+            /* Settling back from the top edge keeps the card tucked
+               behind the next one rather than growing out from under it. */
             transformOrigin: "50% 0%",
           }}
         >
           <Panel />
         </div>
       ))}
+
+      {/* Real height, not padding: a sticky card's travel is bounded by
+          its container's content box, so padding alone would leave the
+          last card short of DECK_TOP and the card behind showing. */}
+      <div aria-hidden style={{ height: DECK_TAIL }} />
     </div>
   );
 }
