@@ -30,4 +30,10 @@ export const STAGE = {
 
 export const TEAL = "#0e8f80";
 export const BLUE = "#1a7fd4";
-export const ORANGE = "#c24a06";
+
+/*
+  The one accent. Named for the job, not the hue, so a change of colour
+  stays a one-line edit here. Gold is light enough that anything sitting
+  on a field of it takes ink, not white.
+*/
+export const ACCENT = "#c8992f";

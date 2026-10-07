@@ -1,4 +1,4 @@
-import { ORANGE } from "./panel-theme";
+import { ACCENT } from "./panel-theme";
 
 /**
  * "How it works" — a centred heading over a card grid: the device on the
@@ -144,13 +144,13 @@ function SpecCard({ label, sub, value, icon: Icon, accent, hero }: Spec) {
   return (
     <div
       className="flex flex-1 flex-col rounded-[20px] p-5"
-      style={{ background: accent ? ORANGE : CARD, color: accent ? "#ffffff" : INK }}
+      style={{ background: accent ? ACCENT : CARD, color: INK }}
     >
       <p className="text-[17px] font-semibold tracking-[-0.01em]">{label}</p>
       {sub && (
         <p
           className="mt-1.5 text-[14px] leading-[1.45]"
-          style={{ color: accent ? "rgba(255,255,255,0.8)" : BODY }}
+          style={{ color: accent ? "rgba(26,26,26,0.72)" : BODY }}
         >
           {sub}
         </p>

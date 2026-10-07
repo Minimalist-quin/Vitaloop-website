@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap, registerGsap, ScrollTrigger } from "@/lib/gsap";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
-import { ORANGE, PANEL } from "./panel-theme";
+import { ACCENT, PANEL } from "./panel-theme";
 
 /**
  * The four stages, read as one sequence rather than four items.
@@ -95,7 +95,7 @@ export function JourneySteps() {
           className="absolute top-0 left-0 w-px"
           style={{
             height: reducedMotion ? "100%" : 0,
-            background: `linear-gradient(to bottom, ${ORANGE} 0, ${ORANGE} calc(100% - ${SIGNAL_TIP}px), transparent 100%)`,
+            background: `linear-gradient(to bottom, ${ACCENT} 0, ${ACCENT} calc(100% - ${SIGNAL_TIP}px), transparent 100%)`,
           }}
         />
 
@@ -108,7 +108,7 @@ export function JourneySteps() {
               <span
                 className="w-4 shrink-0 pt-[3px] text-[11px] tabular-nums"
                 style={{
-                  color: lit ? ORANGE : PANEL.muted,
+                  color: lit ? ACCENT : PANEL.muted,
                   transition: `color ${DURATION} ${EASE}`,
                 }}
               >

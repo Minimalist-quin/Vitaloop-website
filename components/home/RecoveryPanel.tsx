@@ -5,7 +5,7 @@ import { gsap, registerGsap, VITALOOP_EASE } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
-import { BLUE, ORANGE, PANEL, STAGE } from "./panel-theme";
+import { ACCENT, BLUE, PANEL, STAGE } from "./panel-theme";
 
 /**
  * Recovery panel — the lower half of the "Why Vitaloop" pair.
@@ -15,7 +15,7 @@ import { BLUE, ORANGE, PANEL, STAGE } from "./panel-theme";
  * and every figure are ours and deliberately differ from it. Surfaces,
  * ink and data colours all come from [panel-theme]: variability carries
  * the core blue, breathing and HRV balance the lighter blue, temperature
- * the accent orange. One reading, one colour, across both panels.
+ * the accent. One reading, one colour, across both panels.
  *
  * ⚠️ All copy and data here are illustrative mock-up values for the
  * screen design — not measurements, and not final copy. Replace both
@@ -207,12 +207,12 @@ function TemperatureGauge() {
       <div
         data-temp-fill
         className="absolute inset-y-0 left-0 w-[19px]"
-        style={{ background: ORANGE }}
+        style={{ background: ACCENT }}
       >
         {["38", "37", "36"].map((label, i) => (
           <span
             key={label}
-            className="absolute right-[2px] text-[7px] text-white/80"
+            className="absolute right-[2px] text-[7px] text-black/70"
             style={{ top: `${18 + i * 24}%` }}
           >
             {label}
