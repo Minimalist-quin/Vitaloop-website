@@ -23,7 +23,10 @@ import { ORANGE, PANEL } from "./panel-theme";
 const STEPS = [
   { title: "Monitor", body: "Track your health continuously." },
   { title: "Understand", body: "Turn data into clear, personal insights." },
-  { title: "Check in", body: "Get thoughtful support from Avora." },
+  {
+    title: "Check in",
+    body: "The health robot checks in and helps you understand how you’re doing.",
+  },
   {
     title: "Respond",
     body: "In an emergency, the health robot alerts the right people and helps get you the support you need.",
