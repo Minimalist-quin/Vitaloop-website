@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { DeviceLoop } from "./DeviceLoop";
 import { ACCENT } from "./panel-theme";
 
 /**
@@ -16,15 +16,14 @@ import { ACCENT } from "./panel-theme";
  * would cut the outer layers off. The footage is instead extended
  * vertically in ffmpeg by stretching its own top and bottom rows: the
  * ground is a smooth vertical gradient, so the join is invisible and
- * nothing in frame is lost. Re-cut with scripts/ in the commit message.
+ * nothing in frame is lost. Re-cut with the recipe in the commit.
  *
- * The loop explains the product — outside, construction, what is inside
- * it — which is the bar motion has to clear here.
+ * Scroll drives it — see DeviceLoop.
  *
  * ⚠️ PLACEHOLDER — the loop is a generated concept render, not
  * photography of a built device, and not a final industrial design.
- * It is also missing its closing on-the-wrist shot. Replace it with
- * real product footage before launch.
+ * Its closing shot is also not the casting that was asked for. Replace
+ * it with real product footage before launch.
  *
  * Every figure below is the one supplied for the device. None are
  * invented, and none may be — see the project's rule on statistics.
@@ -255,39 +254,7 @@ export function HowItWorks() {
             className="relative min-h-[420px] overflow-hidden rounded-[20px]"
             style={{ background: DEVICE_GROUND }}
           >
-            {/*
-              The poster sits underneath rather than only on the <video>:
-              it is what reduced-motion readers get, and it is also what
-              shows if the file never loads. Not `priority` — the card is
-              below the fold and the hero's own image owns first paint.
-            */}
-            <Image
-              src="/device-loop-poster.webp"
-              alt="The Vitaloop wearable, shown from the front at a three-quarter angle."
-              fill
-              sizes="(min-width: 1024px) 520px, (min-width: 640px) 50vw, 100vw"
-              className="object-cover"
-            />
-
-            {/*
-              preload="none" keeps the loop off the critical path; the
-              poster covers the gap until it arrives. Hidden outright
-              under prefers-reduced-motion, where the still is the whole
-              card and stays fully readable.
-            */}
-            <video
-              className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="none"
-              poster="/device-loop-poster.webp"
-              aria-hidden
-            >
-              <source src="/device-loop.webm" type="video/webm" />
-              <source src="/device-loop.mp4" type="video/mp4" />
-            </video>
+            <DeviceLoop className="absolute inset-0" />
 
             {/* The label sits on its own scrim rather than trusting
                 whichever part of the footage lands behind it. */}
