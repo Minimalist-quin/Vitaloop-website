@@ -44,20 +44,9 @@ export function PanelDeck() {
 
     registerGsap();
 
-    /* The deck only stacks on a wide screen. Narrow, the panels are read
-       one under the other: a 320px card parks well short of the fold, so
-       stacking there buys nothing and leaves a run of bare section under
-       the parked card. matchMedia reverts these cleanly on the way out,
-       which matters because the fade leaves a card at opacity 0 — the
-       panels would otherwise stay invisible once the deck stopped
-       stacking. */
-    const mm = gsap.matchMedia();
-
-    mm.add("(min-width: 1024px)", () => {
-      const cards = Array.from(
-        root.current?.querySelectorAll<HTMLElement>("[data-deck-card]") ?? [],
-      );
-      if (cards.length < 2) return;
+    const ctx = gsap.context((self) => {
+      const cards = self.selector?.("[data-deck-card]") as HTMLElement[] | undefined;
+      if (!cards || cards.length < 2) return;
 
       /* Each card is pushed back as the next one rides up over it, tied
          to that next card's travel rather than to a fixed distance. */
@@ -87,9 +76,9 @@ export function PanelDeck() {
           },
         });
       });
-    });
+    }, root);
 
-    return () => mm.revert();
+    return () => ctx.revert();
   }, [reducedMotion]);
 
   if (reducedMotion) {
@@ -102,15 +91,26 @@ export function PanelDeck() {
   }
 
   return (
-    <div ref={root} className="mx-auto w-full max-w-[320px]">
+    /*
+      The tail has to be real height inside this box or the last card's
+      sticky travel is spent before it covers the one behind. Stacked,
+      though, that height lands between the panels and the list under
+      them and reads as a hole in the section.
+
+      So the height stays and the content after it is pulled back over
+      it. The negative margin moves the next sibling, not this box's
+      content, so the travel is untouched — the list rides up under the
+      parked card, which is what the deck is doing anyway. Side by side
+      the tail costs nothing, since the list is in its own column.
+
+      Keep the offset in step with DECK_TAIL.
+    */
+    <div ref={root} className="mx-auto -mb-[140px] w-full max-w-[320px] lg:mb-0">
       {[SleepPanel, RecoveryPanel].map((Panel, i) => (
         <div
           key={i}
           data-deck-card
-          /* Sticky only where the deck stacks. Narrow screens read the
-             panels one under the other, so nothing parks and nothing
-             needs room to park in. */
-          className="lg:sticky"
+          className="sticky"
           style={{
             top: DECK_TOP,
             zIndex: i + 1,
@@ -126,10 +126,8 @@ export function PanelDeck() {
 
       {/* Real height, not padding: a sticky card's travel is bounded by
           its container's content box, so padding alone would leave the
-          last card short of DECK_TOP and the card behind showing. Only
-          where there is travel to bound — below lg it is the gap the
-          mobile layout was carrying for nothing. */}
-      <div aria-hidden className="hidden lg:block" style={{ height: DECK_TAIL }} />
+          last card short of DECK_TOP and the card behind showing. */}
+      <div aria-hidden style={{ height: DECK_TAIL }} />
     </div>
   );
 }
