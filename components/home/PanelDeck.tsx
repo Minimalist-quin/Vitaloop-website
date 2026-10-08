@@ -22,13 +22,9 @@ import { RecoveryPanel } from "./RecoveryPanel";
 
 /* Where every card parks. */
 const DECK_TOP = 24;
-/* Room below the last card, so it can travel up to DECK_TOP and hold
-   there — without it, the last card's sticky range is already spent and
-   it never covers the one behind.
-   Only as much as that takes. The last panel is shorter than the screen,
-   so while it is parked there is bare section under it; every pixel of
-   tail beyond what the travel needs is spent sitting in that gap. */
-const DECK_TAIL = 140;
+/* The room below the last card is a class on the tail element rather
+   than a constant, because the two layouts want different amounts of
+   it — see the comment there. */
 /* The covered card fades out over this much of the next card's travel,
    so it is gone before the next card lands on it. */
 const DECK_FADE = 220;
@@ -91,21 +87,7 @@ export function PanelDeck() {
   }
 
   return (
-    /*
-      The tail has to be real height inside this box or the last card's
-      sticky travel is spent before it covers the one behind. Stacked,
-      though, that height lands between the panels and the list under
-      them and reads as a hole in the section.
-
-      So the height stays and the content after it is pulled back over
-      it. The negative margin moves the next sibling, not this box's
-      content, so the travel is untouched — the list rides up under the
-      parked card, which is what the deck is doing anyway. Side by side
-      the tail costs nothing, since the list is in its own column.
-
-      Keep the offset in step with DECK_TAIL.
-    */
-    <div ref={root} className="mx-auto -mb-[140px] w-full max-w-[320px] lg:mb-0">
+    <div ref={root} className="mx-auto w-full max-w-[320px]">
       {[SleepPanel, RecoveryPanel].map((Panel, i) => (
         <div
           key={i}
@@ -124,10 +106,21 @@ export function PanelDeck() {
         </div>
       ))}
 
-      {/* Real height, not padding: a sticky card's travel is bounded by
-          its container's content box, so padding alone would leave the
-          last card short of DECK_TOP and the card behind showing. */}
-      <div aria-hidden style={{ height: DECK_TAIL }} />
+      {/*
+        Real height, not padding: a sticky card's travel is bounded by
+        its container's content box, so padding alone would leave the
+        last card short of DECK_TOP and the card behind showing.
+
+        This height is purely how long the last panel stays parked once
+        it lands — the travel that gets it there comes from the panel
+        above, not from here. Side by side that costs only section
+        height, so it keeps the full dwell. Stacked it falls between the
+        panels and the list under them, where every pixel of it is a
+        hole in the section, so it keeps just enough to register as a
+        hold. Short, rather than pulling the list up over the panel: the
+        list belongs under the deck, not behind it.
+      */}
+      <div aria-hidden className="h-10 lg:h-[140px]" />
     </div>
   );
 }
