@@ -113,7 +113,10 @@ export function ScoreSection() {
   }, []);
 
   return (
-    <section className="bg-[#f2efe9] py-20 text-[#1a1a1a] lg:py-28">
+    /* Less room at the foot than the head: the deck's last panel parks
+       short of the fold, so the section already carries bare ground
+       under it and a matching bottom pad only lengthens that. */
+    <section className="bg-[#f2efe9] pt-20 pb-10 text-[#1a1a1a] lg:pt-28 lg:pb-14">
       <div className="mx-auto max-w-6xl px-6 lg:px-10">
         <p className="text-center text-[12px] tracking-[0.14em] text-[#8a8780]">Why Vitaloop</p>
 

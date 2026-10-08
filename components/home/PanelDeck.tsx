@@ -24,8 +24,11 @@ import { RecoveryPanel } from "./RecoveryPanel";
 const DECK_TOP = 24;
 /* Room below the last card, so it can travel up to DECK_TOP and hold
    there — without it, the last card's sticky range is already spent and
-   it never covers the one behind. */
-const DECK_TAIL = 320;
+   it never covers the one behind.
+   Only as much as that takes. The last panel is shorter than the screen,
+   so while it is parked there is bare section under it; every pixel of
+   tail beyond what the travel needs is spent sitting in that gap. */
+const DECK_TAIL = 140;
 /* The covered card fades out over this much of the next card's travel,
    so it is gone before the next card lands on it. */
 const DECK_FADE = 220;
