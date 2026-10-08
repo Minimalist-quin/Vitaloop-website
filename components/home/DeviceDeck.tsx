@@ -165,9 +165,12 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
 
   return (
     /* Stacked by default — film over its specifications, which is the
-       arrangement narrow screens keep. From lg the two sit side by side
-       at the proportions the section has always used: the film in the
-       2.4 column, the specifications sharing the 3 beside it. */
+       arrangement narrow screens keep. From lg the two sit side by side.
+
+       The split stays at 2.4: the film holds 16:9, so its column's width
+       is also its height, and widening it to make the row taller took
+       that width off the cards instead — enough that their labels began
+       to wrap. The row's height is set on the specifications instead. */
     <div
       ref={root}
       className="mt-[clamp(1.75rem,5vh,4rem)] flex flex-col gap-4 lg:grid lg:grid-cols-[2.4fr_3fr] lg:items-stretch"
@@ -177,14 +180,17 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
         /* The film's own shape, so the picture fills the card edge to
            edge. A min-height here would win over the ratio and leave a
            band, which is the whole thing this avoids. */
-        /* lg:self-start, and only lg. Beside the specifications it stops
-           the row's stretch overriding the ratio and putting the band
-           back, and they stretch to the row instead, which levels the
-           bottom edges. Stacked, the deck is a flex column, where
-           align-self is the horizontal axis — unqualified it collapsed
-           the card to nothing, since everything inside it is absolutely
-           positioned and there is no content to size it. */
-        className="relative aspect-[16/9] overflow-hidden rounded-[20px] lg:self-start"
+        /* lg:self-center, and only lg. Not stretch: the row is now taller
+           than the film, and stretching would override the ratio and put
+           a band back inside the card. Centred rather than pinned to the
+           top so the few pixels the cards gained read as margin on both
+           sides instead of a hole under the film.
+
+           Stacked, the deck is a flex column, where align-self is the
+           horizontal axis — unqualified, it collapsed the card to
+           nothing, since everything inside it is absolutely positioned
+           and there is no content to size it. */
+        className="relative aspect-[16/9] overflow-hidden rounded-[20px] lg:self-center"
         style={{ background: GROUND }}
       >
         {/*

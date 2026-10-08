@@ -265,7 +265,10 @@ export function HowItWorks() {
             That leaves the last column on its own on a row of two, so it
             takes both. Beside the film it is a column like the others. */}
         <DeviceDeck>
-          <div className="grid grid-cols-2 items-stretch gap-4 lg:grid-cols-3">
+          {/* The row's height, beside the film. The cards stretch to it,
+              and the film is centred in it at its own ratio — so this is
+              the dial for how tall these cards stand. */}
+          <div className="grid grid-cols-2 items-stretch gap-4 lg:min-h-[340px] lg:grid-cols-3">
             {COLUMNS.map((column, i) => (
               <div
                 key={column[0].label}
