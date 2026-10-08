@@ -43,6 +43,15 @@ const PX_PER_SECOND = 130;
    never pinning at all. */
 const MAX_PINNABLE_SCREENS = 1.3;
 
+/* The loop's length, used until the file reports its own. The scrub used
+   to be built from the loadedmetadata event, which made the whole scene
+   hostage to the video: slow network, a decoder that defers, or a Fast
+   Refresh that swaps the element, and the event never arrives, so
+   nothing pins and nothing scrubs. The asset is ours and fixed, so the
+   scene is built immediately against this and corrected the moment the
+   real duration lands. Keep it in step with public/device-loop-scrub.mp4. */
+const LOOP_SECONDS = 20;
+
 export function DeviceLoop({ className }: { className?: string }) {
   const reduced = useReducedMotion();
   const video = useRef<HTMLVideoElement>(null);
@@ -74,12 +83,12 @@ export function DeviceLoop({ className }: { className?: string }) {
       },
     });
 
-    /* duration is NaN until metadata lands, and a tween built on NaN
-       silently never advances — so the scrub is built from the event.
-       Building the pin here too is deliberate: the section is only ever
-       held once there is a loop to hold it for. If the file 404s or the
-       decoder refuses it, nothing pins and the page scrolls normally,
-       rather than trapping the reader against a still. */
+    /* The length is read through a function so GSAP re-reads it on every
+       refresh: it starts at LOOP_SECONDS and becomes the file's real
+       duration the moment that is known, without the scene waiting on
+       it. */
+    const seconds = () => (Number.isFinite(el.duration) ? el.duration : LOOP_SECONDS);
+
     let tween: gsap.core.Tween | null = null;
     let pinnedNow: boolean | null = null;
 
@@ -97,13 +106,16 @@ export function DeviceLoop({ className }: { className?: string }) {
     };
 
     const build = () => {
-      if (tween || !Number.isFinite(el.duration)) return;
+      /* A file the browser has rejected outright is the one case worth
+         refusing to hold the reader for — there would be nothing behind
+         the hold but the poster. */
+      if (tween || el.error) return;
 
       const pinned = fits();
       pinnedNow = pinned;
 
       tween = gsap.to(el, {
-        currentTime: el.duration,
+        currentTime: seconds,
         ease: "none",
         scrollTrigger: pinned
           ? {
@@ -111,7 +123,7 @@ export function DeviceLoop({ className }: { className?: string }) {
               /* The section comes to rest against the top of the screen
                  and stays there for the length of the film. */
               start: "top top",
-              end: () => `+=${Math.round(el.duration * PX_PER_SECOND)}`,
+              end: () => `+=${Math.round(seconds() * PX_PER_SECOND)}`,
               pin: true,
               /* Lenis eases the scroll, so the pin has to be taken a
                  frame early or the section jumps as it catches. */
@@ -119,12 +131,24 @@ export function DeviceLoop({ className }: { className?: string }) {
               invalidateOnRefresh: true,
               scrub: SCRUB,
             }
-          : { trigger, start: "top bottom", end: "bottom top", scrub: SCRUB },
+          : {
+              trigger,
+              start: "top bottom",
+              end: "bottom top",
+              invalidateOnRefresh: true,
+              scrub: SCRUB,
+            },
       });
     };
 
-    el.addEventListener("loadedmetadata", build);
-    if (el.readyState >= 1) build();
+    build();
+
+    /* Once the real duration is known, a refresh re-reads it and the end
+       distance and tween target correct themselves. */
+    const onMeta = () => ScrollTrigger.refresh();
+    const onError = () => teardown();
+    el.addEventListener("loadedmetadata", onMeta);
+    el.addEventListener("error", onError);
 
     /* Rotating a tablet can move the section across the threshold in
        either direction, and whether it pins was decided once. Rebuild
@@ -138,7 +162,8 @@ export function DeviceLoop({ className }: { className?: string }) {
     window.addEventListener("resize", onResize);
 
     return () => {
-      el.removeEventListener("loadedmetadata", build);
+      el.removeEventListener("loadedmetadata", onMeta);
+      el.removeEventListener("error", onError);
       window.removeEventListener("resize", onResize);
       teardown();
       warm.kill();
@@ -169,7 +194,11 @@ export function DeviceLoop({ className }: { className?: string }) {
         className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
         muted
         playsInline
-        preload="none"
+        /* "metadata", not "none": none leaves the browser free to fetch
+           nothing at all, so the file had no duration and no frame to
+           seek to until something forced it. This costs the header, not
+           the file; the warm trigger raises it to "auto" for the rest. */
+        preload="metadata"
         poster="/device-loop-poster.webp"
         aria-hidden
       >
