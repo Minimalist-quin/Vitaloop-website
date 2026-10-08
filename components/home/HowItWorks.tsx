@@ -1,3 +1,4 @@
+import { cn } from "@/lib/cn";
 import { DeviceDeck } from "./DeviceDeck";
 import { ACCENT } from "./panel-theme";
 
@@ -256,13 +257,23 @@ export function HowItWorks() {
           </p>
         </div>
 
-        {/* Three columns beside the film, where they share its row. Under
-            it they have the full width, so they go two across before
-            three rather than straight to three narrow ones. */}
+        {/* Three columns beside the film, where they share its row; two
+            across everywhere narrower, down to the smallest screen —
+            these cards carry a short label and one figure, so a column
+            each is enough for them and a single stack wastes the width.
+
+            That leaves the last column on its own on a row of two, so it
+            takes both. Beside the film it is a column like the others. */}
         <DeviceDeck>
-          <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {COLUMNS.map((column) => (
-              <div key={column[0].label} className="flex flex-col gap-4">
+          <div className="grid grid-cols-2 items-stretch gap-4 lg:grid-cols-3">
+            {COLUMNS.map((column, i) => (
+              <div
+                key={column[0].label}
+                className={cn(
+                  "flex flex-col gap-4",
+                  i === COLUMNS.length - 1 && "col-span-2 lg:col-span-1",
+                )}
+              >
                 {column.map((spec) => (
                   <SpecCard key={spec.label} {...spec} />
                 ))}
