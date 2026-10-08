@@ -180,17 +180,17 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
         /* The film's own shape, so the picture fills the card edge to
            edge. A min-height here would win over the ratio and leave a
            band, which is the whole thing this avoids. */
-        /* lg:self-center, and only lg. Not stretch: the row is now taller
-           than the film, and stretching would override the ratio and put
-           a band back inside the card. Centred rather than pinned to the
-           top so the few pixels the cards gained read as margin on both
-           sides instead of a hole under the film.
+        /* Beside the specifications the card takes the row's full height
+           so it stands level with them, which means giving up the film's
+           ratio — the video covers, and the sides it loses are bounded
+           by the row height chosen in HowItWorks.
 
-           Stacked, the deck is a flex column, where align-self is the
-           horizontal axis — unqualified, it collapsed the card to
-           nothing, since everything inside it is absolutely positioned
-           and there is no content to size it. */
-        className="relative aspect-[16/9] overflow-hidden rounded-[20px] lg:self-center"
+           Stacked, it keeps 16:9 and fills the width, with no crop at
+           all. align-self stays off below lg: the deck is a flex column
+           there, where it is the horizontal axis, and unqualified it
+           collapsed the card to nothing, since everything inside is
+           absolutely positioned and there is nothing to size it by. */
+        className="relative aspect-[16/9] overflow-hidden rounded-[20px] lg:aspect-auto lg:self-stretch"
         style={{ background: GROUND }}
       >
         {/*
