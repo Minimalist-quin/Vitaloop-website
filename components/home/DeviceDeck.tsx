@@ -102,7 +102,11 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
 
       const held = {
         trigger: hold === "section" ? section : cardEl,
-        start: hold === "section" ? "top top" : "bottom bottom",
+        /* Held on the card: centred, not flush to the bottom edge. The
+           card fits — that is what chose this branch — so centring it
+           is what actually puts it in view rather than against the fold
+           with the rest of the section pressing on it. */
+        start: hold === "section" ? "top top" : "center center",
         end: () => `+=${Math.round(seconds() * PX_PER_SECOND)}`,
         pin: section,
         /* Lenis eases the scroll, so the pin is taken a frame early or
