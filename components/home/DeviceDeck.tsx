@@ -63,6 +63,11 @@ const COLS = [2.4, 1, 1, 1];
 const GAP = 16;
 const LG = "(min-width: 1024px)";
 
+/* The film's shape. The card takes it at both ends of the move, so the
+   picture fills the card and no part of the frame is ever cropped or
+   padded. Change this only if the footage itself is recut. */
+const FILM_RATIO = 16 / 9;
+
 /* Holding a section taller than the screen holds part of it out of
    sight for the whole of the loop, so the hold is only taken when the
    section fits. Where it cannot — narrow widths, where the cards stack
@@ -85,6 +90,7 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
 
     const trigger = gridEl.closest("section") ?? gridEl;
     const specs = Array.from(gridEl.children).filter((n) => n !== cardEl) as HTMLElement[];
+    const heading = trigger.querySelector<HTMLElement>("[data-deck-heading]");
 
     const seconds = () => (Number.isFinite(el.duration) ? el.duration : LOOP_SECONDS);
     const wide = () => window.matchMedia(LG).matches;
@@ -95,25 +101,30 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
     let endWidths: number[] = [];
     let endCardHeight = 0;
     let startCardHeight = 0;
+    let headingHeight = 0;
+    let pinnable = false;
 
     const measure = () => {
-      gridEl.style.removeProperty("grid-template-columns");
-      gridEl.style.removeProperty("grid-template-rows");
-      gridEl.style.removeProperty("column-gap");
-      cardEl.style.removeProperty("height");
-      specs.forEach((s) => s.style.removeProperty("opacity"));
+      reset();
 
       const total = gridEl.getBoundingClientRect().width;
       const span = COLS.reduce((a, b) => a + b, 0);
       const usable = total - GAP * (COLS.length - 1);
       endWidths = COLS.map((c) => (usable * c) / span);
 
-      endCardHeight = cardEl.getBoundingClientRect().height;
+      /* The card carries the film's own shape at both ends, so the
+         picture fills it and there is never a band to colour-match. */
+      endCardHeight = endWidths[0] / FILM_RATIO;
+      startCardHeight = total / FILM_RATIO;
 
-      /* The card grows into whatever headroom the section has left over
-         inside the screen it is about to be held on, and no further. */
-      const slack = window.innerHeight - trigger.getBoundingClientRect().height;
-      startCardHeight = endCardHeight + Math.max(0, slack);
+      headingHeight = heading ? heading.getBoundingClientRect().height : 0;
+
+      /* What the section will measure at the open, where the card is at
+         its tallest and the heading has stood down. Predicted rather
+         than measured, because the section is not in that state yet. */
+      const natural = trigger.getBoundingClientRect().height;
+      const atOpen = natural - headingHeight - cardEl.getBoundingClientRect().height + startCardHeight;
+      pinnable = wide() && atOpen <= window.innerHeight * MAX_PINNABLE_SCREENS;
     };
 
     /* t: 0 is the full-width film, 1 is the finished grid. */
@@ -128,6 +139,16 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
       gridEl.style.columnGap = `${gap}px`;
       gridEl.style.gridTemplateColumns = [first, ...rest].map((w) => `${w}px`).join(" ");
       cardEl.style.height = `${height}px`;
+
+      /* The heading stands down so the film can hold the section's full
+         width at its own shape — at that width it is 664px tall, and the
+         heading's 265 would push the pair past any laptop screen. It
+         comes back with the specifications, which is the moment the
+         words are wanted again. */
+      if (heading) {
+        heading.style.height = `${headingHeight * t}px`;
+        heading.style.opacity = `${gsap.utils.clamp(0, 1, (t - 0.35) / 0.65)}`;
+      }
 
       /* The row has to be pinned to the card's height. A grid row takes
          the height of its tallest item, and a spec column squeezed
@@ -148,6 +169,10 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
       gridEl.style.removeProperty("column-gap");
       cardEl.style.removeProperty("height");
       specs.forEach((s) => s.style.removeProperty("opacity"));
+      if (heading) {
+        heading.style.removeProperty("height");
+        heading.style.removeProperty("opacity");
+      }
     };
 
     const warm = ScrollTrigger.create({
@@ -174,7 +199,7 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
 
       measure();
 
-      const pinned = wide() && trigger.getBoundingClientRect().height <= window.innerHeight * MAX_PINNABLE_SCREENS;
+      const pinned = pinnable;
       const hand = { t: wide() ? 0 : 1 };
       apply(hand.t);
 
@@ -246,7 +271,12 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
     >
       <div
         ref={card}
-        className="relative min-h-[clamp(260px,42vh,420px)] overflow-hidden rounded-[20px]"
+        /* The film's own shape, so the picture fills the card with no
+           band to match. A min-height here used to win over it and left
+           the card taller than the columns beside it; the scene sets an
+           explicit height anyway, and this is what holds the shape
+           before the scene runs and under reduced motion. */
+        className="relative aspect-[16/9] self-start overflow-hidden rounded-[20px]"
         style={{ background: GROUND }}
       >
         {/*
@@ -260,12 +290,15 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
           alt="The Vitaloop wearable, shown from the front at a three-quarter angle."
           fill
           sizes="(min-width: 1024px) 1180px, 100vw"
-          className="object-contain"
+          className="object-cover"
         />
 
         <video
           ref={video}
-          className="absolute inset-0 h-full w-full object-contain motion-reduce:hidden"
+          /* cover, not contain: the card is held at the film's own ratio,
+             so the two agree and cover only absorbs sub-pixel rounding
+             that would otherwise show as a hairline of card. */
+          className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
           muted
           playsInline
           /* "metadata", not "none": none leaves the browser free to fetch

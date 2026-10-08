@@ -235,7 +235,9 @@ export function HowItWorks() {
        back rather than letting the grid run off the bottom. */
     <section className="bg-white px-4 py-[clamp(2.5rem,6vh,7rem)] lg:px-10">
       <div className="mx-auto max-w-[1180px]">
-        <div className="text-center">
+        {/* Collapsed while the film is at full width — see DeviceDeck.
+            overflow-hidden so the collapse clips rather than reflows. */}
+        <div data-deck-heading className="overflow-hidden text-center">
           <p
             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[14px]"
             style={{ borderColor: RULE, color: INK }}
