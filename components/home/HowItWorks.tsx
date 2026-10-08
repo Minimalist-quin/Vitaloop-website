@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FabricBackdrop } from "./FabricBackdrop";
 import { ACCENT } from "./panel-theme";
 
@@ -5,8 +6,15 @@ import { ACCENT } from "./panel-theme";
  * "How it works" — a centred heading over a card grid: the device on the
  * left, its specifications beside it.
  *
- * ⚠️ The left card is a deliberate placeholder: the reference puts a
- * device mock there and there is no asset for it yet.
+ * The device sits as a cut-out over FabricBackdrop rather than as a
+ * photograph with a background of its own: the card is already a drawn
+ * scene, and a second background inside it reads as a picture pasted on
+ * a picture. The shadow is CSS, not baked into the asset, so the device
+ * can move on the backdrop without its shadow staying behind.
+ *
+ * ⚠️ device-watch.webp is a PLACEHOLDER — a generated concept render,
+ * not photography of a built device, and not a final industrial design.
+ * Replace it with a real product shot before launch.
  *
  * Every figure below is the one supplied for the device. None are
  * invented, and none may be — see the project's rule on statistics.
@@ -229,20 +237,34 @@ export function HowItWorks() {
         </div>
 
         <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-[2.4fr_1fr_1fr_1fr]">
-          {/* ⚠️ PLACEHOLDER — the device mock goes on top of this.
-              The backdrop is extracted from a supplied reference: its
-              backdrop is drawn, not photographed — see FabricBackdrop. */}
+          {/* The backdrop is drawn, not photographed — see FabricBackdrop. */}
           <div className="relative min-h-[420px] overflow-hidden rounded-[20px]">
             <FabricBackdrop className="absolute inset-0 h-full w-full" />
+
+            {/* Inset rather than filling the card: the dunes are the
+                scene and the device stands in it, so it needs ground
+                below it and haze above. It sits off the pale left fold
+                so the near-black case keeps its contrast. */}
+            <div className="absolute inset-0 flex items-center justify-center p-8 pb-16">
+              <Image
+                src="/device-watch.webp"
+                alt="The Vitaloop wearable, shown from the front at a three-quarter angle."
+                width={884}
+                height={1100}
+                sizes="(min-width: 1024px) 420px, (min-width: 640px) 50vw, 90vw"
+                className="h-full w-auto object-contain drop-shadow-[0_26px_34px_rgba(74,38,16,0.42)]"
+              />
+            </div>
+
             {/* The label has to read over both the pale fold and the deep
                 fabric, so it sits on its own scrim rather than trusting
-                whichever part of the photo lands behind it. */}
+                whichever part of the backdrop lands behind it. */}
             <div className="absolute inset-x-0 bottom-0 p-5">
               <p
                 className="inline-flex rounded-full px-3 py-1.5 text-[11px] tracking-[0.18em] uppercase backdrop-blur-sm"
                 style={{ background: "rgba(26,26,26,0.55)", color: "#ffffff" }}
               >
-                [PLACEHOLDER] &mdash; device mock
+                [PLACEHOLDER] &mdash; concept render
               </p>
             </div>
           </div>
