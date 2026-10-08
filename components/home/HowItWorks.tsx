@@ -231,7 +231,7 @@ export function HowItWorks() {
        tall window the clamps sit at their old fixed values and nothing
        about the design changes; on a short laptop they give the height
        back rather than letting the grid run off the bottom. */
-    <section className="bg-white px-4 py-[clamp(2.5rem,6vh,7rem)] lg:px-10">
+    <section className="bg-white px-4 py-[clamp(3.5rem,9vh,9.5rem)] lg:px-10">
       <div className="mx-auto max-w-[1180px]">
         <div className="text-center">
           <p
