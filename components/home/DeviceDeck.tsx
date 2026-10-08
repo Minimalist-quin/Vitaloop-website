@@ -82,10 +82,15 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
       tween = null;
     };
 
-    /* The hold is only worth taking while the whole picture fits the
-       screen. On a window too short for it the film still scrubs, just
-       without the hold. */
-    const fits = () => cardEl.getBoundingClientRect().height <= window.innerHeight;
+    /* Where the hold should catch. If the whole section fits the screen
+       it is held from the top, so nothing is held out of sight. If only
+       the picture fits — which is the stacked layout, where the film is
+       full width and the section runs past the fold — it is held from
+       the moment the card is wholly on screen instead. If not even the
+       card fits, the film still scrubs, without the hold. */
+    const sectionFits = () => section.getBoundingClientRect().height <= window.innerHeight;
+    const cardFits = () => cardEl.getBoundingClientRect().height <= window.innerHeight;
+    const holdAt = () => (sectionFits() ? "section" : cardFits() ? "card" : "none");
 
     const build = () => {
       /* A file the browser has rejected is the one case worth refusing
@@ -93,32 +98,33 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
          but the poster. */
       if (tween || el.error) return;
 
-      const pinned = fits();
+      const hold = holdAt();
+
+      const held = {
+        trigger: hold === "section" ? section : cardEl,
+        start: hold === "section" ? "top top" : "bottom bottom",
+        end: () => `+=${Math.round(seconds() * PX_PER_SECOND)}`,
+        pin: section,
+        /* Lenis eases the scroll, so the pin is taken a frame early or
+           the section jumps as it catches. */
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        scrub: SCRUB,
+      };
 
       tween = gsap.to(el, {
         currentTime: seconds,
         ease: "none",
-        scrollTrigger: pinned
-          ? {
-              trigger: cardEl,
-              /* Held from the moment the card is wholly on screen, so
-                 the film never plays against a cropped frame. */
-              start: "bottom bottom",
-              end: () => `+=${Math.round(seconds() * PX_PER_SECOND)}`,
-              pin: section,
-              /* Lenis eases the scroll, so the pin is taken a frame
-                 early or the section jumps as it catches. */
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-              scrub: SCRUB,
-            }
-          : {
-              trigger: cardEl,
-              start: "top bottom",
-              end: "bottom top",
-              invalidateOnRefresh: true,
-              scrub: SCRUB,
-            },
+        scrollTrigger:
+          hold === "none"
+            ? {
+                trigger: cardEl,
+                start: "top bottom",
+                end: "bottom top",
+                invalidateOnRefresh: true,
+                scrub: SCRUB,
+              }
+            : held,
       });
     };
 
@@ -131,13 +137,14 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
     el.addEventListener("loadedmetadata", onMeta);
     el.addEventListener("error", onError);
 
-    /* A resize changes the card's height, and with it whether the hold
-       is worth taking. Rebuild only when that answer changes —
+    /* A resize changes both heights, and with them where the hold should
+       catch — the layout switches between stacked and side by side at
+       the same breakpoint. Rebuild only when that answer changes;
        ScrollTrigger handles every other resize itself. */
-    let held = fits();
+    let hold = holdAt();
     const onResize = () => {
-      if (fits() === held) return;
-      held = fits();
+      if (holdAt() === hold) return;
+      hold = holdAt();
       teardown();
       build();
     };
@@ -153,13 +160,24 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
   }, [reduced]);
 
   return (
-    <div ref={root} className="mt-[clamp(1.75rem,5vh,4rem)] flex flex-col gap-4">
+    /* Stacked by default — film over its specifications, which is the
+       arrangement narrow screens keep. From lg the two sit side by side
+       at the proportions the section has always used: the film in the
+       2.4 column, the specifications sharing the 3 beside it. */
+    <div
+      ref={root}
+      className="mt-[clamp(1.75rem,5vh,4rem)] flex flex-col gap-4 lg:grid lg:grid-cols-[2.4fr_3fr] lg:items-stretch"
+    >
       <div
         ref={card}
         /* The film's own shape, so the picture fills the card edge to
            edge. A min-height here would win over the ratio and leave a
            band, which is the whole thing this avoids. */
-        className="relative aspect-[16/9] overflow-hidden rounded-[20px]"
+        /* self-start so the row's stretch cannot override the ratio and
+           reintroduce the band this whole shape exists to avoid. The
+           specifications beside it stretch to the row instead, which is
+           what brings their bottom edge level with the card's. */
+        className="relative aspect-[16/9] self-start overflow-hidden rounded-[20px]"
         style={{ background: GROUND }}
       >
         {/*

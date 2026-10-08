@@ -256,10 +256,10 @@ export function HowItWorks() {
           </p>
         </div>
 
-        {/* The specifications sit under the film rather than beside it:
-            the card runs the full width, so this is the row it leaves. */}
+        {/* Three columns at every width from sm up: beside the film on a
+            wide screen, under it on a narrow one. */}
         <DeviceDeck>
-          <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid items-stretch gap-4 sm:grid-cols-3">
             {COLUMNS.map((column) => (
               <div key={column[0].label} className="flex flex-col gap-4">
                 {column.map((spec) => (
