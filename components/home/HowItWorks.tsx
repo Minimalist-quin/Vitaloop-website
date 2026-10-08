@@ -1,29 +1,26 @@
-import { DeviceLoop } from "./DeviceLoop";
+import { DeviceDeck } from "./DeviceDeck";
 import { ACCENT } from "./panel-theme";
 
 /**
  * "How it works" — a centred heading over a card grid: the device on the
  * left, its specifications beside it.
  *
- * The device card is the loop itself rather than a still on a drawn
- * backdrop. The footage carries its own warm ground, so a second
- * background behind it would only show as a border around a rectangle —
- * FabricBackdrop is no longer used here, and the card takes the
- * footage's own cream so any pixel the video doesn't cover matches it.
+ * The grid is a scroll scene, not a static layout: the device card opens
+ * at the full width of the section and plays the product film, then
+ * stands aside into its column while these specifications take the space
+ * it leaves. The arrangement below is the state it finishes in, which is
+ * the only state this file describes — DeviceDeck measures it and
+ * animates towards it, so changing the columns here changes the ending
+ * without touching the scene.
  *
- * The loop is 16:9 but the card is nearly square. Cropping to fit is
- * out: the exploded shot spreads its parts across the whole frame and a
- * 1.2 crop cuts the outer layers off — measured, not assumed, on six of
- * eight sampled frames. So the frame is kept whole and the shortfall is
- * filled with a blurred, feathered copy of the frame itself.
- *
- * An earlier pass filled it by stretching the footage's own top and
- * bottom rows. That is invisible while those rows are empty ground, and
- * it smears into vertical streaks the moment they are not — the strap
- * in the exploded shot, the forearm in the wrist shot. Blur has no
- * geometry to smear. Recipe in the commit.
- *
- * Scroll drives it — see DeviceLoop.
+ * The footage is used at its own 16:9 and contained rather than cropped:
+ * the exploded scene spreads its parts the full width of the frame and
+ * loses them to any crop. Earlier passes fitted it to a narrower card by
+ * fabricating the difference — first by stretching the frame's own edge
+ * rows, which smears anything touching the edge into vertical streaks,
+ * then by blurring the frame, which keeps the strap as recognisable
+ * blobs. Giving the film the full width removes the problem rather than
+ * disguising it.
  *
  * ⚠️ PLACEHOLDER — the loop is a generated concept render, not
  * photography of a built device, and not a final industrial design.
@@ -38,10 +35,6 @@ import { ACCENT } from "./panel-theme";
  * Every figure below is the one supplied for the device. None are
  * invented, and none may be — see the project's rule on statistics.
  */
-
-/* Sampled from the footage's own ground, so the card and the video are
-   one surface rather than two. */
-const DEVICE_GROUND = "#efe8e2";
 
 type Spec = {
   label: string;
@@ -266,22 +259,21 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="mt-[clamp(1.75rem,5vh,4rem)] grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-[2.4fr_1fr_1fr_1fr]">
-          <div
-            className="relative min-h-[clamp(260px,42vh,420px)] overflow-hidden rounded-[20px]"
-            style={{ background: DEVICE_GROUND }}
-          >
-            <DeviceLoop className="absolute inset-0" />
-          </div>
-
+        {/* min-w-0 and the clipping matter here: these columns are
+            animated from zero width, and without them their contents
+            refuse to narrow and spill across the card. */}
+        <DeviceDeck>
           {COLUMNS.map((column) => (
-            <div key={column[0].label} className="flex flex-col gap-4">
+            <div
+              key={column[0].label}
+              className="flex min-w-0 flex-col gap-4 overflow-hidden"
+            >
               {column.map((spec) => (
                 <SpecCard key={spec.label} {...spec} />
               ))}
             </div>
           ))}
-        </div>
+        </DeviceDeck>
       </div>
     </section>
   );
