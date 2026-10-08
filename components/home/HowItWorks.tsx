@@ -5,22 +5,19 @@ import { ACCENT } from "./panel-theme";
  * "How it works" — a centred heading over a card grid: the device on the
  * left, its specifications beside it.
  *
- * The grid is a scroll scene, not a static layout: the device card opens
- * at the full width of the section and plays the product film, then
- * stands aside into its column while these specifications take the space
- * it leaves. The arrangement below is the state it finishes in, which is
- * the only state this file describes — DeviceDeck measures it and
- * animates towards it, so changing the columns here changes the ending
- * without touching the scene.
+ * The device card runs the full width at the film's own 16:9, and the
+ * specifications sit in the row beneath it. Scroll holds the card and
+ * plays the film through it — see DeviceDeck, which judges the hold by
+ * the card rather than by this section: the section is taller than a
+ * laptop screen and does not need to be in view all at once, but the
+ * picture does.
  *
- * The footage is used at its own 16:9 and contained rather than cropped:
- * the exploded scene spreads its parts the full width of the frame and
- * loses them to any crop. Earlier passes fitted it to a narrower card by
- * fabricating the difference — first by stretching the frame's own edge
- * rows, which smears anything touching the edge into vertical streaks,
- * then by blurring the frame, which keeps the strap as recognisable
- * blobs. Giving the film the full width removes the problem rather than
- * disguising it.
+ * The footage is used at its own shape and fills the card. Earlier
+ * passes fitted it into a narrower card by fabricating the difference —
+ * first by stretching the frame's own edge rows, which smears anything
+ * touching the edge into vertical streaks, then by blurring the frame,
+ * which keeps the strap as recognisable blobs. Giving the film the full
+ * width removes the problem rather than disguising it.
  *
  * ⚠️ PLACEHOLDER — the loop is a generated concept render, not
  * photography of a built device, and not a final industrial design.
@@ -235,9 +232,7 @@ export function HowItWorks() {
        back rather than letting the grid run off the bottom. */
     <section className="bg-white px-4 py-[clamp(2.5rem,6vh,7rem)] lg:px-10">
       <div className="mx-auto max-w-[1180px]">
-        {/* Collapsed while the film is at full width — see DeviceDeck.
-            overflow-hidden so the collapse clips rather than reflows. */}
-        <div data-deck-heading className="overflow-hidden text-center">
+        <div className="text-center">
           <p
             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[14px]"
             style={{ borderColor: RULE, color: INK }}
@@ -261,20 +256,18 @@ export function HowItWorks() {
           </p>
         </div>
 
-        {/* min-w-0 and the clipping matter here: these columns are
-            animated from zero width, and without them their contents
-            refuse to narrow and spill across the card. */}
+        {/* The specifications sit under the film rather than beside it:
+            the card runs the full width, so this is the row it leaves. */}
         <DeviceDeck>
-          {COLUMNS.map((column) => (
-            <div
-              key={column[0].label}
-              className="flex min-w-0 flex-col gap-4 overflow-hidden"
-            >
-              {column.map((spec) => (
-                <SpecCard key={spec.label} {...spec} />
-              ))}
-            </div>
-          ))}
+          <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {COLUMNS.map((column) => (
+              <div key={column[0].label} className="flex flex-col gap-4">
+                {column.map((spec) => (
+                  <SpecCard key={spec.label} {...spec} />
+                ))}
+              </div>
+            ))}
+          </div>
         </DeviceDeck>
       </div>
     </section>
