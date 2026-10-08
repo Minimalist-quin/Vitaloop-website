@@ -27,6 +27,22 @@ import { useReducedMotion } from "@/lib/use-reduced-motion";
    as weight rather than as a jump. */
 const SCRUB = 0.6;
 
+/* How much scroll one second of footage is worth while the section is
+   held. Twenty seconds at this rate is a little under three screens —
+   long enough that a scene is read rather than flicked past, short
+   enough that nobody feels held. Pace the scenes here, not by recutting
+   the film. */
+const PX_PER_SECOND = 130;
+
+/* Holding a section taller than this many screens means holding the
+   reader against content they cannot see — which is what happens on
+   narrow widths, where the spec cards stack and the section runs to
+   several screens. Past it the loop still scrubs, just without the
+   hold. A little over one screen is allowed: the section overruns most
+   laptop viewports by a hair, and refusing to pin for that would mean
+   never pinning at all. */
+const MAX_PINNABLE_SCREENS = 1.3;
+
 export function DeviceLoop({ className }: { className?: string }) {
   const reduced = useReducedMotion();
   const video = useRef<HTMLVideoElement>(null);
@@ -59,25 +75,72 @@ export function DeviceLoop({ className }: { className?: string }) {
     });
 
     /* duration is NaN until metadata lands, and a tween built on NaN
-       silently never advances — so the scrub is built from the event. */
+       silently never advances — so the scrub is built from the event.
+       Building the pin here too is deliberate: the section is only ever
+       held once there is a loop to hold it for. If the file 404s or the
+       decoder refuses it, nothing pins and the page scrolls normally,
+       rather than trapping the reader against a still. */
     let tween: gsap.core.Tween | null = null;
+    let pinnedNow: boolean | null = null;
+
+    const fits = () =>
+      trigger.getBoundingClientRect().height <= window.innerHeight * MAX_PINNABLE_SCREENS;
+
+    /* kill(true) rather than kill(): a pinned trigger wraps the section
+       in a pin-spacer, and killing without reverting leaves that spacer
+       behind — a dead gap on unmount, and a doubled one if a resize
+       rebuilds through here. */
+    const teardown = () => {
+      tween?.scrollTrigger?.kill(true);
+      tween?.kill();
+      tween = null;
+    };
 
     const build = () => {
-      if (!Number.isFinite(el.duration)) return;
+      if (tween || !Number.isFinite(el.duration)) return;
+
+      const pinned = fits();
+      pinnedNow = pinned;
+
       tween = gsap.to(el, {
         currentTime: el.duration,
         ease: "none",
-        scrollTrigger: { trigger, start: "top bottom", end: "bottom top", scrub: SCRUB },
+        scrollTrigger: pinned
+          ? {
+              trigger,
+              /* The section comes to rest against the top of the screen
+                 and stays there for the length of the film. */
+              start: "top top",
+              end: () => `+=${Math.round(el.duration * PX_PER_SECOND)}`,
+              pin: true,
+              /* Lenis eases the scroll, so the pin has to be taken a
+                 frame early or the section jumps as it catches. */
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              scrub: SCRUB,
+            }
+          : { trigger, start: "top bottom", end: "bottom top", scrub: SCRUB },
       });
     };
 
     el.addEventListener("loadedmetadata", build);
     if (el.readyState >= 1) build();
 
+    /* Rotating a tablet can move the section across the threshold in
+       either direction, and whether it pins was decided once. Rebuild
+       only when the answer actually changes — ScrollTrigger handles
+       every other resize itself. */
+    const onResize = () => {
+      if (pinnedNow === null || fits() === pinnedNow) return;
+      teardown();
+      build();
+    };
+    window.addEventListener("resize", onResize);
+
     return () => {
       el.removeEventListener("loadedmetadata", build);
-      tween?.scrollTrigger?.kill();
-      tween?.kill();
+      window.removeEventListener("resize", onResize);
+      teardown();
       warm.kill();
     };
   }, [reduced]);

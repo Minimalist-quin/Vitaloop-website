@@ -11,12 +11,17 @@ import { ACCENT } from "./panel-theme";
  * FabricBackdrop is no longer used here, and the card takes the
  * footage's own cream so any pixel the video doesn't cover matches it.
  *
- * The loop is 16:9 but the card is nearly square, and the exploded shot
- * spreads its parts the full width of the frame, so cropping to fit
- * would cut the outer layers off. The footage is instead extended
- * vertically in ffmpeg by stretching its own top and bottom rows: the
- * ground is a smooth vertical gradient, so the join is invisible and
- * nothing in frame is lost. Re-cut with the recipe in the commit.
+ * The loop is 16:9 but the card is nearly square. Cropping to fit is
+ * out: the exploded shot spreads its parts across the whole frame and a
+ * 1.2 crop cuts the outer layers off — measured, not assumed, on six of
+ * eight sampled frames. So the frame is kept whole and the shortfall is
+ * filled with a blurred, feathered copy of the frame itself.
+ *
+ * An earlier pass filled it by stretching the footage's own top and
+ * bottom rows. That is invisible while those rows are empty ground, and
+ * it smears into vertical streaks the moment they are not — the strap
+ * in the exploded shot, the forearm in the wrist shot. Blur has no
+ * geometry to smear. Recipe in the commit.
  *
  * Scroll drives it — see DeviceLoop.
  *
