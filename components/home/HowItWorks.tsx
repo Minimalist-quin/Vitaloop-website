@@ -256,10 +256,11 @@ export function HowItWorks() {
           </p>
         </div>
 
-        {/* Three columns at every width from sm up: beside the film on a
-            wide screen, under it on a narrow one. */}
+        {/* Three columns beside the film, where they share its row. Under
+            it they have the full width, so they go two across before
+            three rather than straight to three narrow ones. */}
         <DeviceDeck>
-          <div className="grid items-stretch gap-4 sm:grid-cols-3">
+          <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {COLUMNS.map((column) => (
               <div key={column[0].label} className="flex flex-col gap-4">
                 {column.map((spec) => (

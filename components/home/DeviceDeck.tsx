@@ -173,11 +173,14 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
         /* The film's own shape, so the picture fills the card edge to
            edge. A min-height here would win over the ratio and leave a
            band, which is the whole thing this avoids. */
-        /* self-start so the row's stretch cannot override the ratio and
-           reintroduce the band this whole shape exists to avoid. The
-           specifications beside it stretch to the row instead, which is
-           what brings their bottom edge level with the card's. */
-        className="relative aspect-[16/9] self-start overflow-hidden rounded-[20px]"
+        /* lg:self-start, and only lg. Beside the specifications it stops
+           the row's stretch overriding the ratio and putting the band
+           back, and they stretch to the row instead, which levels the
+           bottom edges. Stacked, the deck is a flex column, where
+           align-self is the horizontal axis — unqualified it collapsed
+           the card to nothing, since everything inside it is absolutely
+           positioned and there is no content to size it. */
+        className="relative aspect-[16/9] overflow-hidden rounded-[20px] lg:self-start"
         style={{ background: GROUND }}
       >
         {/*
