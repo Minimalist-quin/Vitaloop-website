@@ -1,24 +1,38 @@
 import Image from "next/image";
-import { FabricBackdrop } from "./FabricBackdrop";
 import { ACCENT } from "./panel-theme";
 
 /**
  * "How it works" — a centred heading over a card grid: the device on the
  * left, its specifications beside it.
  *
- * The device sits as a cut-out over FabricBackdrop rather than as a
- * photograph with a background of its own: the card is already a drawn
- * scene, and a second background inside it reads as a picture pasted on
- * a picture. The shadow is CSS, not baked into the asset, so the device
- * can move on the backdrop without its shadow staying behind.
+ * The device card is the loop itself rather than a still on a drawn
+ * backdrop. The footage carries its own warm ground, so a second
+ * background behind it would only show as a border around a rectangle —
+ * FabricBackdrop is no longer used here, and the card takes the
+ * footage's own cream so any pixel the video doesn't cover matches it.
  *
- * ⚠️ device-watch.webp is a PLACEHOLDER — a generated concept render,
- * not photography of a built device, and not a final industrial design.
- * Replace it with a real product shot before launch.
+ * The loop is 16:9 but the card is nearly square, and the exploded shot
+ * spreads its parts the full width of the frame, so cropping to fit
+ * would cut the outer layers off. The footage is instead extended
+ * vertically in ffmpeg by stretching its own top and bottom rows: the
+ * ground is a smooth vertical gradient, so the join is invisible and
+ * nothing in frame is lost. Re-cut with scripts/ in the commit message.
+ *
+ * The loop explains the product — outside, construction, what is inside
+ * it — which is the bar motion has to clear here.
+ *
+ * ⚠️ PLACEHOLDER — the loop is a generated concept render, not
+ * photography of a built device, and not a final industrial design.
+ * It is also missing its closing on-the-wrist shot. Replace it with
+ * real product footage before launch.
  *
  * Every figure below is the one supplied for the device. None are
  * invented, and none may be — see the project's rule on statistics.
  */
+
+/* Sampled from the footage's own ground, so the card and the video are
+   one surface rather than two. */
+const DEVICE_GROUND = "#efe8e2";
 
 type Spec = {
   label: string;
@@ -237,31 +251,49 @@ export function HowItWorks() {
         </div>
 
         <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-[2.4fr_1fr_1fr_1fr]">
-          {/* The backdrop is drawn, not photographed — see FabricBackdrop. */}
-          <div className="relative min-h-[420px] overflow-hidden rounded-[20px]">
-            <FabricBackdrop className="absolute inset-0 h-full w-full" />
+          <div
+            className="relative min-h-[420px] overflow-hidden rounded-[20px]"
+            style={{ background: DEVICE_GROUND }}
+          >
+            {/*
+              The poster sits underneath rather than only on the <video>:
+              it is what reduced-motion readers get, and it is also what
+              shows if the file never loads. Not `priority` — the card is
+              below the fold and the hero's own image owns first paint.
+            */}
+            <Image
+              src="/device-loop-poster.webp"
+              alt="The Vitaloop wearable, shown from the front at a three-quarter angle."
+              fill
+              sizes="(min-width: 1024px) 520px, (min-width: 640px) 50vw, 100vw"
+              className="object-cover"
+            />
 
-            {/* Inset rather than filling the card: the dunes are the
-                scene and the device stands in it, so it needs ground
-                below it and haze above. It sits off the pale left fold
-                so the near-black case keeps its contrast. */}
-            <div className="absolute inset-0 flex items-center justify-center p-8 pb-16">
-              <Image
-                src="/device-watch.webp"
-                alt="The Vitaloop wearable, shown from the front at a three-quarter angle."
-                width={884}
-                height={1100}
-                sizes="(min-width: 1024px) 420px, (min-width: 640px) 50vw, 90vw"
-                className="h-full w-auto object-contain drop-shadow-[0_26px_34px_rgba(74,38,16,0.42)]"
-              />
-            </div>
+            {/*
+              preload="none" keeps the loop off the critical path; the
+              poster covers the gap until it arrives. Hidden outright
+              under prefers-reduced-motion, where the still is the whole
+              card and stays fully readable.
+            */}
+            <video
+              className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="none"
+              poster="/device-loop-poster.webp"
+              aria-hidden
+            >
+              <source src="/device-loop.webm" type="video/webm" />
+              <source src="/device-loop.mp4" type="video/mp4" />
+            </video>
 
-            {/* The label has to read over both the pale fold and the deep
-                fabric, so it sits on its own scrim rather than trusting
-                whichever part of the backdrop lands behind it. */}
+            {/* The label sits on its own scrim rather than trusting
+                whichever part of the footage lands behind it. */}
             <div className="absolute inset-x-0 bottom-0 p-5">
               <p
-                className="inline-flex rounded-full px-3 py-1.5 text-[11px] tracking-[0.18em] uppercase backdrop-blur-sm"
+                className="relative inline-flex rounded-full px-3 py-1.5 text-[11px] tracking-[0.18em] uppercase backdrop-blur-sm"
                 style={{ background: "rgba(26,26,26,0.55)", color: "#ffffff" }}
               >
                 [PLACEHOLDER] &mdash; concept render
