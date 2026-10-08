@@ -167,13 +167,14 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
     /* Stacked by default — film over its specifications, which is the
        arrangement narrow screens keep. From lg the two sit side by side.
 
-       The split stays at 2.4: the film holds 16:9, so its column's width
-       is also its height, and widening it to make the row taller took
-       that width off the cards instead — enough that their labels began
-       to wrap. The row's height is set on the specifications instead. */
+       The split is what the row's height can be bought with. The film
+       fills the row, so a taller row crops more off its sides, and a
+       wider film column crops less — but the width comes off the cards,
+       whose labels wrap under about 198px a column. Those two bounds
+       meet at a film of 536 and a row of 336; see HowItWorks. */
     <div
       ref={root}
-      className="mt-[clamp(1.75rem,5vh,4rem)] flex flex-col gap-4 lg:grid lg:grid-cols-[2.4fr_3fr] lg:items-stretch"
+      className="mt-[clamp(1.75rem,5vh,4rem)] flex flex-col gap-4 lg:grid lg:grid-cols-[2.56fr_3fr] lg:items-stretch"
     >
       <div
         ref={card}

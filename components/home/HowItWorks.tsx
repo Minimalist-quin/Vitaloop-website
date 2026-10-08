@@ -266,12 +266,15 @@ export function HowItWorks() {
             takes both. Beside the film it is a column like the others. */}
         <DeviceDeck>
           {/* The row's height beside the film, and the dial for how tall
-              these cards stand. The film fills the row too, so it is
-              capped by what the footage can give up: taller than the
-              film's own ratio means cropping its sides, and past 320 the
-              crop reaches into the exploded shot, whose parts run to
-              within 115px of the frame edge. 320 leaves 27px spare. */}
-          <div className="grid grid-cols-2 items-stretch gap-4 lg:min-h-[320px] lg:grid-cols-3">
+              these cards stand — but a dial with a ceiling, because the
+              film fills this row too. Taller than the film's own ratio
+              crops its sides, and the exploded scene's outermost parts
+              sit 115px from the edge of a 1920 frame. A wider film
+              column crops less, so the two trade: at 336 the film takes
+              536 and crops 99px a side, 16 clear of those parts, while
+              the cards keep 198.7 against the 196 their widest label
+              needs. Past that one of the two gives. */}
+          <div className="grid grid-cols-2 items-stretch gap-4 lg:min-h-[336px] lg:grid-cols-3">
             {COLUMNS.map((column, i) => (
               <div
                 key={column[0].label}
