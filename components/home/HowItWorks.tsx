@@ -30,6 +30,11 @@ import { ACCENT } from "./panel-theme";
  * Its closing shot is also not the casting that was asked for. Replace
  * it with real product footage before launch.
  *
+ * Nothing on screen says so any more: the badge that marked it was
+ * removed deliberately, so this comment and the launch checklist are
+ * the only things standing between a concept render and a reader who
+ * takes it for the product.
+ *
  * Every figure below is the one supplied for the device. None are
  * invented, and none may be — see the project's rule on statistics.
  */
@@ -227,8 +232,15 @@ function PulseGlyph() {
 export function HowItWorks() {
   return (
     /* One block: the heading and the grid share a container and a single
-       set of padding, rather than two stacked bands meeting at a seam. */
-    <section className="bg-white px-4 py-20 lg:px-10 lg:py-28">
+       set of padding, rather than two stacked bands meeting at a seam.
+
+       The vertical rhythm is measured against the viewport's height, not
+       only its width, because this section gets held on screen while the
+       loop runs and anything past the fold is held out of sight. On a
+       tall window the clamps sit at their old fixed values and nothing
+       about the design changes; on a short laptop they give the height
+       back rather than letting the grid run off the bottom. */
+    <section className="bg-white px-4 py-[clamp(2.5rem,6vh,7rem)] lg:px-10">
       <div className="mx-auto max-w-[1180px]">
         <div className="text-center">
           <p
@@ -240,37 +252,26 @@ export function HowItWorks() {
           </p>
 
           <h2
-            className="mx-auto mt-8 max-w-[14ch] text-[clamp(2.1rem,5vw,3.5rem)] leading-[1.08] font-semibold tracking-[-0.03em]"
+            className="mx-auto mt-[clamp(1.25rem,3.5vh,2rem)] max-w-[14ch] text-[clamp(2.1rem,5vw,3.5rem)] leading-[1.08] font-semibold tracking-[-0.03em]"
             style={{ color: INK }}
           >
             From signal to support, in 3 steps.
           </h2>
 
           <p
-            className="mx-auto mt-6 max-w-[34ch] text-[clamp(1rem,1.5vw,1.15rem)] leading-[1.5]"
+            className="mx-auto mt-[clamp(0.875rem,2.5vh,1.5rem)] max-w-[34ch] text-[clamp(1rem,1.5vw,1.15rem)] leading-[1.5]"
             style={{ color: BODY }}
           >
             Wear it and forget it, see what changes early, and get help the moment it matters.
           </p>
         </div>
 
-        <div className="mt-14 grid items-stretch gap-4 sm:grid-cols-2 lg:mt-16 lg:grid-cols-[2.4fr_1fr_1fr_1fr]">
+        <div className="mt-[clamp(1.75rem,5vh,4rem)] grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-[2.4fr_1fr_1fr_1fr]">
           <div
-            className="relative min-h-[420px] overflow-hidden rounded-[20px]"
+            className="relative min-h-[clamp(260px,42vh,420px)] overflow-hidden rounded-[20px]"
             style={{ background: DEVICE_GROUND }}
           >
             <DeviceLoop className="absolute inset-0" />
-
-            {/* The label sits on its own scrim rather than trusting
-                whichever part of the footage lands behind it. */}
-            <div className="absolute inset-x-0 bottom-0 p-5">
-              <p
-                className="relative inline-flex rounded-full px-3 py-1.5 text-[11px] tracking-[0.18em] uppercase backdrop-blur-sm"
-                style={{ background: "rgba(26,26,26,0.55)", color: "#ffffff" }}
-              >
-                [PLACEHOLDER] &mdash; concept render
-              </p>
-            </div>
           </div>
 
           {COLUMNS.map((column) => (

@@ -34,14 +34,14 @@ const SCRUB = 0.6;
    the film. */
 const PX_PER_SECOND = 130;
 
-/* Holding a section taller than this many screens means holding the
-   reader against content they cannot see — which is what happens on
-   narrow widths, where the spec cards stack and the section runs to
-   several screens. Past it the loop still scrubs, just without the
-   hold. A little over one screen is allowed: the section overruns most
-   laptop viewports by a hair, and refusing to pin for that would mean
-   never pinning at all. */
-const MAX_PINNABLE_SCREENS = 1.3;
+/* Holding a section taller than the screen holds part of it out of
+   sight for the whole of the loop, so the hold is only taken when the
+   section genuinely fits. The section sizes its own rhythm against the
+   viewport height to make that true on short windows; where it cannot —
+   narrow widths, where the spec cards stack several screens tall — the
+   loop still scrubs, just without the hold. The couple of percent of
+   slack is for sub-pixel layout, not for overflow. */
+const MAX_PINNABLE_SCREENS = 1.02;
 
 /* The loop's length, used until the file reports its own. The scrub used
    to be built from the loadedmetadata event, which made the whole scene
