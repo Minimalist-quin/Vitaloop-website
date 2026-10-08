@@ -167,31 +167,31 @@ export function DeviceDeck({ children }: { children: React.ReactNode }) {
     /* Stacked by default — film over its specifications, which is the
        arrangement narrow screens keep. From lg the two sit side by side.
 
-       The split is what the row's height can be bought with. The film
-       fills the row, so a taller row crops more off its sides, and a
-       wider film column crops less — but the width comes off the cards,
-       whose labels wrap under about 198px a column. Those two bounds
-       meet at a film of 536 and a row of 336; see HowItWorks. */
+       The split also sets the row's height: the film holds 16:9, so its
+       column's width is its height, and the cards beside it stretch to
+       that. Widening it makes them taller and takes the width off them —
+       their widest label wraps under about 196px a column, which at this
+       split they clear by nine. */
     <div
       ref={root}
-      className="mt-[clamp(1.75rem,5vh,4rem)] flex flex-col gap-4 lg:grid lg:grid-cols-[2.56fr_3fr] lg:items-stretch"
+      className="mt-[clamp(1.75rem,5vh,4rem)] flex flex-col gap-4 lg:grid lg:grid-cols-[2.4fr_3fr] lg:items-stretch"
     >
       <div
         ref={card}
         /* The film's own shape, so the picture fills the card edge to
            edge. A min-height here would win over the ratio and leave a
            band, which is the whole thing this avoids. */
-        /* Beside the specifications the card takes the row's full height
-           so it stands level with them, which means giving up the film's
-           ratio — the video covers, and the sides it loses are bounded
-           by the row height chosen in HowItWorks.
+        /* 16:9 at every width, so the picture fills the card and nothing
+           is cropped. The card sets the row's height and the cards
+           beside it stretch to match, which is why self-start rather
+           than stretch: stretch would override the ratio and put a band
+           back inside the card.
 
-           Stacked, it keeps 16:9 and fills the width, with no crop at
-           all. align-self stays off below lg: the deck is a flex column
+           align-self stays off below lg: the deck is a flex column
            there, where it is the horizontal axis, and unqualified it
            collapsed the card to nothing, since everything inside is
            absolutely positioned and there is nothing to size it by. */
-        className="relative aspect-[16/9] overflow-hidden rounded-[20px] lg:aspect-auto lg:self-stretch"
+        className="relative aspect-[16/9] overflow-hidden rounded-[20px] lg:self-start"
         style={{ background: GROUND }}
       >
         {/*

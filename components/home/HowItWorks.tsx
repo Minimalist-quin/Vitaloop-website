@@ -265,16 +265,11 @@ export function HowItWorks() {
             That leaves the last column on its own on a row of two, so it
             takes both. Beside the film it is a column like the others. */}
         <DeviceDeck>
-          {/* The row's height beside the film, and the dial for how tall
-              these cards stand — but a dial with a ceiling, because the
-              film fills this row too. Taller than the film's own ratio
-              crops its sides, and the exploded scene's outermost parts
-              sit 115px from the edge of a 1920 frame. A wider film
-              column crops less, so the two trade: at 336 the film takes
-              536 and crops 99px a side, 16 clear of those parts, while
-              the cards keep 198.7 against the 196 their widest label
-              needs. Past that one of the two gives. */}
-          <div className="grid grid-cols-2 items-stretch gap-4 lg:min-h-[336px] lg:grid-cols-3">
+          {/* No height set here: beside the film these stretch to the
+              row, and the film's own ratio sets it. Giving them a
+              min-height is how they were made taller — it raises the row
+              the film has to fill, which costs the film its sides. */}
+          <div className="grid grid-cols-2 items-stretch gap-4 lg:grid-cols-3">
             {COLUMNS.map((column, i) => (
               <div
                 key={column[0].label}
